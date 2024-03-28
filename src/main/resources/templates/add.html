@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <!-- Open Sans Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <!--Bootstrap Table-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
+  ">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/dash.css}">
+  
+  
+</head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 1rem;
+
+  }
+
+  th {
+    color: white;
+  }
+
+  th,
+  td {
+    border: 1px solid white;
+    padding: 8px;
+    text-align: left;
+    border-color: white;
+
+  }
+
+  th {
+    background-color: #de3450;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  button {
+    color: white;
+    background-color: #de3450;
+    border: none;
+    border-radius: 0.5rem;
+  }
+
+  .status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+
+  .done {
+    background-color: green;
+    color: white;
+  }
+
+  .cancel {
+    background-color: red;
+    color: white;
+  }
+
+  .booked {
+    background-color: blue;
+    color: white;
+  }
+
+  .pending {
+    background-color: rgb(241, 218, 8);
+    color: black;
+  }
+
+  @media only screen and (max-width: 600px) {
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #de3450;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  }
+</style>
+
+<body>
+  <div class="grid-container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="menu-icon" onclick="openSidebar()">
+        <span class="material-icons-outlined">menu</span>
+      </div>
+      <div class="header-left">
+        <span class="material-icons-outlined">search</span>
+      </div>
+      <div class="header-right">
+        <span class="material-icons-outlined">notifications</span>
+        <span class="material-icons-outlined">email</span>
+        <span class="material-icons-outlined">account_circle</span>
+      </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-title">
+        <div class="sidebar-brand">
+          <span class="material-icons-outlined">admin_panel_settings</span> Admin
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+      </div>
+
+      <ul class="sidebar-list">
+        <li class="sidebar-list-item">
+          <a href="/admindash">
+            <span class="material-icons-outlined">dashboard</span> Dashboard
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="ridebooking.html">
+            <span class="material-icons-outlined">leaderboard</span> Ride Bookings
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="manageUser.html">
+            <span class="material-icons-outlined">people</span> Manage User
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="rental.html">
+            <span class="material-icons-outlined">check</span> Rental Information
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+            <a href="bookInfo.html">
+              <span class="material-icons-outlined">poll</span> Booking Information
+            </a>
+          </li>
+        <li class="sidebar-list-item">
+          <a href="#">
+            <span class="material-icons-outlined">history</span> History
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="#">
+            <span class="material-icons-outlined">poll</span> Reports
+          </a>
+        </li>
+        <li class="sidebar-list-item">
+          <a href="/admin">
+            <span class="material-icons-outlined">logout</span> Logout
+          </a>
+        </li>
+      </ul>
+    </aside>
+    <!-- End Sidebar -->
+
+    <!-- Main -->
+    <main class="main-container">
+    
+      <!--Form-->
+    <div class="container">
+        <h2>Add Ride</h2>        
+        <form action="/addRide" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="rideType">Ride Type:</label>
+                <select id="rideType" name="type">
+                    <option value="bike">Bike</option>
+                    <option value="scooter">Scooter</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="licensePlate">License Plate Number:</label>
+                <input type="text" id="licensePlate" name="licensePlate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="available">Available</option>
+                    <option value="booked">Booked</option>
+                    <option value="in-use">In Use</option>
+                    <option value="maintenance">Maintenance</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="image">Image:</label>
+                <input type="file" id="imageUrl" name="imageUrl" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="model">Description:</label>
+                <input type="text" id="describe" name="describe" required>
+            </div>
+            <div class="form-group">
+                <label for="model">Price:</label>
+                <input type="number" id="price" name="price" required>
+            </div>
+            <button type="submit">Add Ride</button>
+        </form>
+    </div>
+    </main>
+    <!-- End Main -->
+
+  </div>
+
+  <!-- Scripts -->
+  <!-- Custom JS -->
+  <script src="dash.js"></script>
+</body>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+select,
+button,
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+select {
+    height: 40px; /* Match input height */
+}
+
+button {
+    background-color: #de3450;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #de3450;
+}
+
+/* Optional: Adjust styling for file input */
+input[type="file"] {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    line-height: normal;
+}
+
+input[type="file"]:focus {
+    outline: none;
+}
+
+</style>
+
+</html>

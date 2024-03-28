@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Product Details</title>
+	<link rel="stylesheet" href="./css/styles.css" />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
+
+</head>
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+	* {
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+	}
+
+	html,
+	body {
+		font-family: 'Roboto', sans-serif;
+	}
+
+	img {
+		width: 100%;
+		display: block;
+	}
+
+	.main-wrapper {
+		min-height: 100vh;
+		background-color: #f1f1f1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 1rem;
+
+	}
+
+	.container {
+		max-width: 1200px;
+		padding: 0 1rem;
+		margin: 0 auto;
+	}
+
+	.product-div {
+		margin: 1rem 0;
+		margin-left: 1.5rem;
+		padding: 2rem 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		background-color: #fff;
+		border-radius: 3px;
+		column-gap: 10px;
+		border-radius: 2rem;
+
+	}
+
+	.product-div-left {
+		padding: 20px;
+	}
+
+	.product-div-right {
+		padding: 20px;
+	}
+
+	.img-container img {
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	.hover-container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		margin-top: 32px;
+	}
+
+	.hover-container div {
+		border: 2px solid rgba(252, 160, 175, 0.7);
+		padding: 1rem;
+		border-radius: 3px;
+		margin: 0 4px 8px 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.active {
+		border-color: rgb(255, 145, 163) !important;
+	}
+
+	.hover-container div:hover {
+		border-color: rgb(255, 145, 163);
+	}
+
+	.hover-container div img {
+		width: 50px;
+		cursor: pointer;
+	}
+
+	.product-div-right span {
+		display: block;
+	}
+
+	.product-name {
+		font-size: 26px;
+		margin-bottom: 22px;
+		font-weight: 700;
+		letter-spacing: 1px;
+		opacity: 0.9;
+	}
+
+	.product-price {
+		font-weight: 700;
+		font-size: 24px;
+		opacity: 0.9;
+		font-weight: 500;
+	}
+
+	.product-rating {
+		display: flex;
+		align-items: center;
+		margin-top: 12px;
+	}
+
+	.product-rating span {
+		margin-right: 6px;
+	}
+
+	.product-description {
+		font-weight: 18px;
+		line-height: 1.6;
+		font-weight: 300;
+		opacity: 0.9;
+		margin-top: 22px;
+	}
+
+	.btn-groups {
+		margin-top: 22px;
+	}
+
+	.btn-groups button {
+		display: inline-block;
+		font-size: 16px;
+		font-family: inherit;
+		text-transform: uppercase;
+		padding: 15px 16px;
+		color: #fff;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.btn-groups button .fas {
+		margin-right: 8px;
+	}
+
+	.add-cart-btn {
+		background-color: #FF9F00;
+		border: 2px solid #FF9F00;
+		margin-right: 8px;
+	}
+
+	.add-cart-btn:hover {
+		background-color: #fff;
+		color: #FF9F00;
+	}
+
+	.buy-now-btn {
+		background-color: #e35252;
+		border: 2px none;
+		border-radius: 2rem;
+	}
+
+	.buy-now-btn:hover {
+		background-color: #FF9F00;
+		color: #000;
+	}
+
+	@media screen and (max-width: 992px) {
+		.product-div {
+			grid-template-columns: 100%;
+		}
+
+		.product-div-right {
+			text-align: center;
+		}
+
+		.product-rating {
+			justify-content: center;
+		}
+
+		.product-description {
+			max-width: 400px;
+			margin-right: auto;
+			margin-left: auto;
+		}
+	}
+
+	@media screen and (max-width: 400px) {
+		.btn-groups button {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+	}
+</style>
+
+<body>
+	<main>
+		<div class="big-wrapper light">
+			<img src="./img/shape.png" alt="" class="shape" />
+
+			<header>
+				<div class="container">
+					<div class="logo">
+						<img src="./assets/edit (1).png" alt="Logo" />
+						<h3>Ride Rental Services</h3>
+					</div>
+
+					<div class="links">
+						<ul>
+							<li><a href="Landing">Home</a></li>
+							<li><a href="Services">Services</a></li>
+							<li><a href="View">Bikes & Pricing</a></li>
+							<li><a href="Test">Testimonials</a></li>
+							<li><a href="rent.html" class="btn">Rent</a></li>
+						</ul>
+					</div>
+
+					<div class="overlay"></div>
+					<div class="hamburger-menu">
+						<div class="bar"></div>
+					</div>
+				</div>
+
+				<!-- -Product Details -->
+				<div class="main-wrapper">
+					<div class="container">
+						<div class="product-div">
+							<div class="product-div-left">
+								<div class="img-container">
+									<img src="assets/yamaha.png" alt="watch">
+								</div>
+								<!-- <div class="hover-container">
+									<div><img src="images/w1.png"></div>
+									<div><img src="images/w2.png"></div>
+									<div><img src="images/w3.png"></div>
+									<div><img src="images/w4.png"></div>
+									<div><img src="images/w5.png"></div>
+								</div> -->
+							</div>
+							<div class="product-div-right">
+								<span class="product-name">Yamaha FZS V2 FI</span>
+								<span class="product-price">Hourly: NPR 200 - NPR 300</span>
+								<span class="product-price">Day: NPR 1,200 - NPR 1,800</span>
+
+								<div class="product-rating">
+									<span><i class="fas fa-star"></i></span>
+									<span><i class="fas fa-star"></i></span>
+									<span><i class="fas fa-star"></i></span>
+									<span><i class="fas fa-star"></i></span>
+									<span><i class="fas fa-star-half-alt"></i></span>
+									<span>(350 ratings)</span>
+								</div>
+								<p class="product-description">Yamaha FZS is a stylish and powerful bike, perfect for urban commuting and short trips. With its sporty design and smooth performance, it offers an exhilarating riding experience.</p>
+								<div class="btn-groups">
+									<!-- <button type="button" class="add-cart-btn"><i class="fas fa-shopping-cart"></i>add
+										to cart</button> -->
+									<a href="rent.html">
+										<button type="button" class="buy-now-btn"><i class="fas fa-wallet"></i>Rent
+											now</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Product details end -->
+	</main>
+	<!--footer-->
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+				<div class="footer-col">
+					<h4>company</h4>
+					<ul>
+						<li><a href="#">about us</a></li>
+						<li><a href="#">our services</a></li>
+						<li><a href="#">privacy policy</a></li>
+					</ul>
+				</div>
+				<div class="footer-col">
+					<h4>get help</h4>
+					<ul>
+						<li><a href="#">FAQ</a></li>
+						<li><a href="#">order status</a></li>
+						<li><a href="#">payment options</a></li>
+					</ul>
+				</div>
+				<div class="footer-col"></div>
+				<div class="footer-col">
+					<h4>follow us</h4>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a> <a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a> <a href="#"><i
+								class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+
+</body>
+<script>
+
+	const allHoverImages = document.querySelectorAll('.hover-container div img');
+	const imgContainer = document.querySelector('.img-container');
+
+	window.addEventListener('DOMContentLoaded', () => {
+		allHoverImages[0].parentElement.classList.add('active');
+	});
+
+	allHoverImages.forEach((image) => {
+		image.addEventListener('mouseover', () => {
+			imgContainer.querySelector('img').src = image.src;
+			resetActiveImg();
+			image.parentElement.classList.add('active');
+		});
+	});
+
+	function resetActiveImg() {
+		allHoverImages.forEach((img) => {
+			img.parentElement.classList.remove('active');
+		});
+	}
+</script>
+
+</html>

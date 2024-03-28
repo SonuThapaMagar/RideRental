@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="https://kit.fontawesome.com/64d58efce2.js"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/css/adminstyle.css}" />
+<link rel="icon" type="image/x-icon" href="../assets/edit (1).png">
+<title>Rentide Admin Login</title>
+</head>
+
+<body>
+	<div class="container">
+		<div class="forms-container">
+			<form action="/adminLogin" method="post"  class="sign-in-form">
+
+
+				<img src="../assets/edit (1).png" alt="logo">
+				<p>Rentide</p>
+				<h2 class="title">Admin Log in</h2>
+				<div class="input-field">
+					<i class="fas fa-envelope"></i> <input type="email" name="email"
+						placeholder="Email" required />
+				</div>
+				<div class="input-field">
+					<i class="fas fa-lock"></i> <input type="password" name="password"
+						placeholder="Password" id="passwordInput" required /> <i
+						class="fas fa-eye" id="togglePassword"></i>
+					
+					<div class="forgot-password-container">
+						<a href="forgot.html" class="forgot-password"
+							id="forgotPasswordLink">Forgot Password?</a>
+					</div>
+					<!-- div th:if="${error}"class="error-message">
+						<span th:text="${error}"></span>
+					</div-->
+
+				</div>
+				<input type="submit" value="Login" class="btn solid" />
+			</form>
+		</div>
+	</div>
+
+	<script src="./js/login.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+  <link rel="icon" href="assets/edit (1).png" type="image/x-icon">    <link rel="stylesheet" href="/css/styles.css" />
+
+  <link rel="stylesheet" href="./css/login.css" />
+  <title>Rento Matic</title>
+
+  <style>
+ 
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="forms-container">
+      <div class="signin-signup">
+        <!-- This is the form for entering email -->
+        <form action="#" class="sign-in-form" id="verifyForm" onsubmit="return validatePhoneNumber()">
+          <h2 class="title">Forgot password?</h2>
+          <p id="gyante">Please enter your email to get the OTP</p>
+          <div class="input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" id="email" placeholder="Email" required />
+          </div>
+          <input type="submit" value="Submit" class="btn solid" />
+          <p class="back-link" id="#">
+            <a href="./login.html">
+            <i class="fas fa-arrow-left"></i> Back
+          </a>
+        </form>
+
+        <!-- This is for OTP -->
+        <form action="#" class="otp-form" id="otpForm" style="display: none;">
+          <h2 class="title" id="verify">Verification</h2>
+          <p>Please enter the OTP that we just sent you.</p>
+          <div class="input-field">
+            <i class="fas fa-key"></i>
+            <input type="text" name="otp" id="otp" placeholder="Enter OTP" required />
+          </div>
+          <input type="submit" value="Submit" class="btn solid" onsubmit="return validateOTP()" />
+          <div class="resend-otp-section">
+            <p>Didn't receive the OTP? <a href="#" id="resendOTP">Resend it?</a></p>
+          </div>
+          <br>
+          <p class="back-link" id="otpFormBackBtn">
+            <i class="fas fa-arrow-left"></i> Back
+
+        </form>
+
+        <!-- This is for new password creation -->
+        <form action="#" class="new-password-form" id="newPasswordForm" style="display: none;" onsubmit="return validatePassword()">
+          <h2 class="title">New Credentials</h2>
+          <p>Create a new secure password</p>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="newPassword" id="newPassword" placeholder="New Password" required />
+            <i class="fas fa-eye-slash" id="toggleNewPassword"></i>
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password"
+              required />
+            <i class="fas fa-eye-slash" id="toggleConfirmPassword"></i>
+          </div>
+          <input type="submit" value="Submit" class="btn solid" onsubmit="return validatePassword()" />
+          
+
+          <!-- Added the back button for the new password form -->
+          <p class="back-link" id="newPasswordFormBackBtn">
+            <i class="fas fa-arrow-left"></i> Back
+          </p>
+        </form>
+
+        <!-- Add this div for enhanced success message -->
+<div id="successMessage" style="display: none; text-align: center;">
+  <i class="fas fa-check-circle" style="color: #28a745; font-size: 3rem;"></i>
+  <h2 class="title">Congratulations!</h2>
+  <p>Password changed successfully.</p>
+  <button onclick="handleDoneButtonClick()" class="btn solid">Done</button>
+</div>
+</div>
+
+
+        <!-- This is the end of the new password creation form -->
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel left-panel">
+        <img src="./img/rentomatic-04.png" class="image" alt="" />
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    document.getElementById('toggleNewPassword').addEventListener('click', togglePasswordVisibility.bind(null, 'newPassword', 'toggleNewPassword'));
+    document.getElementById('toggleConfirmPassword').addEventListener('click', togglePasswordVisibility.bind(null, 'confirmPassword', 'toggleConfirmPassword'));
+
+    document.getElementById('verifyForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      validatePhoneNumber();
+    });
+
+    document.getElementById('otpForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      validateOTP();
+    });
+
+    document.getElementById('newPasswordForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      validatePassword();
+    });
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const passwordInput = document.getElementById(inputId);
+      const passwordIcon = document.getElementById(iconId);
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+      } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+      }
+    }
+
+    function validatePassword() {
+  const emailInput = document.getElementById('email');
+  const newPasswordInput = document.getElementById('newPassword');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const email = emailInput.value;
+  const newPassword = newPasswordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  // Email validation
+  if (!email) {
+    alert('Email address is required.');
+    return false;
+  }
+
+  // Built-in email validation for HTML5
+  if (!emailInput.checkValidity()) {
+    alert('Invalid email address. Please enter a valid email.');
+    return false;
+  }
+
+  // Password length validation
+  if (newPassword.length < 6) {
+    alert('Password is too short. Please use at least 6 characters.');
+    return false;
+  }
+
+  // Add any other password validation logic as needed
+
+  // Password match validation
+  if (newPassword !== confirmPassword) {
+    alert('Passwords do not match. Please enter matching passwords.');
+    return false;
+  }
+
+  // If all validations pass, hide the current form and show the success message
+  hideForm('newPasswordForm');
+  showSuccessMessage();
+
+  // Return false to prevent form submission
+  return false;
+}
+
+// Function to hide a form by its ID
+function hideForm(formId) {
+  const currentForm = document.getElementById(formId);
+  currentForm.style.display = 'none';
+}
+
+// Function to show the success message
+function showSuccessMessage() {
+  const successMessage = document.getElementById('successMessage');
+  successMessage.style.display = 'block';
+}
+
+
+    // Function to show the OTP box
+    function showOTPBox() {
+      const verifyForm = document.getElementById('verifyForm');
+      const otpForm = document.getElementById('otpForm');
+
+      // Hide the verify form and show the OTP box
+      verifyForm.style.display = 'none';
+      otpForm.style.display = 'flex';
+    }
+
+    // Event listener for the submit button in the verification form
+    document.getElementById('verifyForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      showOTPBox();
+    });
+
+    // Function to handle the "Done" button click event
+function handleDoneButtonClick() {
+  // You can perform any additional actions here if needed
+  // For now, redirect to index.html
+  window.location.href = 'index.html';
+}
+
+    function validateOTP() {
+      // Add OTP validation logic if needed
+      // For now, always return true to allow submission
+      showNewPasswordForm();
+      return false; // Prevent form submission (you can remove this if you want to allow submission)
+    }
+
+    function showNewPasswordForm() {
+      const otpForm = document.getElementById('otpForm');
+      const newPasswordForm = document.getElementById('newPasswordForm');
+
+      // Show the new password form and hide the OTP form
+      otpForm.style.display = 'none';
+      newPasswordForm.style.display = 'flex';
+    }
+
+    function goBack(formId) {
+      const currentForm = document.getElementById(formId);
+      const previousFormId = formId === 'otpForm' ? 'verifyForm' : 'verifyForm'; // Adjust as needed
+
+      const previousForm = document.getElementById(previousFormId);
+
+      // Show the previous form and hide the current form
+      currentForm.style.display = 'none';
+      previousForm.style.display = 'flex';
+    }
+
+    // Event listener for the back button in the OTP form
+    document.getElementById('otpFormBackBtn').addEventListener('click', function (event) {
+      event.preventDefault();
+      goBack('otpForm');
+    });
+
+    // Event listener for the back button in the new password form
+    document.getElementById('newPasswordFormBackBtn').addEventListener('click', function (event) {
+      event.preventDefault();
+      goBack('newPasswordForm');
+    });
+  </script>
+</body>
+
+</html>
