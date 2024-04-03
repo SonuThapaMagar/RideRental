@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Edit Ride Details</title>
 
   <!-- Open Sans Font -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -188,11 +188,14 @@
     
       <!--Form-->
     <div class="container">
-        <h2>Add Ride</h2>        
-        <form action="/add" method="POST" enctype="multipart/form-data">
+        <h2>Edit Ride Details</h2>        
+        <form action="/editRide" method="POST" th:object="${rideObject}" enctype="multipart/form-data">
+          <div class="form-group">
+          	<input type="hidden" th:field="*{rideId}">
+          </div>
             <div class="form-group">
                 <label for="rideType">Ride Type:</label>
-                <select id="rideType" name="type">
+                <select id="rideType" th:field="*{type}">
                     <option value="bike">Bike</option>
                     <option value="scooter">Scooter</option>
                 </select>
@@ -200,12 +203,12 @@
             
             <div class="form-group">
                 <label for="licensePlate">License Plate Number:</label>
-                <input type="text" id="plateNo" name="plateNo" required>
+                <input type="text" th:field="*{plateNo}" required>
             </div>
 
             <div class="form-group">
                 <label for="status">Status:</label>
-                <select id="status" name="status">
+                <select th:field="*{status}">
                     <option value="available">Available</option>
                     <option value="booked">Booked</option>
                     <option value="in-use">In Use</option>
@@ -214,17 +217,17 @@
             </div>
             <div class="form-group">
                 <label for="image">Image:</label>
-                <input type="file" name="rideImage" required>
+                <input type="file" th:field="*{rideImg}" required>
             </div>
             <div class="form-group">
                 <label for="model">Description:</label>
-                <input type="text" id="about" name="about" required>
+                <input type="text" id="about" th:field="*{about}" required>
             </div>
             <div class="form-group">
                 <label for="model">Price:</label>
-                <input type="number" id="price" name="price" required>
+                <input type="number" id="price" th:field="*{price}" required>
             </div>
-            <button type="submit">Add Ride</button>
+            <button type="submit">Save Changes</button>
         </form>
     </div>
     </main>

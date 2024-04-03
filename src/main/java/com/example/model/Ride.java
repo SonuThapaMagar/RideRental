@@ -4,10 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
-
+@Table(name = "Ride")
 public class Ride {
 	
 	@Id
@@ -17,8 +18,18 @@ public class Ride {
 	private String status;
 	private String about;
 	private int price;
-	private int plateNo;
-	private String imageUrl;
+	private int plateNo;	
+	private String rideImg;
+	
+	
+	
+
+	public String getRideImg() {
+		return rideImg;
+	}
+	public void setRideImg(String rideImg) {
+		this.rideImg = rideImg;
+	}
 	public int getRideId() {
 		return rideId;
 	}
@@ -55,13 +66,8 @@ public class Ride {
 	public void setPlateNo(int plateNo) {
 		this.plateNo = plateNo;
 	}
-	public String getImageUrl() {
-		return imageUrl;
-	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-	
+
+
 	
 
 }

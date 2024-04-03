@@ -12,9 +12,13 @@
 </head>
 
 <body>
+
 	<div class="container">
 		<div class="forms-container">
-			<form action="/adminLogin" method="post"  class="sign-in-form">
+
+
+
+			<form action="/adminLogin" method="post" class="sign-in-form">
 
 
 				<img src="../assets/edit (1).png" alt="logo">
@@ -28,16 +32,14 @@
 					<i class="fas fa-lock"></i> <input type="password" name="password"
 						placeholder="Password" id="passwordInput" required /> <i
 						class="fas fa-eye" id="togglePassword"></i>
-					
+
 					<div class="forgot-password-container">
 						<a href="forgot.html" class="forgot-password"
 							id="forgotPasswordLink">Forgot Password?</a>
 					</div>
-					<!-- div th:if="${error}"class="error-message">
-						<span th:text="${error}"></span>
-					</div-->
-
+				
 				</div>
+				 	
 				<input type="submit" value="Login" class="btn solid" />
 			</form>
 		</div>

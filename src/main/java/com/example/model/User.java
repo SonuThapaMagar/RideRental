@@ -1,15 +1,20 @@
 package com.example.model;
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
-
+@Table(name = "User")
 public class User {
 	
 	@Id
@@ -22,6 +27,34 @@ public class User {
 	private String phone;
 	private String password;
 	
+	
+	
+	
+	@OneToOne
+	@JoinTable(name="rentId")
+	private Rent rent;
+	
+	@OneToOne
+	@JoinColumn(name = "rideId")
+	private Ride ride;
+	
+	
+	
+	
+	
+
+	public Rent getRent() {
+		return rent;
+	}
+	public void setRent(Rent rent) {
+		this.rent = rent;
+	}
+	public Ride getRide() {
+		return ride;
+	}
+	public void setRide(Ride ride) {
+		this.ride = ride;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -52,7 +85,7 @@ public class User {
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
 	}
-	public String getPhone() {
+	public String getPhone() {	
 		return phone;
 	}
 	public void setPhone(String phone) {
@@ -64,8 +97,6 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
 	
 
 }
