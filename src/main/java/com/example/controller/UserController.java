@@ -130,6 +130,19 @@ public class UserController {
 	public String product() {
 		return "product";
 	}
+	
+	@GetMapping("/search")
+	public String searchRides(@RequestParam(required = false) String keyword, Model model) {
+	    List<Ride> rideList;
+	    if (keyword != null && !keyword.isEmpty()) {
+	    	rideList = rideRepo.findByAboutContainingIgnoreCase(keyword); // Search by name and model (case-insensitively)
+	    } else {
+	    	rideList = rideRepo.findAll(); // Retrieve all rides if no keyword provided
+	    }
+
+	    model.addAttribute("rideList", rideList);
+	    return "dashboard"; // View name to display search results
+	}
 
 	@GetMapping("/renttable")
 	public String renttable() {

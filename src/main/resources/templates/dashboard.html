@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="/css/styles.css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
 </head>
 
 <body>
@@ -47,13 +48,17 @@
 
 			<!--Search bar-->
 			<div class="search-bar">
-				<form action="">
-					<input type="text" class="search-input" name="" id="search"
+				<form action="/search">
+					<input type="text" class="search-input" name="keyword" id="search"
 						placeholder="Search...">
 					<button class="search-button">
 						<i class="fas fa-search"></i>
 					</button>
+					<button type="button" class="clear-button" style="width:30px;height:35px;color:white;background-color:black;border-radius:0.3rem;cursor:pointer" onclick="clearSearch()">
+					 <i class="fas fa-times"></i></button>
+					<!-- Add Clear button -->
 				</form>
+
 			</div>
 			<!--Bikes-->
 			<section class="trip">
@@ -79,11 +84,17 @@
 											<span>From</span> $ <span th:text="${ride.price}"></span>
 										</div>
 										<a href="rentRide">
-											<button class="book__now">Book Now</button> </a>
+											<button class="book__now">Book Now</button>
+										</a>
 									</div>
 								</div>
 							</div>
+						</th:block>
 
+						<th:block th:if="${#lists.isEmpty(rideList)}">
+							<p class="no-results">No rides found matching your search
+								criteria.</p>
+						</th:block>
 
 					</div>
 				</div>
@@ -143,5 +154,10 @@
 	<script src="/js/index.js"></script>
 
 </body>
-
+<script>
+	function clearSearch() {
+		document.getElementById('search').value = ''; // Clear search input
+		document.querySelector('form').submit(); // Submit form to show all products
+	}
+</script>
 </html>

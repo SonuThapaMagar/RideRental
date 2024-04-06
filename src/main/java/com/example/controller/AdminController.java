@@ -66,6 +66,8 @@ public class AdminController {
 	public String adminLogin(@ModelAttribute Admin a, Model model, HttpSession session) {
 		// Checking the credential
 		if (a.getEmail().equals(adminEmail) && a.getPassword().equals(adminPassword)) {
+			session.setAttribute("activeUser", a.getEmail());
+			session.setMaxInactiveInterval(30);
 
 			model.addAttribute("success", "Login successful!"); // Optional
 			return "admindash";
@@ -81,8 +83,8 @@ public class AdminController {
 
 	// add ride
 	@PostMapping("/add")
-	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model)
-			throws IOException {
+	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,
+			HttpSession session) throws IOException {
 		try {
 			// Validate if the uploaded file is empty
 			if (rideImage.isEmpty()) {
@@ -114,15 +116,15 @@ public class AdminController {
 
 					}
 					System.out.println(imagePath);
-					
-					List<User> userList=uRepo.findAll();
-					model.addAttribute("uList",userList);
-					
-					List<Ride> rideList=rideRepo.findAll();
-					model.addAttribute("rideList",rideList);
-					
-					List<Rent> rentList=rentRepo.findAll();
-					model.addAttribute("rList",rentList);
+
+					List<User> userList = uRepo.findAll();
+					model.addAttribute("uList", userList);
+
+					List<Ride> rideList = rideRepo.findAll();
+					model.addAttribute("rideList", rideList);
+
+					List<Rent> rentList = rentRepo.findAll();
+					model.addAttribute("rList", rentList);
 
 					return "admindash";
 
@@ -175,32 +177,129 @@ public class AdminController {
 	}
 
 	@GetMapping("/editRide/{rideId}")
-	public String editRide(@PathVariable int rideId,Model model, HttpSession session){
-				
-//	if (session.getAttribute("activeUser")==null) {
-//		session.setAttribute("error","Please login first !");
-//		return "adminlogin";
-//		
-//	}
-	Ride ride=rideRepo.getById(rideId);
-	model.addAttribute("rideObject",ride);
-	return "editRide";
-		
-		
+	public String editRide(@PathVariable int rideId, Model model, HttpSession session) {
+
+		Ride ride = rideRepo.findById(rideId).orElse(null);
+		if (ride == null) {
+			return "editRide"; // Redirect to an error page
+		}
+		model.addAttribute("rideObject", ride);
+		return "editRide";
 	}
+
+	@PostMapping("/editRide")
+	public String updateRide(@ModelAttribute Ride ride, Model model, HttpSession session) throws IOException {
+
+		try {
+			// Check if the user is logged in
+			if (session.getAttribute("activeUser") == null) {
+				session.setAttribute("error", "Please login first !");
+				return "adminlogin";
+			}
+
+			// Handle file upload for profile image
+			MultipartFile newRideImg = ride.getNewRideImg();
+			if (newRideImg != null && !newRideImg.isEmpty()) {
+				// Save the profile image file to a location on the server
+
+				File saveDir = new ClassPathResource("static/assets").getFile();
+
+				Path imagePath = Paths
+						.get(saveDir.getAbsolutePath() + File.separator + newRideImg.getOriginalFilename());
+
+				try (InputStream inputStream = newRideImg.getInputStream()) {
+
+					Files.copy(newRideImg.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+				}
+				// Update the user's profile image path in the database
+				String imagePathString = "/" + newRideImg.getOriginalFilename();
+				ride.setRideImg(imagePathString);
+
+				rideRepo.save(ride);
+				model.addAttribute("rideList", rideRepo.findAll());
+				return "ridebooking";
+
+			}
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to save ride details");
+			return "editRide";
+		}
+		return "editRide";
+	}
+
+	// Edit User
+	@GetMapping("/editUser/{userId}")
+	public String editUser(@PathVariable int userId, Model model, HttpSession session) {
+
+		User user = uRepo.findById(userId).orElse(null);
+		if (user == null) {
+			return "editRide"; // Redirect to an error page
+		}
+		model.addAttribute("userObject", user);
+		return "editUser";
+	}
+
+	@PostMapping("/editUser")
+	public String updateUser(@ModelAttribute User user, Model model, HttpSession session) throws IOException {
+
+		try {
+			// Check if the user is logged in
+			if (session.getAttribute("activeUser") == null) {
+				session.setAttribute("error", "Please login first !");
+				return "login";
+			}
+
+			// Handle file upload for profile image
+			MultipartFile newLicenseFile = user.getNewLicenseFile();
+			if (newLicenseFile != null && !newLicenseFile.isEmpty()) {
+				// Save the profile image file to a location on the server
+
+				File saveDir = new ClassPathResource("static/assets").getFile();
+
+				Path imagePath = Paths
+						.get(saveDir.getAbsolutePath() + File.separator + newLicenseFile.getOriginalFilename());
+
+				try (InputStream inputStream = newLicenseFile.getInputStream()) {
+
+					Files.copy(newLicenseFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+				}
+				// Update the user's profile image path in the database
+				String imagePathString = "/" + newLicenseFile.getOriginalFilename();
+				user.setLicense(imagePathString);
+
+				uRepo.save(user);
+				model.addAttribute("userList", uRepo.findAll());
+				return "manageUser";
+
+			}
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to save ride details");
+			return "manageUser";
+		}
+		return "editUser";
+	}
+
 	@GetMapping("/deleteRide/{rideId}")
 	public String deleteRide(@PathVariable int rideId, Model model, HttpSession session) {
 		rideRepo.deleteById(rideId);
-		model.addAttribute("rideList",rideRepo.findAll());
+		model.addAttribute("rideList", rideRepo.findAll());
 		return "ridebooking";
 	}
-	
+
 	@GetMapping("/deleteUser/{userId}")
-	public String deleteUser(@PathVariable int userId, Model model,HttpSession session) {
+	public String deleteUser(@PathVariable int userId, Model model, HttpSession session) {
 		uRepo.deleteById(userId);
-		
-		model.addAttribute("uList",uRepo.findAll());
+
+		model.addAttribute("uList", uRepo.findAll());
 		return "manageUser";
 	}
-	
+
 }

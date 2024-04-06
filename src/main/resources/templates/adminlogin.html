@@ -15,8 +15,7 @@
 
 	<div class="container">
 		<div class="forms-container">
-
-
+			<br>
 
 			<form action="/adminLogin" method="post" class="sign-in-form">
 
@@ -37,11 +36,13 @@
 						<a href="forgot.html" class="forgot-password"
 							id="forgotPasswordLink">Forgot Password?</a>
 					</div>
-				
+
 				</div>
-				 	
+
 				<input type="submit" value="Login" class="btn solid" />
 			</form>
+			<p th:text="${session.error}" style="color: red;"></p>
+			
 		</div>
 	</div>
 

@@ -7,9 +7,14 @@ import com.example.model.Ride;
 import java.util.List;
 
 @Repository
-public interface rideRepository extends JpaRepository<Ride, Integer>{
+public interface rideRepository extends JpaRepository<Ride, Integer> {
 
 	Ride findByRideId(int rideId);
+
 	boolean existsByRideId(int rideId);
+
+	List<Ride> findByAboutContainingIgnoreCase(String about);
+
 	
+
 }
