@@ -46,6 +46,13 @@ public class UserController {
 	public String login() {
 		return "login";
 	}
+	
+	@GetMapping("/userLogin")
+	public String userLogin(Model model ) {
+		List<Ride> rideList=rideRepo.findAll();
+		model.addAttribute("rideList", rideList);
+	    return "dashboard";
+	}
 
 	@PostMapping("/userLogin")
 	public String userLogin(@ModelAttribute User user, Model model, HttpSession session) {
@@ -124,6 +131,7 @@ public class UserController {
 		model.addAttribute("rideList", rideList);
 		return "dashboard";
 	}
+	
 	
 	
 	@GetMapping("/product")

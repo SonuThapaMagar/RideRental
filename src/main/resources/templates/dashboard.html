@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -76,9 +77,13 @@
 								<img th:src="@{'/assets/' + ${ride.rideImg}}" alt="Ride Image">
 								<div class="trip__details">
 									<p th:text="${ride.about}"></p>
+									
 									<div class="rating">
-										<i class="ri-star-fill"></i> 4.2
+										<i class="ri-star-fill"></i>
+										        <div class="status" th:text="${ride.status}"></div>
+										
 									</div>
+									
 									<div class="booking__price">
 										<div class="price">
 											<span>From</span> $ <span th:text="${ride.price}"></span>

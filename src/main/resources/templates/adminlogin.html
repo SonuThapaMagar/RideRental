@@ -9,6 +9,7 @@
 <link rel="stylesheet" th:href="@{/css/adminstyle.css}" />
 <link rel="icon" type="image/x-icon" href="../assets/edit (1).png">
 <title>Rentide Admin Login</title>
+
 </head>
 
 <body>
@@ -16,6 +17,12 @@
 	<div class="container">
 		<div class="forms-container">
 			<br>
+			<!-- Add this code where you want to display the error message -->
+			<div th:if="${errorMessage}" class="error-message"
+				style="text-align: center; color: red;">
+				<p th:text="${errorMessage}"></p>
+			</div>
+
 
 			<form action="/adminLogin" method="post" class="sign-in-form">
 
@@ -41,13 +48,18 @@
 
 				<input type="submit" value="Login" class="btn solid" />
 			</form>
-			<p th:text="${session.error}" style="color: red;"></p>
-			
+			<!-- p th:text="${session.error}" style="color: red;"></p-->
+
 		</div>
 	</div>
 
 	<script src="./js/login.js"></script>
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script th:if="${errorMessage}">
+		setTimeout(function() {
+			document.querySelector('.error-message').style.display = 'none';
+		}, 3000); // 3000 milliseconds = 3 seconds
+	</script>
+
 </body>
 
 </html>

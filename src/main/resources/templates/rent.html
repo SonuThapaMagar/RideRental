@@ -1,262 +1,319 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Rentide</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
-  ">
-<script src="https://kit.fontawesome.com/64d58efce2.js"
-	crossorigin="anonymous"></script>
-<link rel="icon" type="image/x-icon" href="/assets/edit (1).png">
-<link rel="stylesheet"
-	href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
-<link rel="stylesheet" href="/css/styles.css" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+	href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+<title>Ride Rental Form</title>
 </head>
 <style>
-body, input {
-	font-family: "Poppins", sans-serif;
+@import
+	url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap')
+	;
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
 }
 
-.forms-container {
-	max-width: 600px;
-	margin: 0 auto;
-	background-color: #fff;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+body {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.title {
-	font-size: 24px;
-	color: #333;
-	margin-bottom: 20px;
-}
-
-.input-field {
-	margin-bottom: 20px;
-}
-
-.input-field i {
-	margin-right: 10px;
-	color: #888;
-}
-
-.input-field label {
-	display: block;
-	margin-bottom: 5px;
-	font-weight: bold;
-	color: #333;
-}
-
-.input-field input, .input-field select {
+.container {
+	position: relative;
+	max-width: 900px;
 	width: 100%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	font-size: 16px;
-	outline: none;
+	border-radius: 6px;
+	padding: 30px;
+	margin: 0 15px;
+	background-color: #fff;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
-.input-field input[type="date"], .input-field input[type="time"],
-	.input-field select {
-	height: 40px;
-}
-
-.input-field input[type="submit"], .input-field input[type="button"] {
-	width: auto;
-	padding: 10px 20px;
-	font-size: 16px;
-	background-color: #e91e63;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s;
-}
-
-.input-field input[type="submit"]:hover, .input-field input[type="button"]:hover
-	{
-	background-color: #e91e63;
-}
-
-.btn1 {
-	width: 150px;
-	background-color: grey;
-	border: none;
-	outline: none;
-	height: 49px;
-	border-radius: 49px;
-	color: #fff;
-	text-transform: uppercase;
+.container header {
+	position: relative;
+	font-size: 20px;
 	font-weight: 600;
-	margin: 32px 0;
-	cursor: pointer;
-	transition: 0.5s;
+	color: #333;
 }
 
-.btn {
-	width: 150px;
-	background-color: #de3450;
-	border: none;
-	outline: none;
-	height: 49px;
-	border-radius: 49px;
-	color: #fff;
-	text-transform: uppercase;
-	font-weight: 600;
-	margin: 32px 0;
-	cursor: pointer;
-	transition: 0.5s;
-}
-
-.btn:hover {
+.container header::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	height: 3px;
+	width: 100%;
+	border-radius: 8px;
 	background-color: #ff580f;
 }
 
-@media ( max-width : 870px) {
-	.signin-signup {
-		width: 100%;
-		top: 95%;
-		transform: translate(-50%, -100%);
-		transition: 1s 0.8s ease-in-out;
+.container form {
+	position: relative;
+	margin-top: 16px;
+	min-height: 490px;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+.container form .form {
+	position: absolute;
+	background-color: #fff;
+	transition: 0.3s ease;
+}
+
+.container form .form.second {
+	opacity: 0;
+	pointer-events: none;
+	transform: translateX(100%);
+}
+
+form.secActive .form.second {
+	opacity: 1;
+	pointer-events: auto;
+	transform: translateX(0);
+}
+
+form.secActive .form.first {
+	opacity: 0;
+	pointer-events: none;
+	transform: translateX(-100%);
+}
+
+.container form .title {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 16px;
+	font-weight: 500;
+	margin: 6px 0;
+	color: #333;
+}
+
+.container form .fields {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+form .fields .input-field {
+	display: flex;
+	width: calc(100%/ 3 - 15px);
+	flex-direction: column;
+	margin: 4px 0;
+}
+
+.input-field label {
+	font-size: 12px;
+	font-weight: 500;
+	color: #2e2e2e;
+}
+
+.input-field input, select {
+	outline: none;
+	font-size: 14px;
+	font-weight: 400;
+	color: #333;
+	border-radius: 5px;
+	border: 1px solid #aaa;
+	padding: 0 15px;
+	height: 42px;
+	margin: 8px 0;
+}
+
+.input-field input :focus, .input-field select:focus {
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.13);
+}
+
+.input-field select, .input-field input[type="date"] {
+	color: #707070;
+}
+
+.input-field input[type="date"]:valid {
+	color: #333;
+}
+
+.container form button, .backBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 45px;
+	max-width: 200px;
+	width: 100%;
+	border: none;
+	outline: none;
+	color: #fff;
+	border-radius: 5px;
+	margin: 25px 0;
+	background-color: green;
+	transition: all 0.3s linear;
+	cursor: pointer;
+}
+
+.container form .btnText {
+	font-size: 14px;
+	font-weight: 400;
+}
+
+.btn-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+/* Specify the order for the "Back" button */
+.backBtn {
+	order: 1;
+}
+
+/* Specify the order for the "Proceed" button */
+.btn {
+	order: 2;
+}
+
+@media ( max-width : 750px) {
+	.container form {
+		overflow-y: scroll;
 	}
-	.signin-signup, .container.sign-up-mode .signin-signup {
-		left: 50%;
+	.container form::-webkit-scrollbar {
+		display: none;
 	}
-	.input-field {
-		position: relative;
+	form .fields .input-field {
+		width: calc(100%/ 2 - 15px);
 	}
 }
 
-@media ( max-width : 570px) {
-	form {
-		padding: 0 1.5rem;
+@media ( max-width : 550px) {
+	form .fields .input-field {
+		width: 100%;
 	}
 }
 </style>
-
 <body>
-	<main>
-		<div class="big-wrapper light">
-			<img src="./img/shape.png" alt="" class="shape" />
 
-			<header>
-				<div class="container">
-					<div class="logo">
-						<img src="./assets/edit (1).png" alt="Logo" />
-						<h3>Ride Rental Services</h3>
-					</div>
+	<div class="container">
+		<header>Ride Rental Form</header>
 
-					<div class="links">
-						<ul>
-							<li><a href="index">Home</a></li>
-							<li><a href="Services">Services</a></li>
-							<li><a href="view">Bikes & Pricing</a></li>
-							<li><a href="test">Testimonials</a></li>
-							<li><a href="login" class="btn">Logout</a></li>
-						</ul>
-					</div>
+		<form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+			method="POST">
+			<div class="form first">
 
-					<div class="overlay"></div>
+				<!-- Personal Details -->
+				<div class="details personal">
+					<span class="title">Personal Details</span>
 
-					<div class="hamburger-menu">
-						<div class="bar"></div>
+					<div class="fields">
+						<div class="input-field">
+							<label>Full Name</label> <input type="text"
+								placeholder="Enter your name" required>
+						</div>
+
+						<div class="input-field">
+							<label>Email</label> <input type="text"
+								placeholder="Enter your email" required>
+						</div>
+
+						<div class="input-field">
+							<label>Mobile Number</label> <input type="number"
+								placeholder="Enter mobile number" required>
+						</div>
+
+
 					</div>
 				</div>
-			</header>
+				<!-- Personal Details  End-->
 
-			<!--Rent Details-->
+				<!-- Rental Details  -->
 
-			<section class="forms-container">
-				<form action="/rentRide" method="post" class="rent_details">
-					<h2 class="title">Rent Details</h2>
-					<div class="input-field">
-						<i class="fas fa-calendar"></i> <label for="start_date">Start
-							Date</label> <input type="date" id="start_date" name="rentStartDate"
-							required />
+				<div class="details ID">
+					<span class="title">Rental Details</span>
+
+					<div class="fields">
+						<div class="input-field">
+							<label>Pick Up Location</label> <input type="text"
+								placeholder="Enter pick up location" required>
+						</div>
+
+
+						<div class="input-field">
+							<label>Rent Date</label> <input type="datetime-local"
+								placeholder="Enter rent start date" required>
+						</div>
+
+						<div class="input-field">
+							<label>Rent End Date</label> <input type="date"
+								placeholder="Enter rent end date" required>
+						</div>
+
+						<div class="input-field">
+							<label>Select Rent Package</label> <select required>
+								<option disabled selected>Select package</option>
+								<option>1 hour</option>
+								<option>3 hour</option>
+								<option>Half Day</option>
+								<option>Full Day</option>
+
+							</select>
+						</div>
 					</div>
-					<div class="input-field">
-						<i class="fas fa-calendar"></i> <label for="start_date">End
-							Date</label> <input type="date" id="end_date" name="rentEndDate" required />
-					</div>
-					<div class="input-field">
-						<i class="fas fa-clock"></i> <label for="time">Time</label> <input
-							type="time" id="time" name="rentTime" required />
-					</div>
-					<div class="input-field">
-						<i class="fas fa-list"></i> <label for="number">Contact
-							Number</label> <input type="number" id="phone" name="phone" required />
 
-					</div>
-
-					<input type="button" class="btn1" value="Cancel" />
-
-					<button type="button" class="btn" onclick="redirectToPayment()">Next</button>
-				</form>
-			</section>
-	</main>
-
-	<!--footer-->
-	<footer class="footer">
-		<div class="container">
-			<div class="row">
-				<div class="footer-col">
-					<h4>company</h4>
-					<ul>
-						<li><a href="#">about us</a></li>
-						<li><a href="#">our services</a></li>
-						<li><a href="#">privacy policy</a></li>
-					</ul>
-				</div>
-				<div class="footer-col">
-					<h4>get help</h4>
-					<ul>
-						<li><a href="#">FAQ</a></li>
-						<!-- <li><a href="#">shipping</a></li>
-                <li><a href="#">returns</a></li> -->
-						<li><a href="#">order status</a></li>
-						<li><a href="#">payment options</a></li>
-					</ul>
-				</div>
-				<div class="footer-col">
-					<!-- <h4>online shop</h4> -->
-					<!-- <ul>
-                <li><a href="#">watch</a></li>
-                <li><a href="#">bag</a></li>
-                <li><a href="#">shoes</a></li>
-                <li><a href="#">dress</a></li>
-              </ul> -->
-				</div>
-				<div class="footer-col">
-					<h4>follow us</h4>
-					<div class="social-links">
-						<a href="#"><i class="fab fa-facebook-f"></i></a> <a href="#"><i
-							class="fab fa-twitter"></i></a> <a href="#"><i
-							class="fab fa-instagram"></i></a> <a href="#"><i
-							class="fab fa-linkedin-in"></i></a>
+					<div class="btn-container">
+						<a href="userLogin" style="width: 100px; text-decoration: none;">
+							<button type="button" class="backBtn"
+								style="background-color: black;">Back</button>
+						</a> <a href="payment" style="text-decoration: none; width: 130px;">
+							<button type="submit" class="btn" id="proceed-btn">Pay
+								Via eSewa</button>
+						</a>
 					</div>
 				</div>
+				<!-- Rental Details  -->
+				<!-- Hidden Input Fields for eSewa Parameters -->
+				<input type="hidden" id="amount" name="amount" value="100">
+
+				<input type="hidden" id="tax_amount" name="tax_amount" value="10">
+
+				<input type="hidden" id="total_amount" name="total_amount"
+					value="110"> <input type="hidden" id="transaction_uuid"
+					name="transaction_uuid" required> <input type="hidden"
+					id="product_code" name="product_code" value="YOUR_PRODUCT_CODE">
+
+				<input type="hidden" id="product_service_charge"
+					name="product_service_charge" value="0"> 
+					
+					
+				<input	type="hidden" id="product_delivery_charge"
+					name="product_delivery_charge" value="0"> 
+					
+				<input
+					type="hidden" id="success_url" name="success_url"
+					value="YOUR_SUCCESS_URL">
+					
+				<input type="hidden"
+					id="failure_url" name="failure_url" value="YOUR_FAILURE_URL">
+				
+				<input type="hidden" id="signed_field_names"
+					name="signed_field_names"
+					value="total_amount,transaction_uuid,product_code">
+			
+				<!-- Include the generated signature here -->
+				<input type="hidden" id="signature" name="signature"
+					value="GENERATED_SIGNATURE">
+
+
 			</div>
-		</div>
-	</footer>
-
-	<!-- JavaScript Files -->
-
-	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
-	<script src="/js/index.js"></script>
-
+		</form>
+	</div>
 </body>
- <script>
-    function redirectToPayment() {
-      // Redirect the user to payment.html
-      window.location.href = "payment.html";
-    }
-  </script>
 
 </html>

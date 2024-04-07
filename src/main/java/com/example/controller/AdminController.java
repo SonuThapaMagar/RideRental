@@ -57,7 +57,10 @@ public class AdminController {
 	private static final String adminPassword = "admin@2024";
 
 	@GetMapping("/admin")
-	public String admin() {
+	public String admin(@RequestParam(name = "error", required = false) String error, Model model) {
+		if (error != null && !error.isEmpty()) {
+			model.addAttribute("errorMessage", error);
+		}
 		return "adminlogin";
 	}
 
@@ -76,15 +79,34 @@ public class AdminController {
 		return "adminlogin";
 	}
 
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "adminlogin";
+	}
+
 	@GetMapping("/add")
-	public String add() {
+	public String add(HttpSession session, Model model) {
+
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		return "add";
+
 	}
 
 	// add ride
 	@PostMapping("/add")
 	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,
 			HttpSession session) throws IOException {
+
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		try {
 			// Validate if the uploaded file is empty
 			if (rideImage.isEmpty()) {
@@ -145,40 +167,63 @@ public class AdminController {
 	}
 
 	@GetMapping("/admindash")
-	public String admindash() {
+	public String admindash(HttpSession session, Model model) {
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			// If not logged in, redirect to the login page
+			return "adminlogin";
+		}
 		return "admindash";
 	}
 
 	@GetMapping("/ridebooking")
-	public String rideDetails(Model model) {
+	public String rideDetails(Model model, HttpSession session) {
+
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
 		return "ridebooking";
 	}
 
 	@GetMapping("/manageUser")
-	public String manageUser(Model model) {
+	public String manageUser(Model model, HttpSession session) {
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		List<User> uList = uRepo.findAll();
 		model.addAttribute("uList", uList);
 		return "manageUser";
 	}
 
 	@GetMapping("/rental")
-	public String rental(Model model) {
+	public String rental(Model model, HttpSession session) {
+		
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
+
 		List<Rent> rentList = rentRepo.findAll();
 		model.addAttribute("rentList", rentList);
 		return "rental";
 	}
 
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "adminlogin";
-	}
-
 	@GetMapping("/editRide/{rideId}")
 	public String editRide(@PathVariable int rideId, Model model, HttpSession session) {
 
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		Ride ride = rideRepo.findById(rideId).orElse(null);
 		if (ride == null) {
 			return "editRide"; // Redirect to an error page
@@ -235,6 +280,13 @@ public class AdminController {
 	@GetMapping("/editUser/{userId}")
 	public String editUser(@PathVariable int userId, Model model, HttpSession session) {
 
+		
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
+		
 		User user = uRepo.findById(userId).orElse(null);
 		if (user == null) {
 			return "editRide"; // Redirect to an error page
@@ -247,10 +299,10 @@ public class AdminController {
 	public String updateUser(@ModelAttribute User user, Model model, HttpSession session) throws IOException {
 
 		try {
-			// Check if the user is logged in
 			if (session.getAttribute("activeUser") == null) {
-				session.setAttribute("error", "Please login first !");
-				return "login";
+				String errorMessage = "Please login first!";
+				model.addAttribute("errorMessage", errorMessage);
+				return "adminlogin";
 			}
 
 			// Handle file upload for profile image
@@ -289,6 +341,12 @@ public class AdminController {
 
 	@GetMapping("/deleteRide/{rideId}")
 	public String deleteRide(@PathVariable int rideId, Model model, HttpSession session) {
+		
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		rideRepo.deleteById(rideId);
 		model.addAttribute("rideList", rideRepo.findAll());
 		return "ridebooking";
@@ -296,6 +354,12 @@ public class AdminController {
 
 	@GetMapping("/deleteUser/{userId}")
 	public String deleteUser(@PathVariable int userId, Model model, HttpSession session) {
+		
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		uRepo.deleteById(userId);
 
 		model.addAttribute("uList", uRepo.findAll());
