@@ -1,16 +1,13 @@
 package com.example.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-
+import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,22 +17,56 @@ public class Rent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int rentId;
-	private LocalDate rentStartDate;
+	private LocalDateTime rentStartDate;
 	private LocalDate rentEndDate;
-	private String rentStatus;
-	private LocalTime rentTime;
-	private String payementStatus;
+	private String pickUpLocation;
+	private String paymentStatus;
+	private String rentPackage;
+	private String location;
+
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "rideId")
+	private Ride ride;
+	private String fullName;
+	private String email;
+	private String phone;
 
 	
 	
-	
-
-	public LocalTime getRentTime() {
-		return rentTime;
+	public String getLocation() {
+		return location;
 	}
 
-	public void setRentTime(LocalTime rentTime) {
-		this.rentTime = rentTime;
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public int getRentId() {
@@ -46,11 +77,11 @@ public class Rent {
 		this.rentId = rentId;
 	}
 
-	public LocalDate getRentStartDate() {
+	public LocalDateTime getRentStartDate() {
 		return rentStartDate;
 	}
 
-	public void setRentStartDate(LocalDate rentStartDate) {
+	public void setRentStartDate(LocalDateTime rentStartDate) {
 		this.rentStartDate = rentStartDate;
 	}
 
@@ -62,32 +93,49 @@ public class Rent {
 		this.rentEndDate = rentEndDate;
 	}
 
-	public String getRentStatus() {
-		return rentStatus;
+	public String getPickUpLocation() {
+		return pickUpLocation;
 	}
 
-	public void setRentStatus(String rentStatus) {
-		this.rentStatus = rentStatus;
+	public void setPickUpLocation(String pickUpLocation) {
+		this.pickUpLocation = pickUpLocation;
+	}
+
+	public String getRentPackage() {
+		return rentPackage;
+	}
+
+	public void setRentPackage(String rentPackage) {
+		this.rentPackage = rentPackage;
 	}
 
 	public String getPayementStatus() {
-		return payementStatus;
+		return paymentStatus;
 	}
 
 	public void setPayementStatus(String payementStatus) {
-		this.payementStatus = payementStatus;
+		this.paymentStatus = payementStatus;
 	}
 
-	public Rent(int rentId, LocalDate rentStartDate, LocalDate rentEndDate, String rentStatus, String payementStatus,
-			User user, Ride ride) {
+	public Rent() {
+
+	}
+
+	public Rent(String location,String fullName, String email, String phone, LocalDateTime rentStartDate, LocalDate rentEndDate,
+			String pickUpLocation, String paymentStatus, String rentPackage, User user, Ride ride) {
 		super();
-		this.rentId = rentId;
+		this.location=location;
+		this.fullName = fullName;
+		this.email = email;
+		this.phone = phone;
 		this.rentStartDate = rentStartDate;
 		this.rentEndDate = rentEndDate;
-		this.rentStatus = rentStatus;
-		this.payementStatus = payementStatus;
+		this.pickUpLocation = pickUpLocation;
+		this.paymentStatus = paymentStatus;
+		this.rentPackage = rentPackage;
+		this.user = user;
+		this.ride = ride;
+
 	}
-	
-	
 
 }

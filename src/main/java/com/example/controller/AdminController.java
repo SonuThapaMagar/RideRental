@@ -14,9 +14,12 @@ import javax.swing.event.TableModelListener;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +33,7 @@ import com.example.repository.userRepository;
 import com.mysql.jdbc.StringUtils;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -42,6 +46,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class AdminController {
 
+	
+	 
 	@Autowired
 	private rideRepository rideRepo;
 
@@ -66,7 +72,15 @@ public class AdminController {
 
 	// Admin login via static credential
 	@PostMapping("/adminLogin")
-	public String adminLogin(@ModelAttribute Admin a, Model model, HttpSession session) {
+	public String adminLogin(@Valid @ModelAttribute Admin a, BindingResult bindingResult, Model model,
+			HttpSession session) {
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("emailError", bindingResult.getFieldError("email").getDefaultMessage());
+			model.addAttribute("passwordError", bindingResult.getFieldError("password").getDefaultMessage());
+			return "adminlogin";
+		}
+
 		// Checking the credential
 		if (a.getEmail().equals(adminEmail) && a.getPassword().equals(adminPassword)) {
 			session.setAttribute("activeUser", a.getEmail());
@@ -84,6 +98,18 @@ public class AdminController {
 		session.invalidate();
 		return "adminlogin";
 	}
+	
+	  @GetMapping("/adminDash")
+	    public String adminDash(HttpSession session, Model model) {
+	        if (session.getAttribute("activeUser") == null) {
+	            String errorMessage = "Please login first!";
+	            model.addAttribute("errorMessage", errorMessage);
+	            // If not logged in, redirect to the login page
+	            return "adminlogin";
+	        }
+	        return "admindash";
+	    }
+
 
 	@GetMapping("/add")
 	public String add(HttpSession session, Model model) {
@@ -99,14 +125,8 @@ public class AdminController {
 
 	// add ride
 	@PostMapping("/add")
-	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,
-			HttpSession session) throws IOException {
-
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
+	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model) throws IOException {
+	
 		try {
 			// Validate if the uploaded file is empty
 			if (rideImage.isEmpty()) {
@@ -204,7 +224,7 @@ public class AdminController {
 
 	@GetMapping("/rental")
 	public String rental(Model model, HttpSession session) {
-		
+
 		if (session.getAttribute("activeUser") == null) {
 			String errorMessage = "Please login first!";
 			model.addAttribute("errorMessage", errorMessage);
@@ -280,13 +300,12 @@ public class AdminController {
 	@GetMapping("/editUser/{userId}")
 	public String editUser(@PathVariable int userId, Model model, HttpSession session) {
 
-		
 		if (session.getAttribute("activeUser") == null) {
 			String errorMessage = "Please login first!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		
+
 		User user = uRepo.findById(userId).orElse(null);
 		if (user == null) {
 			return "editRide"; // Redirect to an error page
@@ -296,14 +315,10 @@ public class AdminController {
 	}
 
 	@PostMapping("/editUser")
-	public String updateUser(@ModelAttribute User user, Model model, HttpSession session) throws IOException {
+	public String updateUser(@ModelAttribute User user, Model model) throws IOException {
 
 		try {
-			if (session.getAttribute("activeUser") == null) {
-				String errorMessage = "Please login first!";
-				model.addAttribute("errorMessage", errorMessage);
-				return "adminlogin";
-			}
+			
 
 			// Handle file upload for profile image
 			MultipartFile newLicenseFile = user.getNewLicenseFile();
@@ -341,7 +356,7 @@ public class AdminController {
 
 	@GetMapping("/deleteRide/{rideId}")
 	public String deleteRide(@PathVariable int rideId, Model model, HttpSession session) {
-		
+
 		if (session.getAttribute("activeUser") == null) {
 			String errorMessage = "Please login first!";
 			model.addAttribute("errorMessage", errorMessage);
@@ -354,7 +369,7 @@ public class AdminController {
 
 	@GetMapping("/deleteUser/{userId}")
 	public String deleteUser(@PathVariable int userId, Model model, HttpSession session) {
-		
+
 		if (session.getAttribute("activeUser") == null) {
 			String errorMessage = "Please login first!";
 			model.addAttribute("errorMessage", errorMessage);

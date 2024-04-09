@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.model.Rent;
 import com.example.model.Ride;
 import com.example.model.User;
+import com.example.repository.rentRepository;
 import com.example.repository.rideRepository;
 import com.example.repository.userRepository;
 
@@ -27,6 +29,9 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 
@@ -36,7 +41,10 @@ public class UserController {
 
 	@Autowired
 	private rideRepository rideRepo;
-	
+
+	@Autowired
+	private rentRepository rentRepo;
+
 	@GetMapping("/")
 	public String landingPage() {
 		return "index";
@@ -46,12 +54,12 @@ public class UserController {
 	public String login() {
 		return "login";
 	}
-	
+
 	@GetMapping("/userLogin")
-	public String userLogin(Model model ) {
-		List<Ride> rideList=rideRepo.findAll();
+	public String userLogin(Model model) {
+		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
-	    return "dashboard";
+		return "dashboard";
 	}
 
 	@PostMapping("/userLogin")
@@ -61,13 +69,18 @@ public class UserController {
 
 		if (uRepo.existsByEmailAndPassword(user.getEmail(), hashedPassword)) {
 
+			session.setAttribute("activeUser", user.getEmail());
 			session.setAttribute("activeUser", user.getFullName());
 			session.setMaxInactiveInterval(30);
+
 			List<User> uList = uRepo.findAll();
 			model.addAttribute("uList", uList);
 
-			List<Ride> rideList=rideRepo.findAll();
+			List<Ride> rideList = rideRepo.findAll();
 			model.addAttribute("rideList", rideList);
+
+			model.addAttribute("loggedInUserEmail", user.getEmail());
+			model.addAttribute("loggedInUserFullName", user.getFullName());
 			return "dashboard";
 
 		}
@@ -127,29 +140,44 @@ public class UserController {
 
 	@GetMapping("/index")
 	public String index(Model model) {
-		List<Ride> rideList=rideRepo.findAll();
+		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
 		return "dashboard";
 	}
-	
-	
-	
+
 	@GetMapping("/product")
 	public String product() {
 		return "product";
 	}
 	
+	@GetMapping("/editProfile")
+	public String editProfile(Model model,HttpSession session) {
+		
+		  String activeUserEmail = (String) session.getAttribute("activeUser");
+		    if (activeUserEmail != null) {
+		        // Retrieve the user from the database based on the email
+		        User userObject = uRepo.findByEmail(activeUserEmail);
+		        if (userObject != null) {
+		            // Add the userObject to the model
+		            model.addAttribute("userObject", userObject);
+		            return "profile"; // Assuming your profile page is named "profile.html"
+		        }
+		    }
+		return "profile";
+	}
+
 	@GetMapping("/search")
 	public String searchRides(@RequestParam(required = false) String keyword, Model model) {
-	    List<Ride> rideList;
-	    if (keyword != null && !keyword.isEmpty()) {
-	    	rideList = rideRepo.findByAboutContainingIgnoreCase(keyword); // Search by name and model (case-insensitively)
-	    } else {
-	    	rideList = rideRepo.findAll(); // Retrieve all rides if no keyword provided
-	    }
+		List<Ride> rideList;
+		if (keyword != null && !keyword.isEmpty()) {
+			rideList = rideRepo.findByAboutContainingIgnoreCase(keyword); // Search by name and model
+																			// (case-insensitively)
+		} else {
+			rideList = rideRepo.findAll(); // Retrieve all rides if no keyword provided
+		}
 
-	    model.addAttribute("rideList", rideList);
-	    return "dashboard"; // View name to display search results
+		model.addAttribute("rideList", rideList);
+		return "dashboard"; // View name to display search results
 	}
 
 	@GetMapping("/renttable")
@@ -171,9 +199,35 @@ public class UserController {
 	public String view() {
 		return "view";
 	}
+
 	@GetMapping("/rentRide")
-	public String rentRide() {
-		
+	public String rentRide(Model model, HttpSession session) {
+
 		return "rent";
 	}
+
+	@GetMapping("/orderDetails")
+	public String order(Model model, HttpSession session) {
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "login";
+		}
+		List<Rent> rentList = rentRepo.findAll();
+		model.addAttribute("rentList", rentList);
+		return "orderDetails";
+	}
+
+	@PostMapping("/orderDetails")
+	public String orderDetails(@ModelAttribute Rent rent, Model model) {
+
+		Rent savedRent = rentRepo.save(rent);
+		List<Rent> rentList = rentRepo.findAll();
+		model.addAttribute("rentList", rentList);
+
+		return "orderDetails";
+	}
+	
+	
+
 }

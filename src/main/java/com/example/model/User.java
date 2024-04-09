@@ -40,6 +40,11 @@ public class User {
 	@OneToOne
 	@JoinColumn(name = "rideId")
 	private Ride ride;
+	
+	
+	@OneToMany
+	(mappedBy = "user")
+	private List<Rent> rentList;
 
 	public MultipartFile getNewLicenseFile() {
 		return newLicenseFile;

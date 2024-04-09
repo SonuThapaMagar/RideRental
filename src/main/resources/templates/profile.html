@@ -52,10 +52,9 @@
 
 							<hr class="border-light m-0">
 							<div class="card-body">
+								<form action="/editUser" method="post" th:object="${userObject}"
+									enctype="multipart/form-data">
 
-								<!-- <form action="#" method="post" th:object="${userObject}"
-									enctype="multipart/form-data"> -->
-								<form action="#" method="post">
 									<div class="form-group">
 										<input type="hidden" th:field="*{userId}">
 									</div>
@@ -85,8 +84,9 @@
 									</div>
 
 									<div class="form-group">
-										<label class="form-label">License</label> <input type="file"
-											th:field="*{newLicenseFile}" class="form-control">
+										<label class="form-label">License</label> 
+										<input type="file"
+										th:field="*{newLicenseFile}" class="form-control">
 									</div>
 									<button type="submit" class="btn btn-primary">Save</button>
 								</form>
