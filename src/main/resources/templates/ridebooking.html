@@ -197,9 +197,9 @@ button {
 						<td th:text="${ride.price}"></td>
 						<td th:text="${ride.status}"></td>
 						<td th:text="${ride.about}"></td>
-						<td><img th:src="@{'/assets/' + ${ride.rideImg}}"
-							alt="Ride Image" style="width: 100px; height: 100px;"></td>
-
+							<td><a
+							th:href="@{'/assets/' +${ride.rideImg}}"
+							target="_blank" style="text-decoration:none;">View Image</a></td>
 						<td><span class="material-icons-outlined">edit</span> 
 						<a
 							th:href="@{'/editRide/'+${ride.rideId}}"> 

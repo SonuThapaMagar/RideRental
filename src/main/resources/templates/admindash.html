@@ -180,13 +180,16 @@ button {
 				<a href="/ridebooking" style="text-decoration: none;">
 					<div class="card" style="border: none;">
 						<div class="card-inner">
-							<h2>View All Vehicles</h2>
+							<h2>View All Rides</h2>
 							<span class="material-icons-outlined">visibility</span>
 						</div>
+						<h2>
+							Total Rides: <span th:text="${totalRides}"></span>
+						</h2>
+
 					</div>
-				</a> 
-				
-				<a href="/manageUser" style="text-decoration: none;">
+
+				</a> <a href="/manageUser" style="text-decoration: none;">
 					<div class="card" style="background-color: #4F79BD;">
 						<div class="card-inner">
 							<h2>View User Details</h2>

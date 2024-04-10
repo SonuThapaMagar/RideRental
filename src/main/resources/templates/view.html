@@ -7,11 +7,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rentide</title>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
   <link rel="stylesheet" th:href="@{/css/styles.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 </head>
+<style>
+.profile-dropdown {
+	position: relative;
+	width: fit-content;
+}
 
+.profile-dropdown-btn {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-right: 1rem;
+	font-size: 0.9rem;
+	font-weight: 500;
+	width: 150px;
+	border-radius: 50px;
+	color: var(--black);
+	/* background-color: white;
+  box-shadow: var(--shadow); */
+	cursor: pointer;
+	border: 1px solid var(--secondary);
+	transition: box-shadow 0.2s ease-in, background-color 0.2s ease-in,
+		border 0.3s;
+}
+
+.profile-dropdown-btn:hover {
+	background-color: var(--secondary-light-2);
+	box-shadow: var(--shadow);
+}
+
+.profile-img {
+	position: relative;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	background: url(./assets/profile-pic.jpg);
+	background-size: cover;
+}
+
+.profile-img i {
+	position: absolute;
+	right: 0;
+	bottom: 0.3rem;
+	font-size: 0.5rem;
+	color: var(--green);
+}
+
+.profile-dropdown-btn span {
+	margin: 0 0.5rem;
+	margin-right: 0;
+}
+
+.profile-dropdown-list {
+	position: absolute;
+	top: 68px;
+	width: 220px;
+	right: 0;
+	background-color: var(--white);
+	border-radius: 10px;
+	max-height: 0;
+	overflow: hidden;
+	box-shadow: var(--shadow);
+	transition: max-height 0.5s;
+}
+
+.profile-dropdown-list hr {
+	border: 0.5px solid var(--green);
+}
+
+.profile-dropdown-list.active {
+	max-height: 500px;
+}
+
+.profile-dropdown-list-item {
+	padding: 0.5rem 0rem 0.5rem 1rem;
+	transition: background-color 0.2s ease-in, padding-left 0.2s;
+}
+
+.profile-dropdown-list-item a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: var(--black);
+}
+
+.profile-dropdown-list-item a i {
+	margin-right: 0.8rem;
+	font-size: 1.1rem;
+	width: 2.3rem;
+	height: 2.3rem;
+	background-color: #e35252; /* Change the color here */
+	color: var(--white);
+	line-height: 2.3rem;
+	text-align: center;
+	margin-right: 1rem;
+	border-radius: 50%;
+	transition: margin-right 0.3s;
+}
+:root {
+	--primary: #eeeeee;
+	--secondary: #227c70;
+	--orange: #e35252;
+	--secondary-light: rgb(34, 124, 112, 0.2);
+	--secondary-light-2: rgb(127, 183, 126, 0.1);
+	--white: #fff;
+	--black: #393e46;
+	--shadow: 0px 2px 8px 0px var(--secondary-light);
+}
+.profile-dropdown-list-item:hover {
+	padding-left: 1.5rem;
+	background-color: var(--secondary-light);
+}
+</style>
 <body>
     <main>
         <div class="big-wrapper light">
@@ -25,16 +140,48 @@
                     </div>
 
                    <div class="links">
-              <ul>
-                <li><a href="/index">Home</a></li>
-                <li><a href="/Services">Services</a></li>
-                <li><a href="/view">Bikes & Pricing</a></li>
-                <li><a href="/test">Testimonials</a></li>
-                <li><a href="/login" class="btn">Login</a></li>
-              </ul>
+           	<ul>
+							<li><a href="userLogin">Home</a></li>
+							<li><a href="Services">Services</a></li>
+							<li><a href="view">Bikes & Pricing</a></li>
+							<li><a href="/orderDetails">Your Bookings</a></li>
+
+						</ul>
             </div>
 
                     <div class="overlay"></div>
+                    
+                    <div class="profile-dropdown">
+						<div onclick="toggle()" class="profile-dropdown-btn">
+							<div class="profile-img">
+								<i class="fa-solid fa-circle"></i>
+							</div>
+
+							<span th:text="${loggedInUserEmail}"> <i
+								class="fa-solid fa-angle-down"></i></span>
+
+
+						</div>
+
+						<ul class="profile-dropdown-list">
+							<li class="profile-dropdown-list-item"><a
+								href="/editProfile"> <i class="fa-regular fa-user"></i>
+									Edit Profile
+							</a></li>
+
+
+							<li class="profile-dropdown-list-item"><a href=""> <i
+									class="fa-solid fa-sliders"></i> Settings
+							</a></li>
+
+
+
+							<li class="profile-dropdown-list-item"><a href="/logoutUser">
+									<i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+							</a></li>
+						</ul>
+					</div>
+                    
 
                     <div class="hamburger-menu">
                         <div class="bar"></div>
@@ -72,7 +219,7 @@
                 <div class="rating"><i class="ri-star-fill"></i> 4.2</div>
                 <div class="booking__price">
                   <div class="price"><span>From</span> $300</div>
-                  <a href="login.html">
+                  <a href="">
                     <button class="book__now">Book Now</button>
                   </a>                </div>
               </div>
@@ -186,5 +333,20 @@
     <script src="/js/index.js"></script>
 
 </body>
+<script>let profileDropdownList = document.querySelector(".profile-dropdown-list");
+  let btn = document.querySelector(".profile-dropdown-btn");
 
+  let classList = profileDropdownList.classList;
+
+  const toggle = () => classList.toggle("active");
+
+  window.addEventListener("click", function (e) {
+    if (!btn.contains(e.target)) classList.remove("active");
+  });
+  
+	function clearSearch() {
+		document.getElementById('search').value = ''; // Clear search input
+		document.querySelector('form').submit(); // Submit form to show all products
+	}
+</script>
 </html>

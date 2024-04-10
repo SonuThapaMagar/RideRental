@@ -533,47 +533,16 @@
 
 					<div class="links">
 						<ul>
-							<li><a href="userLogin">Home</a></li>
-							<li><a href="Services">Services</a></li>
-							<li><a href="view">Bikes & Pricing</a></li>
-							<li><a href="/orderDetails">Your Bookings</a></li>
-
+							<li><a href="/">Home</a></li>
+							<li><a href="/indexServices">Services</a></li>
+							<li><a href="/indexView">Bikes & Pricing</a></li>
+							<li><a href="/indexTest">Testimonials</a></li>
+							<li><a href="/login" class="btn">Login</a></li>
 						</ul>
 					</div>
 
 					<div class="overlay"></div>
 					
-					<div class="profile-dropdown">
-						<div onclick="toggle()" class="profile-dropdown-btn">
-							<div class="profile-img">
-								<i class="fa-solid fa-circle"></i>
-							</div>
-
-							<span th:text="${loggedInUserEmail}"> <i
-								class="fa-solid fa-angle-down"></i></span>
-
-
-						</div>
-
-						<ul class="profile-dropdown-list">
-							<li class="profile-dropdown-list-item"><a
-								href="/editProfile"> <i class="fa-regular fa-user"></i>
-									Edit Profile
-							</a></li>
-
-
-							<li class="profile-dropdown-list-item"><a href=""> <i
-									class="fa-solid fa-sliders"></i> Settings
-							</a></li>
-
-
-
-							<li class="profile-dropdown-list-item"><a href="/logoutUser">
-									<i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
-							</a></li>
-						</ul>
-					</div>
-
 					<div class="hamburger-menu">
 						<div class="bar"></div>
 					</div>

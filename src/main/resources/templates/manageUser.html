@@ -212,11 +212,11 @@ button {
 						<td th:text="${user.fullName}"></td>
 						<td th:text="${user.email}"></td>
 						<td th:text="${user.phone}"></td>
-						<td><img th:src="@{'/assets/' + ${user.license}}"
-							alt="User Image" style="width: 100px; height: 100px;"></td>
-
+						<td><a
+							th:href="@{'/assets/' + ${user.license}}"
+							target="_blank" style="text-decoration:none;">View License</a></td>
+						
 						<td th:text="${user.dob}"></td>
-
 
 						<td><span class="material-icons-outlined">edit</span> <a
 							th:href="@{ '/editUser/' + ${user.userId}}"> <input

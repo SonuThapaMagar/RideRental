@@ -5,6 +5,8 @@
 	<meta charset="ISO-8859-1">
 	<title>Product Details</title>
 	<link rel="stylesheet" th:href="@{/css/styles.css}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 
@@ -206,6 +208,7 @@
 			margin-bottom: 10px;
 		}
 	}
+	
 </style>
 
 <body>
@@ -214,23 +217,55 @@
 			<img src="./img/shape.png" alt="" class="shape" />
 
 			<header>
-				<div class="container">
+						<div class="container">
 					<div class="logo">
 						<img src="./assets/edit (1).png" alt="Logo" />
 						<h3>Ride Rental Services</h3>
 					</div>
 
 					<div class="links">
-              <ul>
-                <li><a href="/index">Home</a></li>
-                <li><a href="/Services">Services</a></li>
-                <li><a href="/view">Bikes & Pricing</a></li>
-                <li><a href="/test">Testimonials</a></li>
-                <li><a href="/login" class="btn">Login</a></li>
-              </ul>
-            </div>
+						<ul>
+							<li><a href="userLogin">Home</a></li>
+							<li><a href="Services">Services</a></li>
+							<li><a href="view">Bikes & Pricing</a></li>
+							<li><a href="orderDetails">Your Bookings</a></li>
+
+						</ul>
+					</div>
 
 					<div class="overlay"></div>
+					
+					<div class="profile-dropdown">
+						<div onclick="toggle()" class="profile-dropdown-btn">
+							<div class="profile-img">
+								<i class="fa-solid fa-circle"></i>
+							</div>
+
+							<span th:text="${loggedInUserEmail}"> <i
+								class="fa-solid fa-angle-down"></i></span>
+
+
+						</div>
+
+						<ul class="profile-dropdown-list">
+							<li class="profile-dropdown-list-item"><a
+								href="/editProfile"> <i class="fa-regular fa-user"></i>
+									Edit Profile
+							</a></li>
+
+
+							<li class="profile-dropdown-list-item"><a href=""> <i
+									class="fa-solid fa-sliders"></i> Settings
+							</a></li>
+
+
+
+							<li class="profile-dropdown-list-item"><a href="/logoutUser">
+									<i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+							</a></li>
+						</ul>
+					</div>
+
 					<div class="hamburger-menu">
 						<div class="bar"></div>
 					</div>
@@ -339,6 +374,23 @@
 			img.parentElement.classList.remove('active');
 		});
 	}
+	
+	let profileDropdownList = document.querySelector(".profile-dropdown-list");
+	  let btn = document.querySelector(".profile-dropdown-btn");
+
+	  let classList = profileDropdownList.classList;
+
+	  const toggle = () => classList.toggle("active");
+
+	  window.addEventListener("click", function (e) {
+	    if (!btn.contains(e.target)) classList.remove("active");
+	  });
+	  
+		function clearSearch() {
+			document.getElementById('search').value = ''; // Clear search input
+			document.querySelector('form').submit(); // Submit form to show all products
+		}
 </script>
+
 
 </html>

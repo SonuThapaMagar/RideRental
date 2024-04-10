@@ -17,7 +17,6 @@
 	<div class="container">
 		<div class="forms-container">
 			<br>
-			<!-- Add this code where you want to display the error message -->
 			<div th:if="${errorMessage}" class="error-message"
 				style="text-align: center; color: red;">
 				<p th:text="${errorMessage}"></p>
@@ -32,7 +31,7 @@
 				<h2 class="title">Admin Log in</h2>
 
 				<div class="input-field">
-					<i class="fas fa-envelope"></i> <input type="email" name="email"
+					<i class="fas fa-envelope"></i> <input type="email" required name="email"
 						placeholder="Email" />
 				</div>
 
@@ -43,7 +42,7 @@
 				<br>
 
 				<div class="input-field">
-					<i class="fas fa-lock"></i> <input type="password" name="password"
+					<i class="fas fa-lock"></i> <input type="password" required name="password"
 						placeholder="Password" id="passwordInput" /> <i
 						class="fas fa-eye" id="togglePassword"></i>
 				</div>
@@ -71,6 +70,7 @@
 		setTimeout(function() {
 			document.querySelector('.error-message').style.display = 'none';
 		}, 3000); // 3000 milliseconds = 3 seconds
+		
 		</script>
 
 </body>

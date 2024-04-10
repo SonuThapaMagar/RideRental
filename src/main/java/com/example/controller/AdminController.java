@@ -46,8 +46,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class AdminController {
 
-	
-	 
 	@Autowired
 	private rideRepository rideRepo;
 
@@ -89,7 +87,7 @@ public class AdminController {
 			model.addAttribute("success", "Login successful!"); // Optional
 			return "admindash";
 		}
-		session.setAttribute("error", "Invalid credentials"); // Set error message in session
+		model.addAttribute("errorMessage", "Invalid username or password !!"); // Set error message
 		return "adminlogin";
 	}
 
@@ -98,18 +96,19 @@ public class AdminController {
 		session.invalidate();
 		return "adminlogin";
 	}
-	
-	  @GetMapping("/adminDash")
-	    public String adminDash(HttpSession session, Model model) {
-	        if (session.getAttribute("activeUser") == null) {
-	            String errorMessage = "Please login first!";
-	            model.addAttribute("errorMessage", errorMessage);
-	            // If not logged in, redirect to the login page
-	            return "adminlogin";
-	        }
-	        return "admindash";
-	    }
 
+	@GetMapping("/adminDash")
+	public String adminDash(HttpSession session, Model model) {
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		} else {
+			long totalRides = rideRepo.count();
+			model.addAttribute("totalRides", totalRides);
+			return "admindash";
+		}
+	}
 
 	@GetMapping("/add")
 	public String add(HttpSession session, Model model) {
@@ -118,15 +117,17 @@ public class AdminController {
 			String errorMessage = "Please login first!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
+		} else {
+			return "add";
 		}
-		return "add";
 
 	}
 
 	// add ride
 	@PostMapping("/add")
-	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model) throws IOException {
-	
+	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model)
+			throws IOException {
+
 		try {
 			// Validate if the uploaded file is empty
 			if (rideImage.isEmpty()) {
@@ -188,62 +189,44 @@ public class AdminController {
 
 	@GetMapping("/admindash")
 	public String admindash(HttpSession session, Model model) {
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			// If not logged in, redirect to the login page
-			return "adminlogin";
-		}
-		return "admindash";
+	
+			return "admindash";
+		
 	}
 
 	@GetMapping("/ridebooking")
 	public String rideDetails(Model model, HttpSession session) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
-		List<Ride> rideList = rideRepo.findAll();
-		model.addAttribute("rideList", rideList);
-		return "ridebooking";
+	
+			List<Ride> rideList = rideRepo.findAll();
+			model.addAttribute("rideList", rideList);
+			return "ridebooking";
+		
 	}
 
 	@GetMapping("/manageUser")
 	public String manageUser(Model model, HttpSession session) {
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
-		List<User> uList = uRepo.findAll();
-		model.addAttribute("uList", uList);
-		return "manageUser";
+	
+			List<User> uList = uRepo.findAll();
+			model.addAttribute("uList", uList);
+			return "manageUser";
+		
+
 	}
 
 	@GetMapping("/rental")
 	public String rental(Model model, HttpSession session) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
-
-		List<Rent> rentList = rentRepo.findAll();
-		model.addAttribute("rentList", rentList);
-		return "rental";
+	
+			List<Rent> rentList = rentRepo.findAll();
+			model.addAttribute("rentList", rentList);
+			return "rental";
+		
 	}
 
 	@GetMapping("/editRide/{rideId}")
 	public String editRide(@PathVariable int rideId, Model model, HttpSession session) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
 		Ride ride = rideRepo.findById(rideId).orElse(null);
 		if (ride == null) {
 			return "editRide"; // Redirect to an error page
@@ -252,15 +235,12 @@ public class AdminController {
 		return "editRide";
 	}
 
+
 	@PostMapping("/editRide")
 	public String updateRide(@ModelAttribute Ride ride, Model model, HttpSession session) throws IOException {
 
 		try {
-			// Check if the user is logged in
-			if (session.getAttribute("activeUser") == null) {
-				session.setAttribute("error", "Please login first !");
-				return "adminlogin";
-			}
+		
 
 			// Handle file upload for profile image
 			MultipartFile newRideImg = ride.getNewRideImg();
@@ -300,16 +280,11 @@ public class AdminController {
 	@GetMapping("/editUser/{userId}")
 	public String editUser(@PathVariable int userId, Model model, HttpSession session) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
-
 		User user = uRepo.findById(userId).orElse(null);
 		if (user == null) {
 			return "editRide"; // Redirect to an error page
 		}
+
 		model.addAttribute("userObject", user);
 		return "editUser";
 	}
@@ -318,7 +293,6 @@ public class AdminController {
 	public String updateUser(@ModelAttribute User user, Model model) throws IOException {
 
 		try {
-			
 
 			// Handle file upload for profile image
 			MultipartFile newLicenseFile = user.getNewLicenseFile();
@@ -335,12 +309,13 @@ public class AdminController {
 					Files.copy(newLicenseFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
 				}
+								
 				// Update the user's profile image path in the database
 				String imagePathString = "/" + newLicenseFile.getOriginalFilename();
 				user.setLicense(imagePathString);
 
 				uRepo.save(user);
-				model.addAttribute("userList", uRepo.findAll());
+				model.addAttribute("uList", uRepo.findAll());
 				return "manageUser";
 
 			}
@@ -357,28 +332,21 @@ public class AdminController {
 	@GetMapping("/deleteRide/{rideId}")
 	public String deleteRide(@PathVariable int rideId, Model model, HttpSession session) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
+	
+			rideRepo.deleteById(rideId);
+			model.addAttribute("rideList", rideRepo.findAll());
+			return "ridebooking";
 		}
-		rideRepo.deleteById(rideId);
-		model.addAttribute("rideList", rideRepo.findAll());
-		return "ridebooking";
-	}
+	
 
 	@GetMapping("/deleteUser/{userId}")
 	public String deleteUser(@PathVariable int userId, Model model, HttpSession session) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
-		uRepo.deleteById(userId);
+			uRepo.deleteById(userId);
 
-		model.addAttribute("uList", uRepo.findAll());
-		return "manageUser";
+			model.addAttribute("uList", uRepo.findAll());
+			return "manageUser";
+		
 	}
 
 }

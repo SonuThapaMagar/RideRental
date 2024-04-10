@@ -1,63 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http:www.thymeleaf.org">
 
 <head>
-
 <meta charset="UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dashboard</title>
-<link rel="icon" type="image/x-icon" href="/assets/edit (1).png">
-<link rel="stylesheet"
-	href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
-<link rel="stylesheet" href="/css/search.css">
+<title>Rentide</title>
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
-<link rel="stylesheet" href="/css/styles.css" />
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-
 </head>
 <style>
-@import
-	url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap")
-	;
-
-:root {
-	--primary: #eeeeee;
-	--secondary: #227c70;
-	--orange: #e35252;
-	--secondary-light: rgb(34, 124, 112, 0.2);
-	--secondary-light-2: rgb(127, 183, 126, 0.1);
-	--white: #fff;
-	--black: #393e46;
-	--shadow: 0px 2px 8px 0px var(--secondary-light);
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	box-sizing: border-box;
-	font-family: "Poppins", sans-serif;
-}
-
-body {
-	height: 100vh;
-	width: 100%;
-	background-color: var(--primary);
-}
-
-.navbar {
-	display: flex;
-	align-items: center;
-	height: 70px;
-	background-color: var(--white);
-	padding: 0 8%;
-	box-shadow: var(--shadow);
-}
-
 .profile-dropdown {
 	position: relative;
 	width: fit-content;
@@ -157,12 +114,22 @@ body {
 	transition: margin-right 0.3s;
 }
 
+:root {
+	--primary: #eeeeee;
+	--secondary: #227c70;
+	--orange: #e35252;
+	--secondary-light: rgb(34, 124, 112, 0.2);
+	--secondary-light-2: rgb(127, 183, 126, 0.1);
+	--white: #fff;
+	--black: #393e46;
+	--shadow: 0px 2px 8px 0px var(--secondary-light);
+}
+
 .profile-dropdown-list-item:hover {
 	padding-left: 1.5rem;
 	background-color: var(--secondary-light);
 }
 </style>
-
 <body>
 	<main>
 		<div class="big-wrapper light">
@@ -177,71 +144,22 @@ body {
 
 					<div class="links">
 						<ul>
-							<li><a href="userLogin">Home</a></li>
-							<li><a href="Services">Services</a></li>
-							<li><a href="view">Bikes & Pricing</a></li>
-							<li><a href="/orderDetails">Your Bookings</a></li>
-
+							<li><a href="/">Home</a></li>
+							<li><a href="/indexServices">Services</a></li>
+							<li><a href="/indexView">Bikes & Pricing</a></li>
+							<li><a href="/indexTest">Testimonials</a></li>
+							<li><a href="/login" class="btn">Login</a></li>
 						</ul>
 					</div>
 
 					<div class="overlay"></div>
 
-					<div class="profile-dropdown">
-						<div onclick="toggle()" class="profile-dropdown-btn">
-							<div class="profile-img">
-								<i class="fa-solid fa-circle"></i>
-							</div>
-
-							<span th:text="${loggedInUserEmail}"> <i
-								class="fa-solid fa-angle-down"></i></span>
-
-
-						</div>
-
-						<ul class="profile-dropdown-list">
-							<li class="profile-dropdown-list-item"><a
-								th:href="@{'/editProfile/' + ${loggedInUserEmail}}"> <i
-									class="fa-regular fa-user"></i> Edit Profile
-							</a></li>
-
-
-
-							<li class="profile-dropdown-list-item"><a href=""> <i
-									class="fa-solid fa-sliders"></i> Settings
-							</a></li>
-
-
-
-							<li class="profile-dropdown-list-item"><a href="/logoutUser">
-									<i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
-							</a></li>
-						</ul>
-					</div>
-
-					<div class="hamburger-menu">
+							<div class="hamburger-menu">
 						<div class="bar"></div>
 					</div>
 				</div>
 			</header>
 
-			<!--Search bar-->
-			<div class="search-bar">
-				<form action="/search">
-					<input type="text" class="search-input" name="keyword" id="search"
-						placeholder="Search...">
-					<button class="search-button">
-						<i class="fas fa-search"></i>
-					</button>
-					<button type="button" class="clear-button"
-						style="width: 30px; height: 35px; color: white; background-color: black; border-radius: 0.3rem; cursor: pointer"
-						onclick="clearSearch()">
-						<i class="fas fa-times"></i>
-					</button>
-					<!-- Add Clear button -->
-				</form>
-
-			</div>
 			<!--Bikes-->
 			<section class="trip">
 				<div class="section__container trip__container">
@@ -250,40 +168,114 @@ body {
 						Scooter Today!</p>
 					<div class="trip__grid">
 
-						<th:block th:each="ride : ${rideList}">
-
-
-							<div class="trip__card">
-
-								<img th:src="@{'/assets/' + ${ride.rideImg}}" alt="Ride Image">
-								<div class="trip__details">
-									<p th:text="${ride.about}"></p>
-
-									<div class="rating">
-										<i class="ri-star-fill"></i>
-										<div class="status" th:text="${ride.status}"></div>
-
+						<div class="trip__card">
+							<img src="assets/honda dio 125.png" alt="trip" />
+							<div class="trip__details">
+								<p>Honda Dio 125</p>
+								<div class="rating">
+									<i class="ri-star-fill"></i> 4.2
+								</div>
+								<div class="booking__price">
+									<div class="price">
+										<span>From</span> $300
 									</div>
-
-									<div class="booking__price">
-										<div class="price">
-											<span>From</span> $ <span th:text="${ride.price}"></span>
-										</div>
-										<a href="rentRide">
-											<button class="book__now">Book Now</button>
-										</a>
-									</div>
+									<a href="/login">
+										<button class="book__now">Book Now</button>
+									</a>
 								</div>
 							</div>
-						</th:block>
+						</div>
 
-						<th:block th:if="${#lists.isEmpty(rideList)}">
-							<p class="no-results">No rides found matching your search
-								criteria.</p>
-						</th:block>
+						<div class="trip__card">
+							<img src="assets/tvs.jpg" alt="trip" />
+							<div class="trip__details">
+								<p>TVS NTORQ 125</p>
+								<div class="rating">
+									<i class="ri-star-fill"></i> 4.2
+								</div>
+								<div class="booking__price">
+									<div class="price">
+										<span>From</span> $300
+									</div>
+									<a href="/login">
+										<button class="book__now">Book Now</button>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="trip__card">
+							<img src="assets/bmw.jpg" alt="trip" />
+							<div class="trip__details">
+								<p>BMW F 850 GS</p>
+								<div class="rating">
+									<i class="ri-star-fill"></i> 4.5
+								</div>
+								<div class="booking__price">
+									<div class="price">
+										<span>From</span> $450
+									</div>
+									<a href="/login">
+										<button class="book__now">Book Now</button>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="trip__card">
+							<img src="assets/yamaha.png" alt="trip" />
+							<div class="trip__details">
+								<p>Yamaha FZ-S</p>
+								<div class="rating">
+									<i class="ri-star-fill"></i> 4.2
+								</div>
+								<div class="booking__price">
+									<div class="price">
+										<span>From</span> $300
+									</div>
+									<a href="/login">
+										<button class="book__now">Book Now</button>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="trip__card">
+							<img src="assets/yamaha.png" alt="trip" />
+							<div class="trip__details">
+								<p>Bajaj Pulsar 150</p>
+								<div class="rating">
+									<i class="ri-star-fill"></i> 4.5
+								</div>
+								<div class="booking__price">
+									<div class="price">
+										<span>From</span> $450
+									</div>
+									<a href="login.html">
+										<button class="book__now">Book Now</button>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="trip__card">
+							<img src="assets/ktm.png" alt="trip" />
+							<div class="trip__details">
+								<p>KTM 390</p>
+								<div class="rating">
+									<i class="ri-star-fill"></i> 4.7
+								</div>
+								<div class="booking__price">
+									<div class="price">
+										<span>From</span> $400
+									</div>
+									<a href="login.html">
+										<button class="book__now">Book Now</button>
+									</a>
+								</div>
+							</div>
+						</div>
+
 
 					</div>
-				</div>
 			</section>
 		</div>
 	</main>
@@ -306,11 +298,21 @@ body {
 					<h4>get help</h4>
 					<ul>
 						<li><a href="#">FAQ</a></li>
+						<!-- <li><a href="#">shipping</a></li>
+              <li><a href="#">returns</a></li> -->
 						<li><a href="#">order status</a></li>
 						<li><a href="#">payment options</a></li>
 					</ul>
 				</div>
-				<div class="footer-col"></div>
+				<div class="footer-col">
+					<!-- <h4>online shop</h4> -->
+					<!-- <ul>
+              <li><a href="#">watch</a></li>
+              <li><a href="#">bag</a></li>
+              <li><a href="#">shoes</a></li>
+              <li><a href="#">dress</a></li>
+            </ul> -->
+				</div>
 				<div class="footer-col">
 					<h4>follow us</h4>
 					<div class="social-links">
