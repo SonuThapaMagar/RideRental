@@ -11,10 +11,13 @@
 <link rel="stylesheet"
 	href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
 <link rel="stylesheet" href="/css/search.css">
+
+<!-- Search -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
 <link rel="stylesheet" href="/css/styles.css" />
+
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
 
@@ -200,9 +203,10 @@ body {
 						</div>
 
 						<ul class="profile-dropdown-list">
-							<li class="profile-dropdown-list-item"><a
-								th:href="@{'/editProfile/' + ${loggedInUserEmail}}"> <i
-									class="fa-regular fa-user"></i> Edit Profile
+							<li class="profile-dropdown-list-item">
+							<a
+								th:href="@{'/editProfile/' + ${loggedInUserEmail}}"> 
+								<i class="fa-regular fa-user"></i> Edit Profile
 							</a></li>
 
 
@@ -343,7 +347,7 @@ body {
   
 	function clearSearch() {
 		document.getElementById('search').value = ''; // Clear search input
-		document.querySelector('form').submit(); // Submit form to show all products
+		document.querySelector('form').submit();
 	}
 </script>
 </html>

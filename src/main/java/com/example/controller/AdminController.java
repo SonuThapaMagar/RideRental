@@ -13,6 +13,7 @@ import java.util.Optional;
 import javax.swing.event.TableModelListener;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.aspectj.weaver.ast.Literal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
@@ -122,6 +123,53 @@ public class AdminController {
 		}
 
 	}
+	@GetMapping("/searchUser")
+	public String searchUser(@RequestParam(required = false) String fullName,Model model, User user) {
+		
+		List<User> uList;
+		if (fullName != null && !fullName.isEmpty()) {
+			uList = uRepo.findByFullName(fullName); // Search by name and model
+																	// (case-insensitively)
+		} else {
+			uList = uRepo.findAll(); // Retrieve all rides if no keyword provided
+		}
+		model.addAttribute("uList", uList);
+
+		return "manageUser";
+	}
+	@GetMapping("/searchRent")
+	public String searchRent(@RequestParam(required = false) String fullName, Rent rent,Model model) {
+		List<Rent> rentList;
+		if (fullName != null && !fullName.isEmpty()) {
+			rentList = rentRepo.findByFullName(fullName); // Search by name and model
+																			// (case-insensitively)
+		} else {
+			rentList = rentRepo.findAll(); // Retrieve all rides if no keyword provided
+		}
+	
+		model.addAttribute("rentList", rentList);
+		return "rental";
+
+	}
+	
+	@GetMapping("/searchRide")
+	public String searchRide(@RequestParam(required = false) String keyword,Model model, Ride ride) {
+		
+		List<Ride> rideList;
+
+		if (keyword != null && !keyword.isEmpty()) {
+			rideList = rideRepo.findByAboutContainingIgnoreCase(keyword); // Search by name and model
+																			// (case-insensitively)
+		} else {
+			rideList = rideRepo.findAll(); // Retrieve all rides if no keyword provided
+		}
+		model.addAttribute("rideList", rideList);
+
+
+		return "ridebooking";
+	}
+
+
 
 	// add ride
 	@PostMapping("/add")
@@ -189,39 +237,36 @@ public class AdminController {
 
 	@GetMapping("/admindash")
 	public String admindash(HttpSession session, Model model) {
-	
-			return "admindash";
-		
+
+		return "admindash";
+
 	}
 
 	@GetMapping("/ridebooking")
 	public String rideDetails(Model model, HttpSession session) {
 
-	
-			List<Ride> rideList = rideRepo.findAll();
-			model.addAttribute("rideList", rideList);
-			return "ridebooking";
-		
+		List<Ride> rideList = rideRepo.findAll();
+		model.addAttribute("rideList", rideList);
+		return "ridebooking";
+
 	}
 
 	@GetMapping("/manageUser")
 	public String manageUser(Model model, HttpSession session) {
-	
-			List<User> uList = uRepo.findAll();
-			model.addAttribute("uList", uList);
-			return "manageUser";
-		
+
+		List<User> uList = uRepo.findAll();
+		model.addAttribute("uList", uList);
+		return "manageUser";
 
 	}
 
 	@GetMapping("/rental")
-	public String rental(Model model, HttpSession session) {
+	public String rental(Model model, User user, Ride ride) {
 
-	
-			List<Rent> rentList = rentRepo.findAll();
-			model.addAttribute("rentList", rentList);
-			return "rental";
-		
+		List<Rent> rentList = rentRepo.findAll();
+		model.addAttribute("rentList", rentList);
+		return "rental";
+
 	}
 
 	@GetMapping("/editRide/{rideId}")
@@ -235,12 +280,10 @@ public class AdminController {
 		return "editRide";
 	}
 
-
 	@PostMapping("/editRide")
 	public String updateRide(@ModelAttribute Ride ride, Model model, HttpSession session) throws IOException {
 
 		try {
-		
 
 			// Handle file upload for profile image
 			MultipartFile newRideImg = ride.getNewRideImg();
@@ -309,7 +352,7 @@ public class AdminController {
 					Files.copy(newLicenseFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
 				}
-								
+
 				// Update the user's profile image path in the database
 				String imagePathString = "/" + newLicenseFile.getOriginalFilename();
 				user.setLicense(imagePathString);
@@ -332,21 +375,19 @@ public class AdminController {
 	@GetMapping("/deleteRide/{rideId}")
 	public String deleteRide(@PathVariable int rideId, Model model, HttpSession session) {
 
-	
-			rideRepo.deleteById(rideId);
-			model.addAttribute("rideList", rideRepo.findAll());
-			return "ridebooking";
-		}
-	
+		rideRepo.deleteById(rideId);
+		model.addAttribute("rideList", rideRepo.findAll());
+		return "ridebooking";
+	}
 
 	@GetMapping("/deleteUser/{userId}")
 	public String deleteUser(@PathVariable int userId, Model model, HttpSession session) {
 
-			uRepo.deleteById(userId);
+		uRepo.deleteById(userId);
 
-			model.addAttribute("uList", uRepo.findAll());
-			return "manageUser";
-		
+		model.addAttribute("uList", uRepo.findAll());
+		return "manageUser";
+
 	}
 
 }

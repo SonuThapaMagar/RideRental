@@ -41,6 +41,17 @@ th {
 	color: white;
 }
 
+.history_lists {
+	background-color: white; display : flex;
+	align-items: center;
+	justify-content: space-between;
+	display: flex;
+	width:1300px;
+		height:200px;
+	
+	border-radius:0.5rem;
+}
+
 th, td {
 	border: 1px solid white;
 	padding: 8px;
@@ -106,13 +117,29 @@ button {
 		background-color: #f2f2f2;
 	}
 }
+.row{
+margin-left:1rem;
+margin-top:2rem;
+
+}
+.header {
+	width: 1350px;
+}
+
+.main-title {
+	border-radius: 0.5rem;
+	width: 1300px;
+	margin-right: 2rem;
+	margin-left: 0rem;
+}
 </style>
 
 <body>
 	<div class="grid-container">
 
 		<!-- Header -->
-		<header class="header">
+		<header class="header"
+			style="background-color: white; border-radius: 0.5rem; margin-top: 1rem;">
 			<div class="menu-icon" onclick="openSidebar()">
 				<span class="material-icons-outlined">menu</span>
 			</div>
@@ -136,7 +163,6 @@ button {
 				</div>
 				<span class="material-icons-outlined" onclick="closeSidebar()">close</span>
 			</div>
-
 			<ul class="sidebar-list">
 				<li class="sidebar-list-item"><a href="/admindash"> <span
 						class="material-icons-outlined">dashboard</span> Dashboard
@@ -169,83 +195,70 @@ button {
 
 		<!-- Main -->
 		<main class="main-container">
-			<div class="main-title">
-				<h2>
-					<strong>DASHBOARD</strong>
-				</h2>
-			</div>
+			<div class="main-title" style="background-color: white;">
 
-			<div class="main-cards">
 
-				<a href="/ridebooking" style="text-decoration: none;">
-					<div class="card" style="border: none;">
-						<div class="card-inner">
-							<h2>View All Rides</h2>
-							<span class="material-icons-outlined">visibility</span>
-						</div>
-						<h2>
+				<div class="main-cards">
+
+					<a href="/ridebooking" style="text-decoration: none;">
+						<div class="card" style="border: none; margin-left: 2rem;">
+							<div class="card-inner">
+								<h2>Rides</h2>
+								<br> <span class="material-icons-outlined">visibility</span>
+							</div>
+							<p>View All</p>
+
+							<!--  h2>
 							Total Rides: <span th:text="${totalRides}"></span>
-						</h2>
+						</h2-->
 
-					</div>
-
-				</a> <a href="/manageUser" style="text-decoration: none;">
-					<div class="card" style="background-color: #4F79BD;">
-						<div class="card-inner">
-							<h2>View User Details</h2>
-							<span class="material-icons-outlined">info</span>
 						</div>
-						<h1>8,731</h1>
-					</div>
-				</a> <a href="/add" style="text-decoration: none;">
-					<div class="card" style="background-color: #9363e0;">
-						<div class="card-inner">
-							<h2>Add New Vehicles</h2>
-							<span class="material-icons-outlined">add</span>
+
+					</a> <a href="/manageUser" style="text-decoration: none;">
+						<div class="card" style="background-color: #4F79BD;">
+							<div class="card-inner">
+								<h2>View User Details</h2>
+								<span class="material-icons-outlined">info</span>
+							</div>
 						</div>
-						<h1>3,841</h1>
-					</div>
-				</a>
-
-				<!-- <div class="card">
-            <div class="card-inner">
-              <h2>MESSAGES</h2>
-              <span class="material-icons-outlined">forum</span>
-            </div>
-            <h1>1,962</h1>
-          </div> -->
-
+					</a> <a href="/add" style="text-decoration: none;">
+						<div class="card" style="background-color: #9363e0;">
+							<div class="card-inner">
+								<h2>Add New Vehicles</h2>
+								<span class="material-icons-outlined">add</span>
+							</div>
+						</div>
+					</a>
+				</div>
 			</div>
+			<br>
 			<!--Table-->
-			<table>
-				<thead>
-					<tr>
-						<th>Ride ID</th>
-						<th>Name</th>
-						<th>Booking Date</th>
-						<th>Booking End Date</th>
-						<th>Price</th>
-						<th>Status</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>John Doe</td>
-						<td>2024-03-18</td>
-						<td>2024-03-20</td>
-						<td>$50</td>
-						<td><span class="status completed">Active</span></td>
-						<td><span class="material-icons-outlined">edit</span>
-							<button id="edit" style="background-color: green;">Edit</button>
-						</td>
+			<div class="history_lists">
+				<div class="row">
+					<h4></h4>
+					<a href="/rental">See all</a>
 
-						<td><span class="material-icons-outlined"> delete</span>
-							<button id="delete">Delete</button></td>
-					</tr>
-			</table>
+					<table>
+						<thead>
+							<tr>
+								<th>Ride ID</th>
+								<th>Name</th>
+								<th>Booking Date</th>
+								<th>Booking End Date</th>
+								<th>Price</th>
+								<th>Status</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="rent:${rentList}">
+								<td th:text="${rent.rentId}"></td>
+
+							</tr>
+					</table>
+				</div>
+			</div>
 		</main>
 		<!-- End Main -->
 

@@ -9,4 +9,7 @@ import com.example.model.Rent;
 @Repository
 public interface rentRepository extends JpaRepository<Rent, Integer> {
 
+	List<Rent> findByFullName(String keyword);
+
+
 }

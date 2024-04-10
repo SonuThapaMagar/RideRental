@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.io.File;
 import java.nio.file.Path;
@@ -195,6 +196,46 @@ public class UserController {
 		model.addAttribute("userObject", user);
 		return "profile";
 	}
+	@PostMapping("/editProfile")
+	public String updateProfile(@ModelAttribute User user, Model model) throws IOException {
+
+		try {
+
+			// Handle file upload for profile image
+			MultipartFile newLicenseFile = user.getNewLicenseFile();
+			if (newLicenseFile != null && !newLicenseFile.isEmpty()) {
+				// Save the profile image file to a location on the server
+
+				File saveDir = new ClassPathResource("static/assets").getFile();
+
+				Path imagePath = Paths
+						.get(saveDir.getAbsolutePath() + File.separator + newLicenseFile.getOriginalFilename());
+
+				try (InputStream inputStream = newLicenseFile.getInputStream()) {
+
+					Files.copy(newLicenseFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+				}
+								
+				// Update the user's profile image path in the database
+				String imagePathString = "/" + newLicenseFile.getOriginalFilename();
+				user.setLicense(imagePathString);
+
+				uRepo.save(user);
+				model.addAttribute("uList", uRepo.findAll());
+				return "dashboard";
+
+			}
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to save ride details");
+			return "dashboard";
+		}
+		return "editProfile";
+	}
+
 
 	@GetMapping("/search")
 	public String searchRides(@RequestParam(required = false) String keyword, User user, Model model,

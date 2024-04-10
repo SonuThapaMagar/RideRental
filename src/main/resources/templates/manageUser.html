@@ -25,6 +25,13 @@
 
 <!-- Custom CSS -->
 <link rel="stylesheet" th:href="@{/css/dash.css}">
+
+<!-- Search Bar -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+
+
+
 <style>
 .expanded-image {
 	width: 300px; /* Adjust as needed */
@@ -136,14 +143,23 @@ button {
 			<div class="menu-icon" onclick="openSidebar()">
 				<span class="material-icons-outlined">menu</span>
 			</div>
-			<div class="header-left">
-				<span class="material-icons-outlined">search</span>
+			<div class="search-bar">
+				<form action="/searchUser">
+					<input type="text" class="search-input" name="fullName" id="search"
+						placeholder="Search...">
+					<button class="search-button">
+						<i class="fas fa-search"></i>
+					</button>
+					<button type="button" class="clear-button"
+						style="width: 30px; height: 35px; color: white; background-color: black; border-radius: 0.3rem; cursor: pointer"
+						onclick="clearSearch()">
+						<i class="fas fa-times"></i>
+					</button>
+					<!-- Add Clear button -->
+				</form>
+
 			</div>
-			<div class="header-right">
-				<span class="material-icons-outlined">notifications</span> <span
-					class="material-icons-outlined">email</span> <span
-					class="material-icons-outlined">account_circle</span>
-			</div>
+			
 		</header>
 		<!-- End Header -->
 
@@ -233,6 +249,10 @@ button {
 						</a>
 					</tr>
 			</table>
+			<th:block th:if="${#lists.isEmpty(uList)}">
+							<p class="no-results">No rides found matching your search
+								criteria.</p>
+						</th:block>
 		</main>
 		<!-- End Main -->
 
@@ -241,6 +261,17 @@ button {
 	<!-- Scripts -->
 	<!-- Custom JS -->
 	<script src="dash.js"></script>
+	<script>
+	 const toggle = () => classList.toggle("active");
+
+	  window.addEventListener("click", function (e) {
+	    if (!btn.contains(e.target)) classList.remove("active");
+	  });
+	  
+		function clearSearch() {
+			document.getElementById('search').value = ''; // Clear search input
+			document.querySelector('form').submit();
+		}</script>
 </body>
 
 </html>

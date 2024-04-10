@@ -22,6 +22,9 @@
 <!-- Bootstrap Icons -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+<!-- Search Bar -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
 <!-- Custom CSS -->
 <link rel="stylesheet" th:href="@{/css/dash.css}">
@@ -117,13 +120,21 @@ button {
 				<span class="material-icons-outlined">menu</span>
 			</div>
 			<div class="header-left">
-				<span class="material-icons-outlined">search</span>
+				<form action="/searchRent">
+					<input type="text" class="search-input" name="fullName" id="search"
+						placeholder="Search...">
+					<button class="search-button">
+						<i class="fas fa-search"></i>
+					</button>
+					<button type="button" class="clear-button"
+						style="width: 30px; height: 35px; color: white; background-color: black; border-radius: 0.3rem; cursor: pointer"
+						onclick="clearSearch()">
+						<i class="fas fa-times"></i>
+					</button>
+					<!-- Add Clear button -->
+				</form>
 			</div>
-			<div class="header-right">
-				<span class="material-icons-outlined">notifications</span> <span
-					class="material-icons-outlined">email</span> <span
-					class="material-icons-outlined">account_circle</span>
-			</div>
+
 		</header>
 		<!-- End Header -->
 
@@ -178,10 +189,12 @@ button {
 					<tr>
 						<th>Rent ID</th>
 						<th>User</th>
+						<th>Email</th>
+						<th>Phone</th>
 						<th>Booking Date</th>
 						<th>Booking End Date</th>
-						<th>Price</th>
-						<th>Payment Status</th>
+						<th>Rent Package</th>
+
 						<th></th>
 						<th></th>
 					</tr>
@@ -191,20 +204,23 @@ button {
 
 
 						<td th:text="${rent.rentId}"></td>
-						<td th:text="${rent.user.fullName}"></td>
+						<td th:text="${rent.fullName}"></td>
+						<td th:text="${rent.email}"></td>
+
+						<td th:text="${rent.phone}"></td>
+
 						<td th:text="${rent.rentStartDate}"></td>
 						<td th:text="${rent.rentEndDate}"></td>
-						<td th:text="${rent.ride.price}"></td>
 
-						<!-- td><span class="status" th:classappend="${rent.status}">[[${ride.status}]]</span></td-->
-						<td><span class="material-icons-outlined">edit</span>
-							<button id="edit" style="background-color: green;">Edit</button>
-						</td>
+						<td th:text="${rent.rentPackage}"></td>
 
-						<td><span class="material-icons-outlined"> delete</span>
-							<button id="delete">Delete</button></td>
+		
 					</tr>
 			</table>
+			<th:block th:if="${#lists.isEmpty(rentList)}">
+				<p class="no-results">No rides found matching your search
+					criteria.</p>
+			</th:block>
 		</main>
 		<!-- End Main -->
 
@@ -213,6 +229,17 @@ button {
 	<!-- Scripts -->
 	<!-- Custom JS -->
 	<script src="dash.js"></script>
+	<script>
+	 const toggle = () => classList.toggle("active");
+
+	  window.addEventListener("click", function (e) {
+	    if (!btn.contains(e.target)) classList.remove("active");
+	  });
+	  
+		function clearSearch() {
+			document.getElementById('search').value = ''; // Clear search input
+			document.querySelector('form').submit();
+		}</script>
 </body>
 
 </html>
