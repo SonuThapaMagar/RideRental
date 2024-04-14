@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,27 @@ public class User {
 	private LocalDate dob;
 	private String phone;
 	private String password;
+	
+	
+	@Column(name = "reset_password_token")
+    private String resetPasswordToken;	
+	
+	
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
+	public List<Rent> getRentList() {
+		return rentList;
+	}
+
+	public void setRentList(List<Rent> rentList) {
+		this.rentList = rentList;
+	}
 
 	@Transient
 	private MultipartFile newLicenseFile;

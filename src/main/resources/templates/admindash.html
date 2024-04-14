@@ -42,14 +42,14 @@ th {
 }
 
 .history_lists {
-	background-color: white; display : flex;
+	background-color: white;
+	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	display: flex;
-	width:1300px;
-		height:200px;
-	
-	border-radius:0.5rem;
+	width: 1300px;
+	height: 200px;
+	border-radius: 0.5rem;
 }
 
 th, td {
@@ -117,11 +117,12 @@ button {
 		background-color: #f2f2f2;
 	}
 }
-.row{
-margin-left:1rem;
-margin-top:2rem;
 
+.row {
+	margin-left: 1rem;
+	margin-top: 2rem;
 }
+
 .header {
 	width: 1350px;
 }
@@ -144,21 +145,16 @@ margin-top:2rem;
 				<span class="material-icons-outlined">menu</span>
 			</div>
 			<div class="header-left">
-				<span class="material-icons-outlined">search</span>
-			</div>
-			<div class="header-right">
-				<span class="material-icons-outlined">notifications</span> <span
-					class="material-icons-outlined">email</span> <span
-					class="material-icons-outlined">account_circle</span>
-			</div>
+<h2>Dashboard</h2>			</div>
+		
 		</header>
 		<!-- End Header -->
 
 		<!-- Sidebar -->
 		<aside id="sidebar">
 			<div class="sidebar-title">
-				<div class="sidebar-brand">
-					<span class="material-icons-outlined">admin_panel_settings</span>
+				<div class="sidebar-brand" >
+						<img src="./assets/edit (1).png" alt="Logo" />
 					Admin
 				</div>
 				<span class="material-icons-outlined" onclick="closeSidebar()">close</span>
@@ -177,15 +173,10 @@ margin-top:2rem;
 						class="material-icons-outlined">check</span> Rental Information
 				</a></li>
 
+						<li class="sidebar-list-item"><a href="/adminProfile"><span
+						class="material-icons-outlined">person</span> Profile
 
-				<li class="sidebar-list-item"><a href="#"> <span
-						class="material-icons-outlined">poll</span> Reports
 				</a></li>
-				<!--li class="sidebar-list-item">
-          <a href="#">
-            <span class="material-icons-outlined">settings</span> Settings
-          </a>
-        </li-->
 				<li class="sidebar-list-item"><a href="/admin"> <span
 						class="material-icons-outlined">logout</span> Logout
 				</a></li>
@@ -235,25 +226,28 @@ margin-top:2rem;
 			<!--Table-->
 			<div class="history_lists">
 				<div class="row">
-					<h4></h4>
-					<a href="/rental">See all</a>
+					<h4>Ride Renting Details</h4>
+					<a href="/rental">View all</a>
 
 					<table>
 						<thead>
 							<tr>
-								<th>Ride ID</th>
-								<th>Name</th>
+								<th>Rent ID</th>
+								<th>User</th>
 								<th>Booking Date</th>
 								<th>Booking End Date</th>
-								<th>Price</th>
-								<th>Status</th>
-								<th></th>
-								<th></th>
+								<th>Rent Package</th>
+
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="rent:${rentList}">
 								<td th:text="${rent.rentId}"></td>
+								<td th:text="${rent.fullName}"></td>
+								<td th:text="${rent.rentStartDate}"></td>
+								<td th:text="${rent.rentEndDate}"></td>
+								<td th:text="${rent.rentPackage}"></td>
+
 
 							</tr>
 					</table>
@@ -267,6 +261,17 @@ margin-top:2rem;
 	<!-- Scripts -->
 	<!-- Custom JS -->
 	<script src="dash.js"></script>
+	<script>
+	 const toggle = () => classList.toggle("active");
+
+	  window.addEventListener("click", function (e) {
+	    if (!btn.contains(e.target)) classList.remove("active");
+	  });
+	  
+		function clearSearch() {
+			document.getElementById('search').value = ''; // Clear search input
+			document.querySelector('form').submit();
+		}</script>
 </body>
 
 </html>

@@ -8,16 +8,21 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Random;
+import java.util.Optional;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.example.model.Rent;
 import com.example.model.Ride;
@@ -26,12 +31,14 @@ import com.example.repository.rentRepository;
 import com.example.repository.rideRepository;
 import com.example.repository.userRepository;
 
+import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
@@ -45,6 +52,12 @@ public class UserController {
 
 	@Autowired
 	private rentRepository rentRepo;
+
+//	@Autowired
+//	private UserService userService;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@GetMapping("/")
 	public String landingPage() {
@@ -81,14 +94,14 @@ public class UserController {
 	@GetMapping("/userLogin")
 	public String userLogin(Model model, User user, HttpSession session) {
 
-//		 if (session.getAttribute("activeUser") == null) {
-//	            String errorMessage = "Please login first!";
-//	            model.addAttribute("errorMessage", errorMessage);
-//	            return "login";
-//	        }
-//		 if (session.getAttribute("activeUser") == null) {
-//		        return "login"; // Redirect to login if user is not logged in
-//		    }
+		// if (session.getAttribute("activeUser") == null) {
+		// String errorMessage = "Please login first!";
+		// model.addAttribute("errorMessage", errorMessage);
+		// return "login";
+		// }
+		// if (session.getAttribute("activeUser") == null) {
+		// return "login"; // Redirect to login if user is not logged in
+		// }
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
 		model.addAttribute("loggedInUserEmail", user.getEmail());
@@ -100,8 +113,9 @@ public class UserController {
 	public String userLogin(@ModelAttribute User user, Model model, HttpSession session) {
 		// Hash the password entered by the user
 		String hashedPassword = DigestUtils.shaHex(user.getPassword());
+		List<User> users = uRepo.findByEmailAndPassword(user.getEmail(), hashedPassword);
 
-		if (uRepo.existsByEmailAndPassword(user.getEmail(), hashedPassword)) {
+		if (users.size() == 1) {
 
 			session.setAttribute("activeUser", user.getEmail());
 			session.setAttribute("activeUser", user.getFullName());
@@ -118,8 +132,11 @@ public class UserController {
 
 			return "dashboard";
 
+		} else if (users.isEmpty()) {
+			model.addAttribute("errorMessage", "Invalid username or password !!");
+		} else {
+			model.addAttribute("errorMessage", "Multiple users found with the same email and password combination.");
 		}
-		model.addAttribute("errorMessage", "Invalid username or password !!"); // Set error message
 		return "login";
 
 	}
@@ -174,6 +191,154 @@ public class UserController {
 		return "login";
 	}
 
+	// Forgot Password
+	@GetMapping("/forgotPassword")
+	public String loadForgotPassword() {
+
+		return "newForgot";
+	}
+
+//	
+//	@PostMapping("/submitForgotPassword")
+//	public String submitForgotPassword(@RequestParam("email") String email, HttpSession session, Model model) {
+//
+//		List<User> users = uRepo.findByEmail(email);
+//
+//		if (!users.isEmpty()) {
+//			if (users.size() == 1) {
+//				// If only one user is found, proceed with the password reset
+//				return "newPassword";
+//			} else {
+//				// If multiple users are found, handle the scenario appropriately
+//				model.addAttribute("errorMessage",
+//						"Multiple accounts found for the provided email address. Please contact support for assistance.");
+//				return "newForgot"; // Display an error page or prompt the user to contact support
+//			}
+//		} else {
+//			// Handle the case where no user is found for the provided email address
+//			model.addAttribute("errorMessage", "No account found for the provided email address.");
+//			return "newForgot"; // Display an error page or prompt the user to verify their email address
+//		}
+//
+//	}
+	@PostMapping("/submitForgotPassword")
+	public String submitForgotPassword(@RequestParam("email") String email, Model model) {
+		// Find the user in the database
+		User user = uRepo.findByEmail(email);
+		if (user != null) {
+			// If user is found, proceed to reset password page
+//			model.addAttribute("userId", user.getUserId()); // You may need to pass the user's ID to the reset password
+			return "redirect:/resetPassword?userId=" + user.getUserId();
+			// page
+//			return "newPassword";
+		} else {
+			// If user is not found, display an error message
+			model.addAttribute("errorMessage", "No account found for the provided email address.");
+			return "newForgot";
+		}
+	}
+
+	@GetMapping("/resetPassword")
+	public String resetPasswordForm(@RequestParam("userId") String userId, Model model) {
+		// Pass the userId to the reset password form
+		Integer userIdInt = Integer.parseInt(userId);
+		model.addAttribute("userId", userId);
+		return "newPassword";
+	}
+
+	@PostMapping("/changedPassword")
+	public String resetPassword(@RequestParam("userId") Integer userId, @RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmPassword") String confirmPassword, Model model) {
+
+		// Check if the new password matches the confirm password
+		if (!newPassword.equals(confirmPassword)) {
+			// If passwords don't match, return an error message
+			model.addAttribute("errorMessage", "New password and confirm password do not match.");
+			return "newPassword"; // Return to the password reset page with an error message
+		}
+
+		Optional<User> userOptional = uRepo.findById(userId);
+		if (userOptional.isPresent()) {
+			// User found, update password
+			User user = userOptional.get();
+			String hashedPassword = DigestUtils.shaHex(newPassword); // Hash the new password
+			user.setPassword(hashedPassword);
+			uRepo.save(user);
+			return "login"; // Display a success message
+		} else {
+			// Handle the case where the user is not found
+			model.addAttribute("errorMessage", "User not found.");
+			return "newForgot";
+		}
+	}
+
+//
+//	// Reset Password
+//	@GetMapping("/resetPassword/{userId}")
+//	public String loadResetPassword(@PathVariable int userId, Model model, HttpSession session) {
+//
+//		model.addAttribute("userId", userId);
+//			if (userId != null) {
+//		        User user = uRepo.findById(userId).orElse(null);
+//		        if (user == null) {
+//		            // Handle case where user is not found
+//		            return "newForgot"; // Redirect to home page or error page
+//		        }
+//		        model.addAttribute("userObject", user);
+//		    }
+//		return "newPassword";
+//	}
+//
+//	@PostMapping("/resetPassword")
+//	public String resetPassword(@RequestParam("userId") Integer userId, @RequestParam("newPassword") String newPassword,
+//			@RequestParam("confirmPassword") String confirmPassword, Model model,HttpSession session) {
+//
+//	    User user = uRepo.findById(userId).orElse(null);
+//	    
+//	    if (user != null) {
+//	        if (!newPassword.equals(confirmPassword)) {
+//	            model.addAttribute("errorMessage", "New password and confirm password do not match.");
+//	           
+//	            return "newPassword"; // Redirect back to the reset password page with an error message
+//	        }
+//	        
+//	        // Update the user's password and save to the repository
+//	        user.setPassword(DigestUtils.shaHex(newPassword));
+//	        uRepo.save(user);
+//	        
+//	        return "login"; // Redirect to login page after successful password reset
+//	    } else {
+//	        model.addAttribute("errorMessage", "User not found. Please try again.");
+//	        return "newPassword"; // Redirect back to the reset password page with an error message
+//	    }
+//	    
+//		String hashedPassword = DigestUtils.shaHex(user.getPassword());
+//		user.setPassword(hashedPassword);
+//		
+//		
+//		User updateUser = uRepo.save(user);
+//		
+//		if (updateUser!=null) {
+//			model.addAttribute("errorMessage", "Password Changed !!");
+//		}
+//			if (!newPassword.equals(confirmPassword)) {
+//		        model.addAttribute("errorMessage", "New password and confirm password do not match.");
+//		        return "newForgot"; // Redirect back to the forgot password page with an error message
+//		    }
+//		    Optional<User> userOptional = uRepo.findById(userId);
+//
+//		    if (userOptional.isPresent()) {
+//		        User user = userOptional.get();
+//		        user.setPassword(DigestUtils.shaHex(newPassword));
+//		        uRepo.save(user);
+//
+//		        return "login";
+//		    } else {
+//		        model.addAttribute("errorMessage", "User not found. Please try again.");
+//		        return "newForgot";
+//		    }
+//	}
+
 	@GetMapping("/index")
 	public String index(Model model) {
 		List<Ride> rideList = rideRepo.findAll();
@@ -187,15 +352,16 @@ public class UserController {
 	}
 
 	@GetMapping("/editProfile/{userId}")
-	public String editProfile(@PathVariable (required = false)Integer userId, Model model) {
+	public String editProfile(@PathVariable(required = false) Integer userId, Model model) {
 
 		User user = uRepo.findById(userId).orElse(null);
-		if (userId== null) {
+		if (userId == null) {
 			return "dashboard";
 		}
 		model.addAttribute("userObject", user);
 		return "profile";
 	}
+
 	@PostMapping("/editProfile")
 	public String updateProfile(@ModelAttribute User user, Model model) throws IOException {
 
@@ -216,7 +382,7 @@ public class UserController {
 					Files.copy(newLicenseFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
 
 				}
-								
+
 				// Update the user's profile image path in the database
 				String imagePathString = "/" + newLicenseFile.getOriginalFilename();
 				user.setLicense(imagePathString);
@@ -236,15 +402,14 @@ public class UserController {
 		return "editProfile";
 	}
 
-
 	@GetMapping("/search")
 	public String searchRides(@RequestParam(required = false) String keyword, User user, Model model,
 			HttpSession session) {
-//		 if (session.getAttribute("activeUser") == null) {
-//	            String errorMessage = "Please login first!";
-//	            model.addAttribute("errorMessage", errorMessage);
-//	            return "login";
-//	        }
+		// if (session.getAttribute("activeUser") == null) {
+		// String errorMessage = "Please login first!";
+		// model.addAttribute("errorMessage", errorMessage);
+		// return "login";
+		// }
 		List<Ride> rideList;
 		if (keyword != null && !keyword.isEmpty()) {
 			rideList = rideRepo.findByAboutContainingIgnoreCase(keyword); // Search by name and model
@@ -261,11 +426,11 @@ public class UserController {
 	@GetMapping("/renttable")
 	public String renttable(Model model, HttpSession session) {
 
-//		 if (session.getAttribute("activeUser") == null) {
-//	            String errorMessage = "Please login first!";
-//	            model.addAttribute("errorMessage", errorMessage);
-//	            return "login";
-//	        }
+		// if (session.getAttribute("activeUser") == null) {
+		// String errorMessage = "Please login first!";
+		// model.addAttribute("errorMessage", errorMessage);
+		// return "login";
+		// }
 		return "renttable";
 	}
 
@@ -286,14 +451,27 @@ public class UserController {
 		return "view";
 	}
 
-	@GetMapping("/rentRide")
+	@GetMapping("/rentRide/{rideId}")
 	public String rentRide(Model model, HttpSession session) {
-//		 if (session.getAttribute("activeUser") == null) {
-//	            String errorMessage = "Please login first!";
-//	            model.addAttribute("errorMessage", errorMessage);
-//	            return "login";
-//	        }
+		// if (session.getAttribute("activeUser") == null) {
+		// String errorMessage = "Please login first!";
+		// model.addAttribute("errorMessage", errorMessage);
+		// return "login";
+		// }
 		return "rent";
+	}
+
+	@PostMapping("/rentRide/{rideId}")
+	public String rentRide(@PathVariable int rideId, @ModelAttribute Rent rent, HttpSession session, Model model) {
+		Ride rentedRide = rideRepo.findById(rideId).orElse(null);
+		if (rentedRide != null && rentedRide.getStatus().equals("available")) {
+			model.addAttribute("rentedRide", rentedRide);
+			return "rent";
+		} else {
+			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
+			return "dashboard";
+		}
+
 	}
 
 	@GetMapping("/orderDetails")
@@ -305,13 +483,32 @@ public class UserController {
 	}
 
 	@PostMapping("/orderDetails")
-	public String orderDetails(@ModelAttribute Rent rent, Model model) {
+	public String orderDetails(@ModelAttribute Rent rent, HttpSession session, Model model, Ride ride) {
 
-		Rent savedRent = rentRepo.save(rent);
-		List<Rent> rentList = rentRepo.findAll();
-		model.addAttribute("rentList", rentList);
+		String userEmail = (String) session.getAttribute("activeUser");
 
-		return "orderDetails";
+		Ride rentedRide = rideRepo.findById(rent.getRentId()).orElse(null);
+
+		if (rentedRide != null && rentedRide.getStatus().equals("available")) {
+			// Update the status of the ride to "on rent"
+			rentedRide.setStatus("On Rent");
+			rideRepo.save(rentedRide);
+
+			// Save the rent details
+			Rent savedRent = rentRepo.save(rent);
+
+			// Retrieve the updated list of rents and rides
+			List<Rent> rentList = rentRepo.findAll();
+			List<Ride> rideList = rideRepo.findAll();
+
+			// Update the model with the updated lists and redirect to the order details
+			model.addAttribute("rentList", rentList);
+			model.addAttribute("rideList", rideList);
+			return "orderDetails";
+		} else {
+			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
+			return "orderDetails";
+		}
 	}
 
 	@GetMapping("/cancelBooking/{rentId}")

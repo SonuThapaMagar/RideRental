@@ -10,6 +10,8 @@ import com.example.model.Rent;
 public interface rentRepository extends JpaRepository<Rent, Integer> {
 
 	List<Rent> findByFullName(String keyword);
-
+	
+	
+boolean existsByUserEmail(String email);
 
 }

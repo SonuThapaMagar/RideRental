@@ -203,10 +203,9 @@ body {
 						</div>
 
 						<ul class="profile-dropdown-list">
-							<li class="profile-dropdown-list-item">
-							<a
-								th:href="@{'/editProfile/' + ${loggedInUserEmail}}"> 
-								<i class="fa-regular fa-user"></i> Edit Profile
+							<li class="profile-dropdown-list-item"><a
+								th:href="@{'/editProfile/' + ${loggedInUserEmail}}"> <i
+									class="fa-regular fa-user"></i> Edit Profile
 							</a></li>
 
 
@@ -273,7 +272,7 @@ body {
 										<div class="price">
 											<span>From</span> $ <span th:text="${ride.price}"></span>
 										</div>
-										<a href="rentRide">
+										<a th:href="@{'/rentRide/' + ${ride.rideId}}">
 											<button class="book__now">Book Now</button>
 										</a>
 									</div>

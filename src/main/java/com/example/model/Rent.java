@@ -35,7 +35,9 @@ public class Rent {
 	private String email;
 	private String phone;
 
-	
+	public Ride getRide() {
+	    return ride;
+	}
 	
 	public String getLocation() {
 		return location;

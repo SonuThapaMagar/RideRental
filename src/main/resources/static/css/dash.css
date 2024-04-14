@@ -181,7 +181,6 @@ body {
   }
   
   .card:first-child {
-    background-color: rgb(255, 123, 66);
   }
   
   .card:nth-child(2) {
