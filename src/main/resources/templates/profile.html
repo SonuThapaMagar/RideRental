@@ -51,9 +51,8 @@
 
 							<hr class="border-light m-0">
 							<div class="card-body">
-								<form action="/editUser" method="post" th:object="${userObject}"
-									enctype="multipart/form-data">
-
+								<form action="/editProfile" method="post"
+									th:object="${userObject}" enctype="multipart/form-data">
 									<div class="form-group">
 										<input type="hidden" th:field="*{userId}">
 									</div>
@@ -66,10 +65,7 @@
 									<div class="form-group">
 										<label class="form-label">E-mail</label> <input type="text"
 											th:field="*{email}" class="form-control mb-1">
-										<div class="alert alert-warning mt-3">
-											Your email is not confirmed. Please check your inbox.<br>
-											<a href="javascript:void(0)">Resend confirmation</a>
-										</div>
+
 									</div>
 
 									<div class="form-group">
@@ -77,17 +73,20 @@
 											type="number" class="form-control" th:field="*{phone}">
 									</div>
 
-									<div class="form-group">
+									<!-- div class="form-group">
 										<label class="form-label">Date of birth</label> <input
 											type="date" class="form-control" th:field="*{dob}">
-									</div>
+									</div-->
 
 									<div class="form-group">
-										<label class="form-label">License</label> 
-										<input type="file"
-										th:field="*{newLicenseFile}" class="form-control">
+										<label class="form-label">License</label> <input type="file"
+											th:field="*{newLicenseFile}" class="form-control">
 									</div>
-									<button type="submit" class="btn btn-primary">Save</button>
+									<!-- Cancel and Save buttons -->
+									<div class="d-flex justify-content-between">
+										<button type="button" class="btn btn-danger md-btn-flat mr-2">Cancel</button>
+										<button type="submit" class="btn btn-success">Save</button>
+									</div>
 								</form>
 							</div>
 						</div>
@@ -113,10 +112,7 @@
 					</div>
 				</div>
 				<div class="text-right mt-3">
-					<a href="img.html">
-						<button type="button" class="btn btn-primary mb-3">Edit
-							Profile</button>&nbsp;
-					</a>
+					<a href="img.html"> </a>
 				</div>
 			</div>
 		</div>

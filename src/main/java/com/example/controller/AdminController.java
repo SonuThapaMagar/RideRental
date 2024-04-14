@@ -317,18 +317,23 @@ import jakarta.validation.Valid;
 		// Edit User
 		@GetMapping("/editUser/{userId}")
 		public String editUser(@PathVariable int userId, Model model, HttpSession session) {
-	
-			User user = uRepo.findById(userId).orElse(null);
-			if (user == null) {
-				return "editRide"; // Redirect to an error page
+			if(session.getAttribute("activeUser")==null)
+			{
+				session.setAttribute("error", "Please login first!");
+				return "adminlogin";
 			}
+			User user=uRepo.getById(userId);
+//			User user = uRepo.findById(userId).orElse(null);
+//			if (user == null) {
+//				return "editRide"; // Redirect to an error page
+//			}
 	
 			model.addAttribute("userObject", user);
 			return "editUser";
 		}
 	
 		@PostMapping("/editUser")
-		public String updateUser(@ModelAttribute User user, Model model) throws IOException {
+		public String editUser(@ModelAttribute User user, Model model) throws IOException {
 	
 			try {
 	

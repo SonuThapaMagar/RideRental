@@ -31,17 +31,16 @@ public class User {
 	private String phone;
 	private String password;
 	
+	@Transient
+	private MultipartFile newUserImg;
 	
-	@Column(name = "reset_password_token")
-    private String resetPasswordToken;	
 	
-	
-	public String getResetPasswordToken() {
-		return resetPasswordToken;
+	public MultipartFile getNewUserImg() {
+		return newUserImg;
 	}
 
-	public void setResetPasswordToken(String resetPasswordToken) {
-		this.resetPasswordToken = resetPasswordToken;
+	public void setNewUserImg(MultipartFile newUserImg) {
+		this.newUserImg = newUserImg;
 	}
 
 	public List<Rent> getRentList() {
