@@ -80,68 +80,7 @@ public class UserController {
 		return "indexTest";
 	}
 
-	@GetMapping("/login")
-	public String login() {
-		return "login";
-	}
-
-	@GetMapping("/logoutUser")
-	public String logoutUser(HttpSession session) {
-		session.invalidate();
-		return "login";
-	}
-
-	@GetMapping("/userLogin")
-	public String userLogin(Model model, User user, HttpSession session) {
-
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "login";
-		}
-		if (session.getAttribute("activeUser") == null) {
-			return "login"; // Redirect to login if user is not logged in
-		}
-		List<Ride> rideList = rideRepo.findAll();
-		model.addAttribute("rideList", rideList);
-		model.addAttribute("loggedInUserEmail", user.getEmail());
-
-		return "dashboard";
-	}
-
-	@PostMapping("/userLogin")
-	public String userLogin(@ModelAttribute User user, Model model, HttpSession session) {
-		// Hash the password entered by the user
-		String hashedPassword = DigestUtils.shaHex(user.getPassword());
-		List<User> users = uRepo.findByEmailAndPassword(user.getEmail(), hashedPassword);
-
-		if (users.size() == 1) {
-
-			session.setAttribute("activeUser", user.getEmail());
-			session.setAttribute("activeUser", user.getFullName());
-			session.setMaxInactiveInterval(30);
-
-			List<User> uList = uRepo.findAll();
-			model.addAttribute("uList", uList);
-
-			List<Ride> rideList = rideRepo.findAll();
-			model.addAttribute("rideList", rideList);
-
-			model.addAttribute("loggedInUserEmail", user.getEmail());
-			model.addAttribute("loggedInUserFullName", user.getFullName());
-
-			return "dashboard";
-
-		} else if (users.isEmpty()) {
-			model.addAttribute("errorMessage", "Invalid username or password !!");
-		} else {
-			model.addAttribute("errorMessage", "Multiple users found with the same email and password combination.");
-		}
-		return "login";
-
-	}
-
-	// Add User
+//----------------------User Registration---------------------
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, @RequestParam MultipartFile licensePhoto, Model model)
 			throws IOException {
@@ -188,6 +127,69 @@ public class UserController {
 			model.addAttribute("error", "Failed to save register details");
 		}
 
+		return "login";
+	}
+
+	// ----------------------User Login---------------------
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	@GetMapping("/userLogin")
+	public String userLogin(Model model, User user, HttpSession session) {
+
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "login";
+		}
+
+		List<Ride> rideList = rideRepo.findAll();
+		model.addAttribute("rideList", rideList);
+		model.addAttribute("loggedInUserEmail", user.getEmail());
+
+		return "dashboard";
+	}
+
+	@PostMapping("/userLogin")
+	public String userLogin(@ModelAttribute User user, Model model, HttpSession session) {
+		// Hash the password entered by the user
+		String hashedPassword = DigestUtils.shaHex(user.getPassword());
+		List<User> users = uRepo.findByEmailAndPassword(user.getEmail(), hashedPassword);
+
+		if (users.size() == 1) {
+			User loggedInUser = users.get(0);
+			session.setAttribute("loggedInUserId", loggedInUser.getUserId());
+
+			session.setAttribute("activeUser", user.getEmail());
+//			session.setAttribute("activeUser", user.getFullName());
+//			session.setMaxInactiveInterval(30);
+
+			List<User> uList = uRepo.findAll();
+			model.addAttribute("uList", uList);
+
+			List<Ride> rideList = rideRepo.findAll();
+			model.addAttribute("rideList", rideList);
+
+			model.addAttribute("loggedInUserEmail", user.getEmail());
+//			model.addAttribute("loggedInUserFullName", user.getFullName());
+
+			return "dashboard";
+
+		} else if (users.isEmpty()) {
+			model.addAttribute("errorMessage", "Invalid username or password !!");
+		} else {
+			model.addAttribute("errorMessage", "Multiple users found with the same email and password combination.");
+		}
+		return "login";
+
+	}
+
+//----------Logout---------
+	@GetMapping("/logoutUser")
+	public String logoutUser(HttpSession session) {
+		session.invalidate();
 		return "login";
 	}
 
@@ -249,6 +251,14 @@ public class UserController {
 		}
 	}
 
+	// ---------Change New Password--------------
+	@GetMapping("/loadChangePassword")
+	public String loadChangePassword(@RequestParam("userId") String userId, Model model) {
+		Integer userIdInt = Integer.parseInt(userId);
+		model.addAttribute("userId", userId);
+		return "changeNewPass";
+	}
+
 	@GetMapping("/index")
 	public String index(Model model) {
 		List<Ride> rideList = rideRepo.findAll();
@@ -264,57 +274,74 @@ public class UserController {
 	// Edit User
 	@GetMapping("/editProfile/{userId}")
 	public String editProfile(@PathVariable int userId, HttpSession session, Model model) {
-		 String userEmail = (String) session.getAttribute("activeUser");
-		    if (userEmail == null) {
-		        return "login"; 
-		    }
-		    User user = uRepo.findByEmail(userEmail);
-		    if (user == null) {
-	
-		        return "dashboard"; 
-		    }
-		    
-		    model.addAttribute("user", user);
-		    return "editProfile"; 
+
+		if (session.getAttribute("activeUser") == null) {
+			session.setAttribute("error", "Please login first!");
+			return "login"; // Redirect to the login page if not logged in
+		}
+
+		User user = uRepo.getById(userId);
+
+		model.addAttribute("userObject", user);
+		return "profile";
 	}
 
-//	@PostMapping("/editProfile")
-//	public String editProfile(@ModelAttribute User user, Model model) {
-//
-//		try {
-//
-//			// Handle file upload for profile image
-//			MultipartFile newUserImg = user.getNewUserImg();
-//			if (newUserImg != null && !newUserImg.isEmpty()) {
-//				// Save the profile image file to a location on the server
-//
-//				File saveDir = new ClassPathResource("static/assets").getFile();
-//
-//				Path imagePath = Paths
-//						.get(saveDir.getAbsolutePath() + File.separator + newUserImg.getOriginalFilename());
-//
-//				try (InputStream inputStream = newUserImg.getInputStream()) {
-//
-//					Files.copy(newUserImg.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//				}
-//				// Update the user's profile image path in the database
-//				String imagePathString = "/" + newUserImg.getOriginalFilename();
-//				user.setNewUserImg(newUserImg);
-//				uRepo.save(user);
-//				model.addAttribute("uList", uRepo.findAll());
-//				return "dashboard";
-//
-//			}
-//		}
-//
-//		catch (Exception e) {
-//			e.printStackTrace();
-//			model.addAttribute("error", "Failed to save ride details");
-//			return "editUser";
-//		}
-//		return "editUser";
-//	}
+	@PostMapping("/editProfile")
+	public String editProfile(@ModelAttribute User user, Model model, HttpSession session) {
+
+		try {
+			// Retrieve the logged-in user ID
+			Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
+			if (loggedInUserId == null) {
+				return "login";
+			}
+
+			// Retrieve the user from the database based on the logged-in user ID
+			User existingUser = uRepo.findById(loggedInUserId).orElse(null);
+			if (existingUser == null) {
+				// Handle case where user is not found
+				return "redirect:/dashboard"; // For example, redirect to the dashboard
+			}
+
+			// Update the user's profile data
+			existingUser.setFullName(user.getFullName());
+			existingUser.setEmail(user.getEmail());
+			existingUser.setDob(user.getDob());
+			existingUser.setPhone(user.getPhone());
+
+			// Handle file upload for profile image
+			MultipartFile newUserImg = user.getNewLicenseFile();
+			if (newUserImg != null && !newUserImg.isEmpty()) {
+				// Save the profile image file to a location on the server
+
+				File saveDir = new ClassPathResource("static/assets").getFile();
+
+				Path imagePath = Paths
+						.get(saveDir.getAbsolutePath() + File.separator + newUserImg.getOriginalFilename());
+
+				try (InputStream inputStream = newUserImg.getInputStream()) {
+
+					Files.copy(newUserImg.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+				}
+				// Update the user's profile image path in the database
+				String imagePathString = "/" + newUserImg.getOriginalFilename();
+				existingUser.setLicense(imagePathString);
+
+				uRepo.save(existingUser);
+				model.addAttribute("uList", uRepo.findAll());
+				return "login";
+
+			}
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("error", "Failed to save ride details");
+			return "profile";
+		}
+		return "profile";
+	}
 
 	@GetMapping("/search")
 	public String searchRides(@RequestParam(required = false) String keyword, User user, Model model,

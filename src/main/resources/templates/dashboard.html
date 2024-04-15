@@ -201,9 +201,15 @@ body {
 
 
 						<ul class="dropdown-menu">
+							
+							
 							<li><a class="dropdown-item"
-								th:href="@{'/editProfile/'+${user.userId}}">Edit Profile</a></li>
-							<li><a class="dropdown-item" href="#">Change Password</a></li>
+								th:href="@{'/editProfile/' + ${session.loggedInUserId}}">Edit
+									Profile</a></li>
+
+
+							<li><a class="dropdown-item"
+								th:href="@{/loadChangePassword}">Change Password</a></li>
 							<li><a class="dropdown-item" href="/logout">Logout here</a></li>
 						</ul>
 					</div>
