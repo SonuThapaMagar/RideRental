@@ -193,7 +193,7 @@ button {
 					<div class="form-group">
 						<label for="status">Status:</label> <select id="status"
 							name="status">
-							<option value="available"  selected>Available</option>
+							<option value="available" selected>Available</option>
 							<option value="booked">On Rent</option>
 						</select>
 					</div>
@@ -202,13 +202,31 @@ button {
 							name="rideImage" required>
 					</div>
 					<div class="form-group">
-						<label for="model">Description:</label> <input type="text"
-							id="about" name="about" required>
+						<label for="model">Description:</label> 
+						<input type="text"id="about" name="about" required>
 					</div>
-					<div class="form-group">
-						<label for="model">Price:</label> <input type="number" id="price"
-							name="price" required>
+					<div class="form-group" >
+						<label for="pricePerHour">Price Per Hour:</label> <input
+							type="number" id="pricePerHour" name="pricePerHour" required>
 					</div>
+
+					<div class="form-group" >
+						<label for="pricePer3Hours">Price Per 3 Hours:</label> <input
+							type="number" id="pricePer3Hours" name="pricePer3Hours" required>
+					</div>
+
+					<div class="form-group" id="pricePerHalfDayGroup">
+						<label for="pricePerHalfDay">Price Per Half Day:</label> <input
+							type="number" id="pricePerHalfDay" name="pricePerHalfDay"
+							required>
+					</div>
+
+					<div class="form-group" id="pricePerFullDayGroup">
+						<label for="pricePerFullDay">Price Per Full Day:</label> <input
+							type="number" id="pricePerFullDay" name="pricePerFullDay"
+							required>
+					</div>
+
 					<button type="submit">Add Ride</button>
 				</form>
 			</div>
@@ -220,6 +238,7 @@ button {
 	<!-- Scripts -->
 	<!-- Custom JS -->
 	<script src="dash.js"></script>
+	
 </body>
 <style>
 body {
@@ -284,5 +303,6 @@ input[type="file"]:focus {
 	outline: none;
 }
 </style>
+
 
 </html>

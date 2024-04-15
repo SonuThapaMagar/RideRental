@@ -44,6 +44,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 
 public class UserController {
+	
+	//------------------Repositories ----------------------
 	@Autowired
 	private userRepository uRepo;
 
@@ -53,27 +55,25 @@ public class UserController {
 	@Autowired
 	private rentRepository rentRepo;
 
-//	@Autowired
-//	private UserService userService;
-
-//	@Autowired
-//	private JavaMailSender javaMailSender;
-
+	//------------------Landing Page ----------------------
 	@GetMapping("/")
 	public String landingPage() {
 
 		return "index";
 	}
+	//------------------Service Page ----------------------
 
 	@GetMapping("/indexServices")
 	public String services() {
 		return "indexService";
 	}
+	//------------------Bike and Price Page ----------------------
 
 	@GetMapping("/indexView")
 	public String View() {
 		return "indexView";
 	}
+	//------------------Testimonials Page----------------------
 
 	@GetMapping("/indexTest")
 	public String testimonial() {
@@ -135,8 +135,9 @@ public class UserController {
 	public String login() {
 		return "login";
 	}
-
-	@GetMapping("/userLogin")
+	// ----------------------After Login Goto Dashboard---------------------
+	
+	@GetMapping("/dashboard")
 	public String userLogin(Model model, User user, HttpSession session) {
 
 		if (session.getAttribute("activeUser") == null) {
@@ -151,8 +152,8 @@ public class UserController {
 
 		return "dashboard";
 	}
-
-	@PostMapping("/userLogin")
+	
+	@PostMapping("/dashboard")
 	public String userLogin(@ModelAttribute User user, Model model, HttpSession session) {
 		// Hash the password entered by the user
 		String hashedPassword = DigestUtils.shaHex(user.getPassword());
@@ -163,8 +164,6 @@ public class UserController {
 			session.setAttribute("loggedInUserId", loggedInUser.getUserId());
 
 			session.setAttribute("activeUser", user.getEmail());
-//			session.setAttribute("activeUser", user.getFullName());
-//			session.setMaxInactiveInterval(30);
 
 			List<User> uList = uRepo.findAll();
 			model.addAttribute("uList", uList);
@@ -173,7 +172,6 @@ public class UserController {
 			model.addAttribute("rideList", rideList);
 
 			model.addAttribute("loggedInUserEmail", user.getEmail());
-//			model.addAttribute("loggedInUserFullName", user.getFullName());
 
 			return "dashboard";
 
@@ -186,14 +184,15 @@ public class UserController {
 
 	}
 
-//----------Logout---------
+	//-------------------Logout---------------------
 	@GetMapping("/logoutUser")
 	public String logoutUser(HttpSession session) {
 		session.invalidate();
 		return "login";
 	}
+	
+	//-------------------Forgot Password---------------------
 
-	// Forgot Password
 	@GetMapping("/forgotPassword")
 	public String loadForgotPassword() {
 
@@ -216,6 +215,7 @@ public class UserController {
 			return "newForgot";
 		}
 	}
+	//-------------------Reset New Password---------------------
 
 	@GetMapping("/resetPassword")
 	public String resetPasswordForm(@RequestParam("userId") String userId, Model model) {
@@ -251,7 +251,7 @@ public class UserController {
 		}
 	}
 
-	// ---------Change New Password--------------
+	// -----------------Change New Password--------------------
 	@GetMapping("/loadChangePassword")
 	public String loadChangePassword(HttpSession session, Model model) {
 
@@ -296,6 +296,7 @@ public class UserController {
 
 		}
 	}
+	//---------------------------------------
 
 	@GetMapping("/index")
 	public String index(Model model) {
@@ -303,11 +304,13 @@ public class UserController {
 		model.addAttribute("rideList", rideList);
 		return "index";
 	}
+	//-------------------Product Page---------------------
 
 	@GetMapping("/product")
 	public String product() {
 		return "product";
 	}
+	//-------------------Edit Profile---------------------
 
 	// Edit User
 	@GetMapping("/editProfile/{userId}")
@@ -315,8 +318,7 @@ public class UserController {
 
 		if (session.getAttribute("activeUser") == null) {
 			session.setAttribute("error", "Please login first!");
-			return "login"; // Redirect to the login page if not logged in
-		}
+			return "login"; 		}
 
 		User user = uRepo.getById(userId);
 
@@ -380,6 +382,7 @@ public class UserController {
 		}
 		return "profile";
 	}
+	//-------------------Search---------------------
 
 	@GetMapping("/search")
 	public String searchRides(@RequestParam(required = false) String keyword, User user, Model model,
@@ -402,6 +405,7 @@ public class UserController {
 		return "dashboard"; // View name to display search results
 	}
 
+	
 	@GetMapping("/renttable")
 	public String renttable(Model model, HttpSession session) {
 
@@ -412,6 +416,7 @@ public class UserController {
 		// }
 		return "renttable";
 	}
+	//-------------------Service Page---------------------
 
 	@GetMapping("/Services")
 	public String Services(Model model, User user, HttpSession session) {
@@ -419,24 +424,27 @@ public class UserController {
 		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
 		return "Services";
 	}
+	//-------------------Testimonials---------------------
 
 	@GetMapping("/test")
 	public String test() {
 		return "test";
 	}
+	//-------------------Bikes & Price---------------------
 
 	@GetMapping("/view")
 	public String view() {
 		return "view";
 	}
+	//-------------------Rent Ride---------------------
 
 	@GetMapping("/rentRide/{rideId}")
 	public String rentRide(Model model, HttpSession session) {
-		// if (session.getAttribute("activeUser") == null) {
-		// String errorMessage = "Please login first!";
-		// model.addAttribute("errorMessage", errorMessage);
-		// return "login";
-		// }
+		 if (session.getAttribute("activeUser") == null) {
+		 String errorMessage = "Please login first!";
+		 model.addAttribute("errorMessage", errorMessage);
+		 return "login";
+		 }
 		return "rent";
 	}
 
@@ -452,6 +460,7 @@ public class UserController {
 		}
 
 	}
+	//-------------------Rent Ride Details---------------------
 
 	@GetMapping("/orderDetails")
 	public String order(Model model, HttpSession session) {
@@ -489,6 +498,7 @@ public class UserController {
 			return "orderDetails";
 		}
 	}
+	//-------------------Cancel Booking---------------------
 
 	@GetMapping("/cancelBooking/{rentId}")
 	public String cancel(@PathVariable int rentId, Model model, User user, HttpSession session) {
@@ -501,5 +511,6 @@ public class UserController {
 		return "orderDetails";
 
 	}
+	
 
 }

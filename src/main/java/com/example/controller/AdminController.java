@@ -176,7 +176,10 @@ public class AdminController {
 			newRide.setPlateNo(ride.getPlateNo());
 			newRide.setStatus(ride.getStatus());
 			newRide.setAbout(ride.getAbout());
-			newRide.setPrice(ride.getPrice());
+			newRide.setPricePerHour(ride.getPricePerHour());
+			newRide.setPricePer3Hours(ride.getPricePer3Hours());
+			newRide.setPricePerHalfDay(ride.getPricePerHalfDay());
+			newRide.setPricePerFullDay(ride.getPricePerFullDay());
 
 			newRide.setRideImg(rideImage.getOriginalFilename());
 			Ride savedRide = rideRepo.save(newRide);

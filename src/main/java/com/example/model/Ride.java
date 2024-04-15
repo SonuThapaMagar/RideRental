@@ -24,11 +24,49 @@ public class Ride {
 	private int plateNo;
 	private String rideImg;
 
+	// Price for different rental packages
+	private int pricePerHour;
+	private int pricePer3Hours;
+	private int pricePerHalfDay;
+	private int pricePerFullDay;
+
 	@Transient
 	private MultipartFile newRideImg;
 
 	public MultipartFile getNewRideImg() {
 		return newRideImg;
+	}
+
+	public int getPricePerHour() {
+		return pricePerHour;
+	}
+
+	public void setPricePerHour(int pricePerHour) {
+		this.pricePerHour = pricePerHour;
+	}
+
+	public int getPricePer3Hours() {
+		return pricePer3Hours;
+	}
+
+	public void setPricePer3Hours(int pricePer3Hours) {
+		this.pricePer3Hours = pricePer3Hours;
+	}
+
+	public int getPricePerHalfDay() {
+		return pricePerHalfDay;
+	}
+
+	public void setPricePerHalfDay(int pricePerHalfDay) {
+		this.pricePerHalfDay = pricePerHalfDay;
+	}
+
+	public int getPricePerFullDay() {
+		return pricePerFullDay;
+	}
+
+	public void setPricePerFullDay(int pricePerFullDay) {
+		this.pricePerFullDay = pricePerFullDay;
 	}
 
 	public void setNewRideImg(MultipartFile newRideImg) {

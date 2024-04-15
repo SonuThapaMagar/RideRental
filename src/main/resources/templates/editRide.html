@@ -176,15 +176,15 @@ button {
 			<!--Form-->
 			<div class="container">
 				<h2>Edit Ride Details</h2>
-				<form action="/editRide" method="POST" th:object="${rideObject}" enctype="multipart/form-data">
+				<form action="/editRide" method="POST" th:object="${rideObject}"
+					enctype="multipart/form-data">
 
 					<div class="form-group">
 						<input type="hidden" th:field="*{rideId}">
 					</div>
 
 					<div class="form-group">
-						<label for="rideType">Ride Type:</label>
-						 <select id="rideType"
+						<label for="rideType">Ride Type:</label> <select id="rideType"
 							th:field="*{type}">
 							<option value="bike">Bike</option>
 							<option value="scooter">Scooter</option>
@@ -206,8 +206,8 @@ button {
 					</div>
 
 					<div class="form-group">
-						<label for="image">Image:</label>
-						<input type="file" th:field="*{newRideImg}" required>
+						<label for="image">Image:</label> <input type="file"
+							th:field="*{newRideImg}" required>
 					</div>
 
 					<div class="form-group">
@@ -216,8 +216,20 @@ button {
 					</div>
 
 					<div class="form-group">
-						<label for="model">Price:</label> <input type="number" id="price"
-							th:field="*{price}" required>
+						<label for="model">Price Per 1Hour:</label> <input type="number"
+							id="price" th:field="*{pricePerHour}" required>
+					</div>
+					<div class="form-group">
+						<label for="model">Price Per 3Hour:</label> <input type="number"
+							id="price" th:field="*{pricePer3Hours}" required>
+					</div>
+					<div class="form-group">
+						<label for="model">Price Per Half Day:</label> <input
+							type="number" id="price" th:field="*{pricePerHalfDay}" required>
+					</div>
+					<div class="form-group">
+						<label for="model">Price Per 1 Day:</label> <input type="number"
+							id="price" th:field="*{pricePerFullDay}" required>
 					</div>
 
 					<button type="submit">Save Changes</button>

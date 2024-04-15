@@ -168,10 +168,8 @@ button {
 						class="material-icons-outlined">check</span> Rental Information
 				</a></li>
 
-						<li class="sidebar-list-item"><a href="/adminProfile"><span
-						class="material-icons-outlined">person</span> Profile
-
-				</a></li>
+				<li class="sidebar-list-item"><a href="/adminProfile"><span
+						class="material-icons-outlined">person</span> Profile </a></li>
 				<li class="sidebar-list-item"><a href="/admin"> <span
 						class="material-icons-outlined">logout</span> Logout
 				</a></li>
@@ -191,7 +189,11 @@ button {
 						<th>Ride ID</th>
 						<th>Ride Type</th>
 						<th>Ride Plate No</th>
-						<th>Price</th>
+						<th>Price Per 1Hour</th>
+						<th>Price Per 3Hour</th>
+						<th>Price Per Half</th>
+						<th>Price Per 1Day</th>
+
 						<th>Status</th>
 						<th>Description</th>
 						<th>Image</th>
@@ -206,23 +208,24 @@ button {
 						<td th:text="${ride.rideId}"></td>
 						<td th:text="${ride.type}"></td>
 						<td th:text="${ride.plateNo}"></td>
-
-						<td th:text="${ride.price}"></td>
+						<td th:text="${ride.pricePerHour}"></td>
+						<td th:text="${ride.pricePer3Hours}"></td>
+						<td th:text="${ride.pricePerHalfDay}"></td>
+						<td th:text="${ride.pricePerFullDay}"></td>
 						<td th:text="${ride.status}"></td>
 						<td th:text="${ride.about}"></td>
-							<td><a
-							th:href="@{'/assets/' +${ride.rideImg}}"
-							target="_blank" style="text-decoration:none;">View Image</a></td>
-						<td><span class="material-icons-outlined">edit</span> 
-						<a
-							th:href="@{'/editRide/'+${ride.rideId}}"> 
-							<input type="submit" value="Edit" style="background-color:orangered;color:white;border-radius:0.5rem;border-color:orangered;width:50px;height:30px;">	</a>
-						</td>
+						<td><a th:href="@{'/assets/' +${ride.rideImg}}"
+							target="_blank" style="text-decoration: none;">View Image</a></td>
+						<td><span class="material-icons-outlined">edit</span> <a
+							th:href="@{'/editRide/'+${ride.rideId}}"> <input
+								type="submit" value="Edit"
+								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered; width: 50px; height: 30px;">
+						</a></td>
 
-						<td><span class="material-icons-outlined"> delete</span>
-						 <a
-							th:href="@{'/deleteRide/'+${ride.rideId}}">
-							 <input	type="submit" value="Delete" style="background-color:orangered;color:white;border-radius:0.5rem;border-color:orangered">
+						<td><span class="material-icons-outlined"> delete</span> <a
+							th:href="@{'/deleteRide/'+${ride.rideId}}"> <input
+								type="submit" value="Delete"
+								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
 
 						</a>
 					</tr>
