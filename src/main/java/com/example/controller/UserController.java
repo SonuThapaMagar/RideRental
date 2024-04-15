@@ -263,6 +263,40 @@ public class UserController {
 		return "changeNewPass";
 	}
 
+	@PostMapping("/changePassword")
+	public String changePassword( @RequestParam("userId") Integer userId,
+			@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmPassword") String confirmPassword, Model model) {
+
+		Optional<User> optional = uRepo.findById(userId);
+		if (optional.isPresent()) {
+			User user = optional.get();
+
+			String hashedOldPassword = DigestUtils.shaHex(oldPassword);
+
+			if (!user.getPassword().equals(hashedOldPassword)) {
+
+				model.addAttribute("errorMessage", "Incorrect old password !!");
+				return "changeNewPass";
+
+			}
+
+			if (!newPassword.equals(confirmPassword)) {
+				model.addAttribute("errorMessage", "New password and confirm password do not match !!");
+				return "changeNewPass";
+			}
+
+			String hashedNewPassword = DigestUtils.shaHex(newPassword);
+			user.setPassword(hashedNewPassword);
+			uRepo.save(user);
+			return "login";
+		} else {
+			model.addAttribute("errorMessage", "User not found !!");
+			return "changeNewPass";
+
+		}
+	}
+
 	@GetMapping("/index")
 	public String index(Model model) {
 		List<Ride> rideList = rideRepo.findAll();

@@ -13,31 +13,41 @@
 		<div class="row justify-content-center">
 			<div class="col-md-6">
 				<div class="card">
-					<div class="card-header">
+					<div class="card-header"
+						style="background-color: white; color: black;">
 						<h3 class="text-center">Change Password</h3>
 					</div>
+
 					<div class="card-body">
-						<form action="/changedPassword" method="post">
-						<input type="hidden" name="userId" th:value="${userId}">
+
+						<form action="/changePassword" th:object="${user}" method="post">
+
+							<input type="hidden" name="userId" th:value="${userId}">
+
+							<div th:if="${errorMessage}" style="text-align: center;">
+								<p th:text="${errorMessage}" style="color: red;"></p>
+							</div>
+
 							<div class="mb-3">
 								<label for="currentPassword" class="form-label">Current
 									Password</label> <input type="password" class="form-control"
-									id="currentPassword" required>
+									th:name="oldPassword" required>
 							</div>
 							<div class="mb-3">
 								<label for="newPassword" class="form-label">New Password</label>
-								<input type="password" class="form-control" id="newPassword"
-									required>
+								<input type="password" class="form-control"
+									th:name="newPassword" required>
 							</div>
 							<div class="mb-3">
 								<label for="confirmPassword" class="form-label">Confirm
 									New Password</label> <input type="password" class="form-control"
-									id="confirmPassword" required>
+									th:name="confirmPassword" required>
 							</div>
 							<div class="text-center">
 								<button type="submit" class="btn btn-primary">Change
 									Password</button>
 							</div>
+
 						</form>
 					</div>
 				</div>
