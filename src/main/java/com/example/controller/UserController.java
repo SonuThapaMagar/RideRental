@@ -253,9 +253,13 @@ public class UserController {
 
 	// ---------Change New Password--------------
 	@GetMapping("/loadChangePassword")
-	public String loadChangePassword(@RequestParam("userId") String userId, Model model) {
-		Integer userIdInt = Integer.parseInt(userId);
-		model.addAttribute("userId", userId);
+	public String loadChangePassword(HttpSession session, Model model) {
+
+		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
+		if (loggedInUserId == null) {
+			return "login";
+		}
+		model.addAttribute("userId", loggedInUserId);
 		return "changeNewPass";
 	}
 
