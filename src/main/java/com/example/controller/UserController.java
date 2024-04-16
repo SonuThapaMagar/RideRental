@@ -161,7 +161,8 @@ public class UserController {
 
 		if (users.size() == 1) {
 			User loggedInUser = users.get(0);
-
+//			Integer loggedInUserId = user.getUserId();
+			
 			session.setAttribute("loggedInUserId", loggedInUser.getUserId());
 			session.setAttribute("activeUser", user.getEmail());
 

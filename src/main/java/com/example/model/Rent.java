@@ -33,9 +33,7 @@ public class Rent {
 	@JoinColumn(name = "rideId")
 	private Ride ride;
 	
-	
-
-	public User getUser() {
+		public User getUser() {
 		return user;
 	}
 
@@ -45,6 +43,14 @@ public class Rent {
 
 	public void setRide(Ride ride) {
 		this.ride = ride;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 	public Ride getRide() {
@@ -99,14 +105,7 @@ public class Rent {
 		this.rentPackage = rentPackage;
 	}
 
-	public String getPayementStatus() {
-		return paymentStatus;
-	}
-
-	public void setPayementStatus(String payementStatus) {
-		this.paymentStatus = payementStatus;
-	}
-
+	
 	public Rent() {
 
 	}
@@ -124,5 +123,7 @@ public class Rent {
 		this.ride = ride;
 
 	}
+
+	
 
 }

@@ -354,36 +354,33 @@ ul {
 									<th scope="col">Full Name</th>
 									<th scope="col">Email</th>
 									<th scope="col">Phone</th>
-
 									<th scope="col">Pick-up Location</th>
 									<th scope="col">Rent Start Date and Time</th>
 									<th scope="col">Rent End Date</th>
 									<th scope="col">Rent Package</th>
-																		<th scope="col">Rent Package</th>
-									
+									<th scope="col">Price</th>
+
 									<th scope="col">Payment Status</th>
 									<th scope="col">Action</th>
 
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="rent:${rentList}">
+								<tr th:each="user, rent : ${uList}, ${rentList}">
 									<td th:text="${rent.rentId}"></td>
-									<td th:text="${rent.fullName}"></td>
-									<td th:text="${rent.email}"></td>
-									<td th:text="${rent.phone}"></td>
+									<td th:text="${user.fullName}"></td>
+									<td th:text="${user.email}"></td>
+									<td th:text="${user.phone}"></td>
 									<td th:text="${rent.location}"></td>
 									<td th:text="${rent.rentStartDate}"></td>
 									<td th:text="${rent.rentEndDate}"></td>
 									<td th:text="${rent.rentPackage}"></td>
 									<td class="paid">Unpaid</td>
-									<td><a th:href="@{ '/cancelBooking/' + ${rent.rentId}}">
+									<td><a th:href="@{'/cancelBooking/' + ${rent.rentId}}">
 											<input type="submit" value="Cancel Booking"
 											style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
-
 									</a></td>
 								</tr>
-
 							</tbody>
 						</table>
 					</div>

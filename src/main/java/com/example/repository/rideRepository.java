@@ -15,6 +15,6 @@ public interface rideRepository extends JpaRepository<Ride, Integer> {
 
 	List<Ride> findByAboutContainingIgnoreCase(String about);
 
-	
+//    int findPriceByTypeAndPackage(String type, String rentPackage);
 
 }

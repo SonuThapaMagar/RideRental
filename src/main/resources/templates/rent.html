@@ -219,24 +219,24 @@ form .fields .input-field {
 					</div>
 	
 					<!-- Personal Details -->
-				<!-- div class="details personal">
+				<div class="details personal">
 					<span class="title">Personal Details</span>
 
 					<div class="fields">
 						<div class="input-field">
 							<label>Full Name</label> <input type="text"
-								th:value="${user.fullName}" readonly
+								th:field="${user.fullName}" 
 								placeholder="Enter your name" required>
 						</div>
 
 						<div class="input-field">
-							<label>Email</label> <input type="text" th:value="${user.email}"
-								readonly placeholder="Enter your email" required>
+							<label>Email</label> <input type="text" th:field="${user.email}"
+								 placeholder="Enter your email" required>
 						</div>
 
 						<div class="input-field">
 							<label>Mobile Number</label> <input type="number"
-								th:value="${user.phone}" placeholder="Enter mobile number"
+								th:field="${user.phone}" placeholder="Enter mobile number"
 								required>
 						</div>
 
@@ -251,11 +251,11 @@ form .fields .input-field {
 					<span class="title">Rental Details</span>
 
 					<div class="fields">
-						<!-- div class="input-field">
+						<div class="input-field">
 							<label>Pick Up Location</label> <input type="text"
-								id="pickUpLocation" th:field="*{pickUpLocation" required>
+								id="pickUpLocation" name="pickUpLocation" required>
 
-						</div-->
+						</div>
 
 						<div class="input-field">
 							<label>Rent Date</label> <input type="datetime-local"
@@ -269,16 +269,22 @@ form .fields .input-field {
 						</div>
 
 						<div class="input-field">
-							<label>Select Rent Package</label> <select id="rentPackage"
-								th:field="*{rentPackage}" required>
+							<label>Select Price Package</label>
+							<!-- Modify the option elements to display the stored prices -->
+							<select id="rentPackage" name="rentPackage" required>
 								<option value="" disabled selected>Select package</option>
-								<option value="1 hour">1 hour</option>
-								<option value="3 hour">3 hour</option>
-								<option value="Half Day">Half Day</option>
-								<option value="Full Day">Full Day</option>
+								<option value="1 hour">1 hour - NRs.<span
+										th:text="${ride.pricePerHour}"></span></option>
+								<option value="3 hour">3 hours - NRs.<span
+										th:text="${ride.pricePer3Hours}"></span></option>
+								<option value="Half Day">Half Day - NRs.<span
+										th:text="${ride.pricePerHalfDay}"></span></option>
+								<option value="Full Day">Full Day - NRs.<span
+										th:text="${ride.pricePerFullDay}"></span></option>
 							</select>
 
 						</div>
+
 						<a href="/orderDetails"
 							style="text-decoration: none; width: 130px;">
 							<button type="submit" class="btn" id="proceed-btn"
@@ -303,5 +309,20 @@ form .fields .input-field {
 		</form>
 	</div>
 </body>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        $('#rentPackage').change(function() {
+            var selectedPackage = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "/getPrice",
+                data: { package: selectedPackage },
+                success: function(data) {
+                    $('#price').val(data);
+                }
+            });
+        });
+    });
+</script>
 
 </html>
