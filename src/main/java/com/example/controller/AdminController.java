@@ -274,6 +274,7 @@ public class AdminController {
 			return "editRide"; // Redirect to an error page
 		}
 		model.addAttribute("rideObject", ride);
+		model.addAttribute("imageURL", "/assets/" + ride.getRideImg());
 		return "editRide";
 	}
 

@@ -44,8 +44,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 
 public class UserController {
-	
-	//------------------Repositories ----------------------
+
+	// ------------------Repositories ----------------------
 	@Autowired
 	private userRepository uRepo;
 
@@ -55,25 +55,25 @@ public class UserController {
 	@Autowired
 	private rentRepository rentRepo;
 
-	//------------------Landing Page ----------------------
+	// ------------------Landing Page ----------------------
 	@GetMapping("/")
 	public String landingPage() {
 
 		return "index";
 	}
-	//------------------Service Page ----------------------
+	// ------------------Service Page ----------------------
 
 	@GetMapping("/indexServices")
 	public String services() {
 		return "indexService";
 	}
-	//------------------Bike and Price Page ----------------------
+	// ------------------Bike and Price Page ----------------------
 
 	@GetMapping("/indexView")
 	public String View() {
 		return "indexView";
 	}
-	//------------------Testimonials Page----------------------
+	// ------------------Testimonials Page----------------------
 
 	@GetMapping("/indexTest")
 	public String testimonial() {
@@ -136,7 +136,7 @@ public class UserController {
 		return "login";
 	}
 	// ----------------------After Login Goto Dashboard---------------------
-	
+
 	@GetMapping("/dashboard")
 	public String userLogin(Model model, User user, HttpSession session) {
 
@@ -152,7 +152,7 @@ public class UserController {
 
 		return "dashboard";
 	}
-	
+
 	@PostMapping("/dashboard")
 	public String userLogin(@ModelAttribute User user, Model model, HttpSession session) {
 		// Hash the password entered by the user
@@ -161,8 +161,8 @@ public class UserController {
 
 		if (users.size() == 1) {
 			User loggedInUser = users.get(0);
-			session.setAttribute("loggedInUserId", loggedInUser.getUserId());
 
+			session.setAttribute("loggedInUserId", loggedInUser.getUserId());
 			session.setAttribute("activeUser", user.getEmail());
 
 			List<User> uList = uRepo.findAll();
@@ -184,14 +184,14 @@ public class UserController {
 
 	}
 
-	//-------------------Logout---------------------
+	// -------------------Logout---------------------
 	@GetMapping("/logoutUser")
 	public String logoutUser(HttpSession session) {
 		session.invalidate();
 		return "login";
 	}
-	
-	//-------------------Forgot Password---------------------
+
+	// -------------------Forgot Password---------------------
 
 	@GetMapping("/forgotPassword")
 	public String loadForgotPassword() {
@@ -215,7 +215,7 @@ public class UserController {
 			return "newForgot";
 		}
 	}
-	//-------------------Reset New Password---------------------
+	// -------------------Reset New Password---------------------
 
 	@GetMapping("/resetPassword")
 	public String resetPasswordForm(@RequestParam("userId") String userId, Model model) {
@@ -264,7 +264,7 @@ public class UserController {
 	}
 
 	@PostMapping("/changePassword")
-	public String changePassword( @RequestParam("userId") Integer userId,
+	public String changePassword(@RequestParam("userId") Integer userId,
 			@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
 			@RequestParam("confirmPassword") String confirmPassword, Model model) {
 
@@ -296,7 +296,7 @@ public class UserController {
 
 		}
 	}
-	//---------------------------------------
+	// ---------------------------------------
 
 	@GetMapping("/index")
 	public String index(Model model) {
@@ -304,13 +304,13 @@ public class UserController {
 		model.addAttribute("rideList", rideList);
 		return "index";
 	}
-	//-------------------Product Page---------------------
+	// -------------------Product Page---------------------
 
 	@GetMapping("/product")
 	public String product() {
 		return "product";
 	}
-	//-------------------Edit Profile---------------------
+	// -------------------Edit Profile---------------------
 
 	// Edit User
 	@GetMapping("/editProfile/{userId}")
@@ -318,10 +318,10 @@ public class UserController {
 
 		if (session.getAttribute("activeUser") == null) {
 			session.setAttribute("error", "Please login first!");
-			return "login"; 		}
+			return "login";
+		}
 
 		User user = uRepo.getById(userId);
-
 		model.addAttribute("userObject", user);
 		return "profile";
 	}
@@ -382,7 +382,7 @@ public class UserController {
 		}
 		return "profile";
 	}
-	//-------------------Search---------------------
+	// -------------------Search---------------------
 
 	@GetMapping("/search")
 	public String searchRides(@RequestParam(required = false) String keyword, User user, Model model,
@@ -405,7 +405,6 @@ public class UserController {
 		return "dashboard"; // View name to display search results
 	}
 
-	
 	@GetMapping("/renttable")
 	public String renttable(Model model, HttpSession session) {
 
@@ -416,7 +415,7 @@ public class UserController {
 		// }
 		return "renttable";
 	}
-	//-------------------Service Page---------------------
+	// -------------------Service Page---------------------
 
 	@GetMapping("/Services")
 	public String Services(Model model, User user, HttpSession session) {
@@ -424,27 +423,49 @@ public class UserController {
 		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
 		return "Services";
 	}
-	//-------------------Testimonials---------------------
+	// -------------------Testimonials---------------------
 
 	@GetMapping("/test")
 	public String test() {
 		return "test";
 	}
-	//-------------------Bikes & Price---------------------
+	// -------------------Bikes & Price---------------------
 
 	@GetMapping("/view")
 	public String view() {
 		return "view";
 	}
-	//-------------------Rent Ride---------------------
+	// -------------------Rent Ride---------------------
 
 	@GetMapping("/rentRide/{rideId}")
-	public String rentRide(Model model, HttpSession session) {
-		 if (session.getAttribute("activeUser") == null) {
-		 String errorMessage = "Please login first!";
-		 model.addAttribute("errorMessage", errorMessage);
-		 return "login";
-		 }
+	public String rentRide(@PathVariable int rideId, Model model, HttpSession session) {
+
+		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
+
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "login";
+		}
+
+		Optional<User> optionalUser = uRepo.findById(loggedInUserId);
+		if (!optionalUser.isPresent()) {
+			return "login";
+
+		}
+		User loggedInUser = optionalUser.get();
+
+		Optional<Ride> optionalRide = rideRepo.findById(rideId);
+		Ride ride = optionalRide.orElse(null);
+
+		if (ride == null) {
+
+			return "dashboard";
+		}
+
+		model.addAttribute("rideObject", ride);
+		model.addAttribute("user", loggedInUser);
+
 		return "rent";
 	}
 
@@ -460,7 +481,31 @@ public class UserController {
 		}
 
 	}
-	//-------------------Rent Ride Details---------------------
+
+//	@PostMapping("/rentRide/{rideId}")
+//	public String rentRide(@PathVariable int rideId, @ModelAttribute Rent rent, HttpSession session, Model model) {
+//
+//		Ride rentedRide = rideRepo.findById(rideId).orElse(null);
+//
+//		if (rentedRide != null && rentedRide.getStatus().equals("Available")) {
+//
+//			rentedRide.setStatus("On Rent");
+//			
+//			rideRepo.save(rentedRide);
+//			
+//			model.addAttribute("rideId", rideId);
+//			model.addAttribute("rentedRide", rentedRide);
+//			
+//			return "rent";
+//			
+//		} else {
+//			
+//			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
+//			return "dashboard";
+//		}
+//
+//	}
+	// -------------------Rent Ride Details---------------------
 
 	@GetMapping("/orderDetails")
 	public String order(Model model, HttpSession session) {
@@ -498,7 +543,7 @@ public class UserController {
 			return "orderDetails";
 		}
 	}
-	//-------------------Cancel Booking---------------------
+	// -------------------Cancel Booking---------------------
 
 	@GetMapping("/cancelBooking/{rentId}")
 	public String cancel(@PathVariable int rentId, Model model, User user, HttpSession session) {
@@ -511,6 +556,5 @@ public class UserController {
 		return "orderDetails";
 
 	}
-	
 
 }

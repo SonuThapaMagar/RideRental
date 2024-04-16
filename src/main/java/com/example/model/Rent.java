@@ -11,12 +11,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "")
+@Table(name = "Rent")
 public class Rent {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int rentId;
+	
 	private LocalDateTime rentStartDate;
 	private LocalDate rentEndDate;
 	private String pickUpLocation;
@@ -28,12 +29,15 @@ public class Rent {
 	@JoinColumn(name = "userId")
 	private User user;
 
-	@ManyToOne
-	@JoinColumn(name = "rideId")
-	private Ride ride;
 	private String fullName;
 	private String email;
 	private String phone;
+	
+	@ManyToOne
+	@JoinColumn(name = "rideId")
+	private Ride ride;
+	
+	
 
 	public Ride getRide() {
 	    return ride;

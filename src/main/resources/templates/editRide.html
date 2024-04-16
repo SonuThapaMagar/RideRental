@@ -186,8 +186,10 @@ button {
 					<div class="form-group">
 						<label for="rideType">Ride Type:</label> <select id="rideType"
 							th:field="*{type}">
-							<option value="bike">Bike</option>
-							<option value="scooter">Scooter</option>
+							<option value="bike" th:selected="${rideObject.type == 'bike'}">Bike</option>
+							<option value="scooter"
+								th:selected="${rideObject.type == 'scooter'}">Scooter</option>
+
 						</select>
 					</div>
 
@@ -198,10 +200,11 @@ button {
 
 					<div class="form-group">
 						<label for="status">Status:</label> <select th:field="*{status}">
-							<option value="available">Available</option>
-							<option value="booked">Booked</option>
-							<option value="in-use">In Use</option>
-							<option value="maintenance">Maintenance</option>
+							<option value="available"
+								th:selected="${rideObject.status == 'Available'}">Available</option>
+							<option value="in-use"
+								th:selected="${rideObject.status == 'On Rent'}">In Use</option>
+
 						</select>
 					</div>
 
@@ -232,7 +235,16 @@ button {
 							id="price" th:field="*{pricePerFullDay}" required>
 					</div>
 
-					<button type="submit">Save Changes</button>
+					<div class="row">
+						<div class="col">
+							<button type="button" class="btn btn-secondary"
+								onclick="window.location.href='/ridebooking'">Cancel</button>
+						</div>
+						<div class="col text-end">
+							<button type="submit" class="btn btn-primary">Save
+								Changes</button>
+						</div>
+					</div>
 				</form>
 			</div>
 		</main>

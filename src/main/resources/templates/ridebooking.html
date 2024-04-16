@@ -32,33 +32,12 @@
 
 </head>
 <style>
+*{
+	font-family: Quicksand, sans-serif;
+
+}
 body {
-	font-family: Arial, sans-serif;
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-	border-radius: 1rem;
-}
-
-th {
-	color: white;
-}
-
-th, td {
-	border: 1px solid white;
-	padding: 8px;
-	text-align: left;
-	border-color: white;
-}
-
-th {
-	background-color: #de3450;
-}
-
-tr:nth-child(even) {
-	background-color: #f2f2f2;
+	font-family: Quicksand, sans-serif;
 }
 
 button {
@@ -78,37 +57,40 @@ button {
 	background-color: green;
 	color: white;
 }
-
-.booked {
-	background-color: red;
-	color: white;
+/*Table styles*/
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: black;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
 }
 
-/* .onrepair {
-    background-color: blue;
-    color: white;
-  } */
-.onrepair {
-	background-color: rgb(240, 183, 12);
-	color: black;
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
 }
 
-@media only screen and (max-width: 600px) {
-	table {
-		border-collapse: collapse;
-		width: 100%;
-	}
-	th, td {
-		border: 1px solid #dddddd;
-		text-align: left;
-		padding: 8px;
-	}
-	th {
-		background-color: #de3450;
-	}
-	tr:nth-child(even) {
-		background-color: #f2f2f2;
-	}
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid black;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+
 }
 </style>
 
@@ -183,7 +165,9 @@ button {
 				<h2>RIDE DETAILS</h2>
 			</div>
 			<!--Table-->
-			<table>
+			
+			
+			<table class="styled-table">
 				<thead>
 					<tr>
 						<th>Ride ID</th>
@@ -204,7 +188,7 @@ button {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="ride:${rideList}">
+					<tr th:each="ride:${rideList}" style="color:black;">
 						<td th:text="${ride.rideId}"></td>
 						<td th:text="${ride.type}"></td>
 						<td th:text="${ride.plateNo}"></td>
@@ -216,13 +200,14 @@ button {
 						<td th:text="${ride.about}"></td>
 						<td><a th:href="@{'/assets/' +${ride.rideImg}}"
 							target="_blank" style="text-decoration: none;">View Image</a></td>
-						<td><span class="material-icons-outlined">edit</span> <a
+
+						<td> <a
 							th:href="@{'/editRide/'+${ride.rideId}}"> <input
 								type="submit" value="Edit"
-								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered; width: 50px; height: 30px;">
+								style="background-color: #44916f; color: white; border-radius: 0.5rem; border-color: #44916f; width: 50px; height: 30px;">
 						</a></td>
 
-						<td><span class="material-icons-outlined"> delete</span> <a
+						<td><a
 							th:href="@{'/deleteRide/'+${ride.rideId}}"> <input
 								type="submit" value="Delete"
 								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
