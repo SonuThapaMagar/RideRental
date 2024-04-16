@@ -100,18 +100,6 @@ public class AdminController {
 
 	}
 
-	@GetMapping("/add")
-	public String add(HttpSession session, Model model) {
-
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		} else {
-			return "add";
-		}
-
-	}
 
 	@GetMapping("/searchUser")
 	public String searchUser(@RequestParam(required = false) String fullName, Model model, User user) {
@@ -132,7 +120,7 @@ public class AdminController {
 	public String searchRent(@RequestParam(required = false) String fullName, Rent rent, Model model) {
 		List<Rent> rentList;
 		if (fullName != null && !fullName.isEmpty()) {
-			rentList = rentRepo.findByFullName(fullName); // Search by name and model
+			rentList = rentRepo.findByUserFullName(fullName); // Search by name and model
 															// (case-insensitively)
 		} else {
 			rentList = rentRepo.findAll(); // Retrieve all rides if no keyword provided
@@ -160,6 +148,19 @@ public class AdminController {
 	}
 
 	// add ride
+
+	@GetMapping("/add")
+	public String add(HttpSession session, Model model) {
+
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		} else {
+			return "add";
+		}
+
+	}
 	@PostMapping("/add")
 	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model)
 			throws IOException {

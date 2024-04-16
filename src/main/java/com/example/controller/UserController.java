@@ -437,124 +437,131 @@ public class UserController {
 	}
 	// -------------------Rent Ride---------------------
 
-	@GetMapping("/rentRide/{rideId}")
-	public String rentRide(@PathVariable int rideId, Model model, HttpSession session) {
-
-		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
-
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "login";
-		}
-
-		Optional<User> optionalUser = uRepo.findById(loggedInUserId);
-		if (!optionalUser.isPresent()) {
-			return "login";
-
-		}
-		User loggedInUser = optionalUser.get();
-
-		Optional<Ride> optionalRide = rideRepo.findById(rideId);
-		Ride ride = optionalRide.orElse(null);
-
-		if (ride == null) {
-
-			return "dashboard";
-		}
-
-		model.addAttribute("rideObject", ride);
-		model.addAttribute("user", loggedInUser);
-
-		return "rent";
-	}
-
-	@PostMapping("/rentRide/{rideId}")
-	public String rentRide(@PathVariable int rideId, @ModelAttribute Rent rent, HttpSession session, Model model) {
-		Ride rentedRide = rideRepo.findById(rideId).orElse(null);
-		if (rentedRide != null && rentedRide.getStatus().equals("available")) {
-			model.addAttribute("rentedRide", rentedRide);
-			return "rent";
-		} else {
-			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
-			return "dashboard";
-		}
-
-	}
-
-//	@PostMapping("/rentRide/{rideId}")
-//	public String rentRide(@PathVariable int rideId, @ModelAttribute Rent rent, HttpSession session, Model model) {
+//	@GetMapping("/rentRide/{rideId}")
+//	public String rentRide(@PathVariable int rideId, Model model, HttpSession session) {
 //
-//		Ride rentedRide = rideRepo.findById(rideId).orElse(null);
+//		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
 //
-//		if (rentedRide != null && rentedRide.getStatus().equals("Available")) {
+//		if (session.getAttribute("activeUser") == null) {
+//			String errorMessage = "Please login first!";
+//			model.addAttribute("errorMessage", errorMessage);
+//			return "login";
+//		}
 //
-//			rentedRide.setStatus("On Rent");
-//			
-//			rideRepo.save(rentedRide);
-//			
-//			model.addAttribute("rideId", rideId);
-//			model.addAttribute("rentedRide", rentedRide);
-//			
-//			return "rent";
-//			
-//		} else {
-//			
-//			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
+//		Optional<User> optionalUser = uRepo.findById(loggedInUserId);
+//		if (!optionalUser.isPresent()) {
+//			return "login";
+//
+//		}
+//		User loggedInUser = optionalUser.get();
+//
+//		Optional<Ride> optionalRide = rideRepo.findById(rideId);
+//		Ride ride = optionalRide.orElse(null);
+//
+//		if (ride == null) {
+//
 //			return "dashboard";
 //		}
 //
+//		model.addAttribute("rideObject", ride);
+//		model.addAttribute("user", loggedInUser);
+//
+//		return "rent";
 //	}
+//
+//	@PostMapping("/rentRide/{rideId}")
+//	public String rentRideDetails(@PathVariable int rideId, @ModelAttribute Rent rent, HttpSession session,
+//			Model model) {
+//
+//		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
+//
+//		Optional<User> optionalUser = uRepo.findById(loggedInUserId);
+//		if (!optionalUser.isPresent()) {
+//			return "login";
+//		}
+//		User loggedInUser = optionalUser.get();
+//
+//		// Retrieve the ride details
+//		Optional<Ride> optionalRide = rideRepo.findById(rideId);
+//		Ride ride = optionalRide.orElse(null);
+//
+//		if (ride == null) {
+//			return "dashboard"; // Handle case where ride is not found
+//		}
+//
+//		// Check if the selected ride is available for rent
+//		if (!ride.getStatus().equals("Available")) {
+//			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
+//			return "dashboard"; // Redirect to dashboard with error message
+//		}
+//
+//		// Update the status of the ride to "On Rent"
+//		ride.setStatus("On Rent");
+//		rideRepo.save(ride);
+//
+//		// Set the user details in the rent object
+//		rent.setUser(loggedInUser);
+//		rent.setRide(ride);
+//
+//		// Save the rent details
+//		Rent savedRent = rentRepo.save(rent);
+//
+//		return "orderDetails";
+//	}
+
 	// -------------------Rent Ride Details---------------------
 
-	@GetMapping("/orderDetails")
-	public String order(Model model, HttpSession session) {
-
-		List<Rent> rentList = rentRepo.findAll();
-		model.addAttribute("rentList", rentList);
-		return "orderDetails";
-	}
-
-	@PostMapping("/orderDetails")
-	public String orderDetails(@ModelAttribute Rent rent, HttpSession session, Model model, Ride ride) {
-
-		String userEmail = (String) session.getAttribute("activeUser");
-
-		Ride rentedRide = rideRepo.findById(rent.getRentId()).orElse(null);
-
-		if (rentedRide != null && rentedRide.getStatus().equals("available")) {
-			// Update the status of the ride to "on rent"
-			rentedRide.setStatus("On Rent");
-			rideRepo.save(rentedRide);
-
-			// Save the rent details
-			Rent savedRent = rentRepo.save(rent);
-
-			// Retrieve the updated list of rents and rides
-			List<Rent> rentList = rentRepo.findAll();
-			List<Ride> rideList = rideRepo.findAll();
-
-			// Update the model with the updated lists and redirect to the order details
-			model.addAttribute("rentList", rentList);
-			model.addAttribute("rideList", rideList);
-			return "orderDetails";
-		} else {
-			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
-			return "orderDetails";
-		}
-	}
+//	@GetMapping("/orderDetails")
+//	public String order(Model model, HttpSession session) {
+//
+//		List<Rent> rentList = rentRepo.findAll();
+//		model.addAttribute("rentList", rentList);
+//
+//		List<Ride> rideList = rideRepo.findAll();
+//		model.addAttribute("rideList", rideList);
+//		return "orderDetails";
+//	}
+//
+//	@PostMapping("/orderDetails")
+//	public String orderDetails(@ModelAttribute Rent rent, HttpSession session, Model model, Ride ride) {
+//
+////		String userEmail = (String) session.getAttribute("activeUser");
+//
+//		Ride rentedRide = rideRepo.findById(rent.getRentId()).orElse(null);
+//
+//		if (rentedRide != null && rentedRide.getStatus().equals("Available")) {
+//			// Update the status of the ride to "on rent"
+//			rentedRide.setStatus("On Rent");
+//			rideRepo.save(rentedRide);
+//
+//			// Save the rent details
+//			Rent savedRent = rentRepo.save(rent);
+//
+//			// Retrieve the updated list of rents and rides
+//			List<Rent> rentList = rentRepo.findAll();
+//			List<Ride> rideList = rideRepo.findAll();
+//
+//			// Update the model with the updated lists and redirect to the order details
+//			model.addAttribute("rentList", rentList);
+//			model.addAttribute("rideList", rideList);
+//			return "orderDetails";
+//		} else {
+//			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
+//			return "orderDetails";
+//		}
+//	}
 	// -------------------Cancel Booking---------------------
 
-	@GetMapping("/cancelBooking/{rentId}")
-	public String cancel(@PathVariable int rentId, Model model, User user, HttpSession session) {
-
-		session.setAttribute("activeUser", user.getEmail());
-		model.addAttribute("loggedInUserEmail", user.getEmail());
-
-		rentRepo.deleteById(rentId);
-		model.addAttribute("rentList", rentRepo.findAll());
-		return "orderDetails";
-
-	}
+//	@GetMapping("/cancelBooking/{rentId}")
+//	public String cancel(@PathVariable int rentId, Model model, User user, HttpSession session) {
+//
+//		session.setAttribute("activeUser", user.getEmail());
+//		model.addAttribute("loggedInUserEmail", user.getEmail());
+//
+//		rentRepo.deleteById(rentId);
+//		model.addAttribute("rentList", rentRepo.findAll());
+//		return "orderDetails";
+//
+//	}
 
 }

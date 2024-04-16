@@ -206,99 +206,101 @@ form .fields .input-field {
 		<header>Ride Rental Form</header>
 
 
-			<form action="/orderDetails" method="POST" th:object="${rideObject}">
-				<div class="form first">
-	
-					<div th:if="${errorMessage}" class="error-message"
-						style="text-align: center; color: red;">
-						<p th:text="${errorMessage}"></p>
-					</div>
-					
-					<!-- div class="form-group">
+		<form action="/rentRide" method="POST" th:object="${rent}">
+			<div class="form first">
+
+				<div th:if="${errorMessage}" class="error-message"
+					style="text-align: center; color: red;">
+					<p th:text="${errorMessage}"></p>
+				</div>
+
+				<!-- div class="form-group">
 						<input type="hidden" th:field="*{userId}">
 					</div>
 	
 					<!-- Personal Details -->
-					<div class="details personal">
-						<span class="title">Personal Details</span>
-	
-						<div class="fields">
-							<div class="input-field">
-								<label>Full Name</label> <input type="text"
-									th:value="${user.fullName}" readonly
-									placeholder="Enter your name" required>
-							</div>
-	
-							<div class="input-field">
-								<label>Email</label> <input type="text" th:value="${user.email}"
-									readonly placeholder="Enter your email" required>
-							</div>
-	
-							<div class="input-field">
-								<label>Mobile Number</label> <input type="number"
-									th:value="${user.phone}" 
-									placeholder="Enter mobile number" required>
-							</div>
-	
-	
+				<!-- div class="details personal">
+					<span class="title">Personal Details</span>
+
+					<div class="fields">
+						<div class="input-field">
+							<label>Full Name</label> <input type="text"
+								th:value="${user.fullName}" readonly
+								placeholder="Enter your name" required>
 						</div>
+
+						<div class="input-field">
+							<label>Email</label> <input type="text" th:value="${user.email}"
+								readonly placeholder="Enter your email" required>
+						</div>
+
+						<div class="input-field">
+							<label>Mobile Number</label> <input type="number"
+								th:value="${user.phone}" placeholder="Enter mobile number"
+								required>
+						</div>
+
+
 					</div>
-					<!-- Personal Details  End-->
-	
-					<!-- Rental Details  -->
-	
-					<div class="details ID">
-						<span class="title">Rental Details</span>
-	
-						<div class="fields">
-							<div class="input-field">
-								<label>Pick Up Location</label> <input type="text"
-									placeholder="Enter pick up location" required>
-							</div>
-	
-							<div class="input-field">
-								<label>Rent Date</label> <input type="datetime-local"
-									name="rentStartDate" placeholder="Enter rent start date"
-									required>
-							</div>
-	
-							<div class="input-field">
-								<label>Rent End Date</label> <input type="date"
-									name="rentEndDate" placeholder="Enter rent end date" required>
-							</div>
-	
-							<div class="input-field">
-								<label>Select Rent Package</label> <select name="rentPackage"
-									required>
-									<option disabled selected>Select package</option>
-									<option>1 hour</option>
-									<option>3 hour</option>
-									<option>Half Day</option>
-									<option>Full Day</option>
-	
-								</select>
-							</div>
-							<a href="/userlogin" style="text-decoration: none; width: 130px;">
-								<button type="submit" class="btn" id="proceed-btn"
-									style="background-color: #005CD8;">Pay Later</button>
-							</a>
-	
-						</div>
-	
-						<div class="btn-container">
-							<a href="userLogin" style="width: 100px; text-decoration: none;">
-								<button type="button" class="backBtn"
-									style="background-color: black;">Back</button>
-	
-							</a> <a href="payment" style="text-decoration: none; width: 150px;">
-								<button type="submit" class="btn" id="proceed-btn">Pay
-									Now via eSewa</button>
-							</a>
-						</div>
-					</div>
-					<!-- Rental Details End -->
 				</div>
-			</form>
+				<!-- Personal Details  End-->
+
+				<!-- Rental Details  -->
+
+				<div class="details ID">
+					<span class="title">Rental Details</span>
+
+					<div class="fields">
+						<!-- div class="input-field">
+							<label>Pick Up Location</label> <input type="text"
+								id="pickUpLocation" th:field="*{pickUpLocation" required>
+
+						</div-->
+
+						<div class="input-field">
+							<label>Rent Date</label> <input type="datetime-local"
+								id="rentStartDate" name="rentStartDate" required>
+
+						</div>
+
+						<div class="input-field">
+							<label>Rent End Date</label> <input type="date" id="rentEndDate"
+								name="rentEndDate" required>
+						</div>
+
+						<div class="input-field">
+							<label>Select Rent Package</label> <select id="rentPackage"
+								th:field="*{rentPackage}" required>
+								<option value="" disabled selected>Select package</option>
+								<option value="1 hour">1 hour</option>
+								<option value="3 hour">3 hour</option>
+								<option value="Half Day">Half Day</option>
+								<option value="Full Day">Full Day</option>
+							</select>
+
+						</div>
+						<a href="/orderDetails"
+							style="text-decoration: none; width: 130px;">
+							<button type="submit" class="btn" id="proceed-btn"
+								style="background-color: #005CD8;">Pay Later</button>
+						</a>
+
+					</div>
+
+					<div class="btn-container">
+						<a href="/dashboard" style="width: 100px; text-decoration: none;">
+							<button type="button" class="backBtn"
+								style="background-color: black;">Back</button>
+
+						</a> <a href="payment" style="text-decoration: none; width: 150px;">
+							<button type="submit" class="btn" id="proceed-btn">Pay
+								Now via eSewa</button>
+						</a>
+					</div>
+				</div>
+				<!-- Rental Details End -->
+			</div>
+		</form>
 	</div>
 </body>
 

@@ -49,33 +49,48 @@
 </script>
 </head>
 <style>
+*{
+	font-family: Quicksand, sans-serif;
+
+}
 body {
-	font-family: Arial, sans-serif;
+	font-family: Quicksand, sans-serif;
 }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	border-radius: 1rem;
+/*Table styles*/
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: black;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
 }
 
-th {
-	color: white;
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
 }
 
-th, td {
-	border: 1px solid white;
-	padding: 8px;
-	text-align: left;
-	border-color: white;
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid black;
 }
 
-th {
-	background-color: #de3450;
-}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
 
-tr:nth-child(even) {
-	background-color: #f2f2f2;
 }
 
 button {
@@ -111,28 +126,6 @@ button {
 	color: black;
 }
 
-@media only screen and (max-width: 600px) {
-	table {
-		border-collapse: collapse;
-		width: 100%;
-	}
-	th, td {
-		border: 1px solid #dddddd;
-		text-align: left;
-		padding: 8px;
-	}
-	th {
-		background-color: #de3450;
-	}
-	tr:nth-child(even) {
-		background-color: #f2f2f2;
-	}
-	.expanded-image {
-		width: 300px; /* Adjust as needed */
-		height: auto; /* Maintain aspect ratio */
-		transition: width 0.3s ease; /* Add smooth transition */
-	}
-}
 </style>
 
 <body>
@@ -201,10 +194,10 @@ button {
 		<!-- Main -->
 		<main class="main-container">
 			<div class="main-title">
-				<h2>Users</h2>
+				<h2>Users Details</h2>
 			</div>
 			<!--Table-->
-			<table>
+			<table class="styled-table">
 				<thead>
 					<tr>
 						<th>User ID</th>
@@ -218,7 +211,7 @@ button {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user:${uList}">
+					<tr th:each="user:${uList}"style="color:black;">
 						<td th:text="${user.userId}"></td>
 						<td th:text="${user.fullName}"></td>
 						<td th:text="${user.email}"></td>
@@ -232,7 +225,7 @@ button {
 						<td><span class="material-icons-outlined">edit</span> <a
 							th:href="@{ '/editUser/' + ${user.userId}}"> <input
 								type="submit" value="Edit"
-								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
+								style="background-color: #44916f; color: white; border-radius: 0.5rem; border-color: #44916f; width: 50px; height: 30px;">
 
 						</a></td>
 

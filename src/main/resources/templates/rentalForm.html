@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ride Rental Form</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Ride Rental Form</h2>
+  <form action="/rentRide" method="POST" th:object="${rent}">
+       <div class="form-group">
+      <label for="startDate">Rent Start Date:</label>
+      <input type="date" class="form-control" id="startDate" name="startDate" required>
+    </div>
+    <div class="form-group">
+      <label for="endDate">Rent End Date:</label>
+      <input type="date" class="form-control" id="endDate" name="endDate" required>
+    </div>
+    <div class="form-group">
+      <label for="package">Ride Package:</label>
+      <select class="form-control" id="package" name="package" required>
+        <option value="1hr">1 Hour - $10</option>
+        <option value="3hr">3 Hours - $25</option>
+        <option value="halfDay">Half Day - $40</option>
+        <option value="1day">1 Day - $60</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

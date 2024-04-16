@@ -29,15 +29,23 @@ public class Rent {
 	@JoinColumn(name = "userId")
 	private User user;
 
-	private String fullName;
-	private String email;
-	private String phone;
-	
 	@ManyToOne
 	@JoinColumn(name = "rideId")
 	private Ride ride;
 	
 	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setRide(Ride ride) {
+		this.ride = ride;
+	}
 
 	public Ride getRide() {
 	    return ride;
@@ -49,30 +57,6 @@ public class Rent {
 
 	public void setLocation(String location) {
 		this.location = location;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public int getRentId() {
@@ -131,9 +115,6 @@ public class Rent {
 			String pickUpLocation, String paymentStatus, String rentPackage, User user, Ride ride) {
 		super();
 		this.location=location;
-		this.fullName = fullName;
-		this.email = email;
-		this.phone = phone;
 		this.rentStartDate = rentStartDate;
 		this.rentEndDate = rentEndDate;
 		this.pickUpLocation = pickUpLocation;
