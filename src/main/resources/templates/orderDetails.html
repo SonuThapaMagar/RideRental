@@ -139,7 +139,7 @@ header .container {
 
 .btn {
 	display: inline-block;
-	padding: 0.9rem 1.9rem;
+	padding: 1rem 1rem;
 	color: #fff !important;
 	background-color: #e35252;
 	border-radius: 16px;
@@ -225,6 +225,7 @@ ul {
 		width: 100%;
 	}
 }
+
 /* CSS for responsive table */
 .booking-history {
 	width: 100%;
@@ -259,10 +260,13 @@ ul {
 }
 
 .btn-cancel {
-	padding: 8px 16px;
+	width: 100px;
+	height: 30px;
+	padding: 8px 12px;
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
+	padding: 8px 12px;
 }
 
 .btn-cancel.disabled {
@@ -270,11 +274,41 @@ ul {
 	cursor: not-allowed;
 }
 
-/* Responsive design */
-@media screen and (max-width: 767px) {
-	.table-container {
-		overflow-x: auto;
-	}
+/*Table styles*/
+.styled-table {
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+	background-color: black;
+	color: #ffffff;
+	text-align: left;
+}
+
+.styled-table th, .styled-table td {
+	padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+	border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+	background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+	border-bottom: 2px solid black;
+}
+
+.styled-table tbody tr.active-row {
+	font-weight: bold;
+	color: #009879;
 }
 </style>
 
@@ -341,45 +375,51 @@ ul {
 
 			</header>
 			<div class="container">
-				<h2>Booking History</h2>
+				<h2>Renting History</h2>
 
 
 				<div class="table-container ">
 
 					<div class="table-container ">
-						<table class="table">
+						<table class="styled-table">
+
 							<thead class="table-dark">
 								<tr>
-									<th scope="col">Rent ID</th>
-									<th scope="col">Full Name</th>
-									<th scope="col">Email</th>
-									<th scope="col">Phone</th>
+									<th scope="col">Ride</th>
+
 									<th scope="col">Pick-up Location</th>
 									<th scope="col">Rent Start Date and Time</th>
 									<th scope="col">Rent End Date</th>
-									<th scope="col">Rent Package</th>
-									<th scope="col">Price</th>
-
+									<th scope="col">Total Price & Package</th>
 									<th scope="col">Payment Status</th>
 									<th scope="col">Action</th>
+									<th scope="col">Rent Status</th>
 
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="user, rent : ${uList}, ${rentList}">
-									<td th:text="${rent.rentId}"></td>
-									<td th:text="${user.fullName}"></td>
-									<td th:text="${user.email}"></td>
-									<td th:text="${user.phone}"></td>
-									<td th:text="${rent.location}"></td>
+
+								<tr th:each="rent :${rentList}">
+
+
+									<td th:if="${rent.ride != null}" th:text="${rent.ride.about}"></td>
+
+									<td th:text="${rent.pickUpLocation}"></td>
 									<td th:text="${rent.rentStartDate}"></td>
 									<td th:text="${rent.rentEndDate}"></td>
 									<td th:text="${rent.rentPackage}"></td>
-									<td class="paid">Unpaid</td>
-									<td><a th:href="@{'/cancelBooking/' + ${rent.rentId}}">
-											<input type="submit" value="Cancel Booking"
-											style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
-									</a></td>
+									<td th:text="${rent.paymentStatus}"></td>
+									<td>
+
+										<button type="button" class="btn btn-danger"
+											data-bs-toggle="modal" data-bs-target="#cancelBookingModal"
+											style="width: 131px; height: 45px;">Cancel Rent</button> <!-- a th:href="@{'/cancelBooking/' + ${rent.rentId}}">
+											<input type="submit" value="Cancel Rent"
+											style="background-color: orangered; color: white; height: 30px; border-radius: 0.5rem; border-color: orangered">
+									</a-->
+									</td>
+									<td th:text="${rent.rentStatus}"></td>
+
 								</tr>
 							</tbody>
 						</table>
@@ -393,6 +433,31 @@ ul {
 
 	</main>
 
+	<!-- Bootstrap Modal -->
+	<div class="modal fade" id="cancelBookingModal" tabindex="-1"
+		aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="cancelBookingModalLabel">Confirm
+						Cancellation</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">Are you sure you want to cancel this
+					booking?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal" style="background-color: black;">Close</button>
+
+					<form action="/cancelBooking/${rent.rentId}" method="POST">
+						<button type="button" class="btn btn-danger" id="confirmCancel">Cancel
+							Anyway</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 	<!-- JavaScript Files -->
@@ -416,5 +481,6 @@ ul {
 		document.getElementById('search').value = ''; // Clear search input
 		document.querySelector('form').submit(); // Submit form to show all products
 	}
+	
 </script>
 </html>

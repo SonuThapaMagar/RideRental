@@ -2,6 +2,8 @@ package com.example.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,13 +20,17 @@ public class Rent {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int rentId;
 	
-	private LocalDateTime rentStartDate;
+	private LocalDate rentStartDate;
 	private LocalDate rentEndDate;
 	private String pickUpLocation;
 	private String paymentStatus;
 	private String rentPackage;
 	private String location;
 
+	
+	@Column(name = "rent_status")
+    private String rentStatus;
+	
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
@@ -33,6 +39,15 @@ public class Rent {
 	@JoinColumn(name = "rideId")
 	private Ride ride;
 	
+			
+		public String getRentStatus() {
+		return rentStatus;
+	}
+
+	public void setRentStatus(String rentStatus) {
+		this.rentStatus = rentStatus;
+	}
+
 		public User getUser() {
 		return user;
 	}
@@ -73,11 +88,11 @@ public class Rent {
 		this.rentId = rentId;
 	}
 
-	public LocalDateTime getRentStartDate() {
+	public LocalDate getRentStartDate() {
 		return rentStartDate;
 	}
 
-	public void setRentStartDate(LocalDateTime rentStartDate) {
+	public void setRentStartDate(LocalDate rentStartDate) {
 		this.rentStartDate = rentStartDate;
 	}
 
@@ -110,7 +125,7 @@ public class Rent {
 
 	}
 
-	public Rent(String location,String fullName, String email, String phone, LocalDateTime rentStartDate, LocalDate rentEndDate,
+	public Rent(String location,String fullName, String email, String phone, LocalDate rentStartDate, LocalDate rentEndDate,
 			String pickUpLocation, String paymentStatus, String rentPackage, User user, Ride ride) {
 		super();
 		this.location=location;

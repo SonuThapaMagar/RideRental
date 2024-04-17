@@ -59,7 +59,7 @@ public class UserController {
 	@GetMapping("/")
 	public String landingPage() {
 
-		return "index";
+		return "index.html";
 	}
 	// ------------------Service Page ----------------------
 

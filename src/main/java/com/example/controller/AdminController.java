@@ -35,6 +35,7 @@ import jakarta.validation.Valid;
 
 @Controller
 public class AdminController {
+	// -------------------Repositories---------------------
 
 	@Autowired
 	private rideRepository rideRepo;
@@ -44,6 +45,8 @@ public class AdminController {
 
 	@Autowired
 	private rentRepository rentRepo;
+
+	// -------------------Admin Login--------------------
 
 	// static credential for admin
 	private static final String adminEmail = "admin2024@gmail.com";
@@ -57,8 +60,8 @@ public class AdminController {
 		}
 		return "adminlogin";
 	}
+	// -------------------Admin Login login via static credential--------------------
 
-	// Admin login via static credential
 	@PostMapping("/adminLogin")
 	public String adminLogin(@Valid @ModelAttribute Admin a, BindingResult bindingResult, Model model,
 			HttpSession session) {
@@ -80,12 +83,14 @@ public class AdminController {
 		model.addAttribute("errorMessage", "Invalid username or password !!"); // Set error message
 		return "adminlogin";
 	}
+	// -------------------Admin Logout--------------------
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
 		return "adminlogin";
 	}
+	// -------------------Admin Dashboard--------------------
 
 	@GetMapping("/adminDash")
 	public String adminDash(HttpSession session, Model model, Rent rent, User user, Ride ride) {
@@ -99,6 +104,7 @@ public class AdminController {
 		return "admindash";
 
 	}
+	// -------------------Admin Search User--------------------
 
 
 	@GetMapping("/searchUser")
@@ -115,6 +121,7 @@ public class AdminController {
 
 		return "manageUser";
 	}
+	// -------------------Admin Search Rent--------------------
 
 	@GetMapping("/searchRent")
 	public String searchRent(@RequestParam(required = false) String fullName, Rent rent, Model model) {
@@ -147,7 +154,8 @@ public class AdminController {
 		return "ridebooking";
 	}
 
-	// add ride
+	// -------------------Admin Add Ride--------------------
+
 
 	@GetMapping("/add")
 	public String add(HttpSession session, Model model) {
@@ -162,9 +170,14 @@ public class AdminController {
 
 	}
 	@PostMapping("/add")
-	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model)
+	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,HttpSession session)
 			throws IOException {
 
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		try {
 			// Validate if the uploaded file is empty
 			if (rideImage.isEmpty()) {

@@ -225,13 +225,13 @@ form .fields .input-field {
 					<div class="fields">
 						<div class="input-field">
 							<label>Full Name</label> <input type="text"
-								th:field="${user.fullName}" 
-								placeholder="Enter your name" required>
+								th:field="${user.fullName}" placeholder="Enter your name"
+								required>
 						</div>
 
 						<div class="input-field">
 							<label>Email</label> <input type="text" th:field="${user.email}"
-								 placeholder="Enter your email" required>
+								placeholder="Enter your email" required>
 						</div>
 
 						<div class="input-field">
@@ -258,7 +258,7 @@ form .fields .input-field {
 						</div>
 
 						<div class="input-field">
-							<label>Rent Date</label> <input type="datetime-local"
+							<label>Rent Date</label> <input type="date"
 								id="rentStartDate" name="rentStartDate" required>
 
 						</div>
@@ -295,34 +295,31 @@ form .fields .input-field {
 
 					<div class="btn-container">
 						<a href="/dashboard" style="width: 100px; text-decoration: none;">
-							<button type="button" class="backBtn"
-								style="background-color: black;">Back</button>
-
-						</a> <a href="payment" style="text-decoration: none; width: 150px;">
-							<button type="submit" class="btn" id="proceed-btn">Pay
-								Now via eSewa</button>
+							<button type="submit" class="btn" id="pay-later-btn"
+								style="background-color: #005CD8;"
+								onclick="setPaymentStatus('Unpaid')">Pay Later</button>
 						</a>
+
+
+						<button type="submit" class="btn" id="pay-now-btn"
+							style="background-color: green;"
+							onclick="setPaymentStatus('Paid')">Pay Now via eSewa</button>
+					
 					</div>
+<input type="hidden" id="paymentStatus" name="paymentStatus" th:field="${rent.paymentStatus}" value="">
+				
+
 				</div>
 				<!-- Rental Details End -->
 			</div>
 		</form>
 	</div>
 </body>
-<script th:inline="javascript">
-    $(document).ready(function() {
-        $('#rentPackage').change(function() {
-            var selectedPackage = $(this).val();
-            $.ajax({
-                type: "GET",
-                url: "/getPrice",
-                data: { package: selectedPackage },
-                success: function(data) {
-                    $('#price').val(data);
-                }
-            });
-        });
-    });
+<script>
+    function setPaymentStatus(status) {
+        document.getElementById('paymentStatus').value = status;
+    }
 </script>
+
 
 </html>
