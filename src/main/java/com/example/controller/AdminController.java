@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -271,14 +274,21 @@ public class AdminController {
 	}
 
 	@GetMapping("/ridebooking")
-	public String rideDetails(Model model, HttpSession session) {
+	public String rideDetails(Model model,@RequestParam(defaultValue = "0") int page, HttpSession session) {
 		String activeUser = (String) session.getAttribute("activeUser");
 		if (activeUser == null || !activeUser.equals(adminEmail)) {
 			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		List<Ride> rideList = rideRepo.findAll();
+		 // Pagination
+	    int pageSize = 5;
+	    page = Math.max(page, 1); // Ensure page is not less than 1
+	    Page<Ride> ridePage = rideRepo.findAll(PageRequest.of(page - 1, pageSize));
+	    int totalPages = ridePage.getTotalPages();
+	    List<Ride> rideList = ridePage.getContent();
+	    
+	    model.addAttribute("totalPages", totalPages);
 		model.addAttribute("rideList", rideList);
 		return "ridebooking";
 
