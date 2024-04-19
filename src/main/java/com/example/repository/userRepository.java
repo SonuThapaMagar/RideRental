@@ -20,4 +20,5 @@ public interface userRepository extends JpaRepository<User, Integer> {
 
 	List<User> findByEmailAndPassword(String email, String hashedPassword);
 
+	
 }

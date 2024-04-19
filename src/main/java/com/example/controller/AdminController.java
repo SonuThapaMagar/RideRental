@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +61,8 @@ public class AdminController {
 		}
 		return "adminlogin";
 	}
-	// -------------------Admin Login login via static credential--------------------
+	// -------------------Admin Login login via static
+	// credential--------------------
 
 	@PostMapping("/adminLogin")
 	public String adminLogin(@Valid @ModelAttribute Admin a, BindingResult bindingResult, Model model,
@@ -99,13 +101,21 @@ public class AdminController {
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		List<Rent> rentList = rentRepo.findAll();
-		model.addAttribute("rentList", rentList);
+		long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
+		long totalUsers = uRepo.count();
+
+		model.addAttribute("totalRides", totalRides);
+		model.addAttribute("totalUsers", totalUsers);
+		
+		
+		List<Ride> rideList = rideRepo.findAll();
+		model.addAttribute("rideList", rideList);
+
 		return "admindash";
 
 	}
+	
 	// -------------------Admin Search User--------------------
-
 
 	@GetMapping("/searchUser")
 	public String searchUser(@RequestParam(required = false) String fullName, Model model, User user) {
@@ -128,7 +138,7 @@ public class AdminController {
 		List<Rent> rentList;
 		if (fullName != null && !fullName.isEmpty()) {
 			rentList = rentRepo.findByUserFullName(fullName); // Search by name and model
-															// (case-insensitively)
+																// (case-insensitively)
 		} else {
 			rentList = rentRepo.findAll(); // Retrieve all rides if no keyword provided
 		}
@@ -156,7 +166,6 @@ public class AdminController {
 
 	// -------------------Admin Add Ride--------------------
 
-
 	@GetMapping("/add")
 	public String add(HttpSession session, Model model) {
 
@@ -169,15 +178,11 @@ public class AdminController {
 		}
 
 	}
-	@PostMapping("/add")
-	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,HttpSession session)
-			throws IOException {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
-			model.addAttribute("errorMessage", errorMessage);
-			return "adminlogin";
-		}
+	@PostMapping("/added")
+	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,
+			HttpSession session) throws IOException {
+
 		try {
 			// Validate if the uploaded file is empty
 			if (rideImage.isEmpty()) {
@@ -196,6 +201,7 @@ public class AdminController {
 			newRide.setPricePerFullDay(ride.getPricePerFullDay());
 
 			newRide.setRideImg(rideImage.getOriginalFilename());
+			
 			Ride savedRide = rideRepo.save(newRide);
 
 			if (savedRide != null) {
@@ -212,17 +218,10 @@ public class AdminController {
 
 					}
 					System.out.println(imagePath);
-
-					List<User> userList = uRepo.findAll();
-					model.addAttribute("uList", userList);
-
 					List<Ride> rideList = rideRepo.findAll();
 					model.addAttribute("rideList", rideList);
 
-					List<Rent> rentList = rentRepo.findAll();
-					model.addAttribute("rList", rentList);
-
-					return "admindash";
+					return "ridebooking";
 
 				} catch (Exception e) {
 
@@ -235,6 +234,7 @@ public class AdminController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("error", "Failed to save ride details");
+			return "add";
 
 		}
 		return "add";
@@ -243,6 +243,15 @@ public class AdminController {
 	@GetMapping("/admindash")
 	public String admindash(HttpSession session, Model model) {
 
+		long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
+		long totalUsers = uRepo.count();
+
+		model.addAttribute("totalRides", totalRides);
+		model.addAttribute("totalUsers", totalUsers);
+		
+		
+		List<Ride> rideList = rideRepo.findAll();
+		model.addAttribute("rideList", rideList);
 		return "admindash";
 
 	}
@@ -264,15 +273,17 @@ public class AdminController {
 		return "manageUser";
 
 	}
-
 	@GetMapping("/rental")
-	public String rental(Model model, User user, Ride ride) {
+	public String rental(Model model) {
+	    List<Rent> rentList = rentRepo.findAll();
 
-		List<Rent> rentList = rentRepo.findAll();
-		model.addAttribute("rentList", rentList);
-		return "rental";
+	    
+	    model.addAttribute("rentList", rentList);
 
+	    
+	    return "rental";
 	}
+
 
 	@GetMapping("/adminProfile")
 	public String adminProfile(Model model) {

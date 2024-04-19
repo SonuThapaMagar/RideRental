@@ -16,6 +16,11 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
 	">
+<!-- Include Bootstrap CSS for styling -->
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+
 <!-- Search -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
@@ -188,33 +193,40 @@ body {
 							<li><a href="Services">Services</a></li>
 							<li><a href="view">Bikes & Pricing</a></li>
 							<li><a href="/orderDetails">Your Bookings</a></li>
-
+							<li><a href="/reviews">Reviews</a></li>
 						</ul>
 					</div>
 
 					<div class="overlay"></div>
 
 					<!-- Profile  Drop down -->
-					<div class="dropdown">
-						<a class="btn btn-secondary dropdown-toggle" href="#"
-							role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Dropdown link </a>
+					<div class="profile-dropdown" style="margin-left: 40px">
+						<button class="profile-dropdown-btn" onclick="toggle()"
+							style="width: 165px">
+							<div class="profile-img"></div>
+							<span th:text="${loggedInUserEmail}"></span> <i
+								class="fas fa-caret-down"></i>
+						</button>
 
-
-						<ul class="dropdown-menu">
-
-
-							<li><a class="dropdown-item"
-								th:href="@{'/editProfile/' + ${session.loggedInUserId}}">Edit
-									Profile</a></li>
-
-
-							<li><a class="dropdown-item"
-								th:href="@{/loadChangePassword}">Change Password</a></li>
-							<li><a class="dropdown-item" href="/logoutUser">Logout
-									here</a></li>
-						</ul>
+						<div class="profile-dropdown-list">
+							<hr />
+							<div class="profile-dropdown-list-item">
+								<a th:href="@{'/editProfile/' + ${session.loggedInUserId}}">
+									<i class="fas fa-user"></i>Edit Profile
+								</a>
+							</div>
+							<div class="profile-dropdown-list-item">
+								<a th:href="@{/loadChangePassword}"> <i class="fas fa-lock"></i>Change
+									Password
+								</a>
+							</div>
+							<div class="profile-dropdown-list-item">
+								<a href="/logoutUser"> <i class="fas fa-sign-out-alt"></i>Logout
+								</a>
+							</div>
+						</div>
 					</div>
+
 					<!-- Profile  Drop down End -->
 
 
@@ -241,7 +253,7 @@ body {
 				</form>
 
 			</div>
-			
+
 
 			<!--Bikes-->
 			<section class="trip">
@@ -249,8 +261,8 @@ body {
 					<h2 class="section__title">Bikes & Scooters</h2>
 					<p class="section__subtitle">Explore Freely, Rent a Bike or
 						Scooter Today!</p>
-						
-						
+
+
 					<div class="trip__grid">
 						<th:block th:if="${#lists.isEmpty(rideList)}">
 							<p class="no-results"
@@ -284,7 +296,7 @@ body {
 											</a>
 										</th:block>
 									</div>
-									
+
 								</div>
 							</div>
 						</th:block>
@@ -292,12 +304,53 @@ body {
 
 
 					</div>
+					<!-- Button to open review form -->
+					<button type="button" style="width: 181px;" class="btn btn-primary"
+						data-bs-toggle="modal" data-bs-target="#reviewModal">
+						Write a Review</button>
 				</div>
 			</section>
 		</div>
 	</main>
 
 
+	<!-- Review Form Modal -->
+	<div class="modal fade" id="reviewModal" tabindex="-1"
+		aria-labelledby="reviewModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reviewModalLabel">Write a Review</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form action="/submitReview" method="post">
+						<div class="mb-3">
+							<label for="review" class="form-label">Your Review:</label>
+							<textarea class="form-control" id="review" name="review" rows="5"
+								placeholder="Write your review here..." required></textarea>
+						</div>
+						<div class="row">
+							<div class="col text-start">
+								<button type="button" class="btn btn-secondary"
+									data-bs-dismiss="modal" style="background-color: #afafaf">Cancel</button>
+							</div>
+							<div class="col text-end">
+								<!-- Display the full name -->
+								<p>
+									Review by: <span th:text="${session.fullName}"></span>
+								</p>
+								<button type="submit" class="btn btn-success"
+									style="background-color: #4fa64f">Save Review</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 	<!--footer-->
 	<footer class="footer">
@@ -310,7 +363,9 @@ body {
 						<li><a href="#">our services</a></li>
 						<li><a href="#">privacy policy</a></li>
 					</ul>
+
 				</div>
+
 				<div class="footer-col">
 					<h4>get help</h4>
 					<ul>
@@ -329,6 +384,7 @@ body {
 							class="fab fa-linkedin-in"></i></a>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</footer>
@@ -341,7 +397,15 @@ body {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js
 	"> </script>
 </body>
-<script>let profileDropdownList = document.querySelector(".profile-dropdown-list");
+<!-- JavaScript Files -->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+        function clearSearch() {
+            document.getElementById('search').value = ''; // Clear search input
+            document.querySelector('form').submit();
+        }
+	let profileDropdownList = document.querySelector(".profile-dropdown-list");
 	  let btn = document.querySelector(".profile-dropdown-btn");
 	
 	  let classList = profileDropdownList.classList;
@@ -352,10 +416,7 @@ body {
 	    if (!btn.contains(e.target)) classList.remove("active");
 	  });
 	  
-		function clearSearch() {
-			document.getElementById('search').value = ''; // Clear search input
-			document.querySelector('form').submit();
-		}
+		
 	</script>
 
 </html>

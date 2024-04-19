@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ride Bookings</title>
 
+<!-- Bootstrap JS Bundle with Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 <!-- Open Sans Font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -57,8 +61,17 @@ body {
 	font-family: Quicksand, sans-serif;
 }
 
+.header{
+background-color:white;
+margin-bottom:1rem;
+margin-top:1rem;
+width:100%;
+border-radius:0.5rem;
+}
 /*Table styles*/
 .styled-table {
+width:100%;
+background-color:white;
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 0.9em;
@@ -98,32 +111,7 @@ button {
 	background-color: #de3450;
 	border: none;
 	border-radius: 0.5rem;
-}
-
-.status {
-	padding: 5px 10px;
-	border-radius: 5px;
-	display: inline-block;
-}
-
-.completed {
-	background-color: green;
-	color: white;
-}
-
-.cancel {
-	background-color: red;
-	color: white;
-}
-
-.booked {
-	background-color: blue;
-	color: white;
-}
-
-.pending {
-	background-color: yellow;
-	color: black;
+	height:35px;
 }
 
 </style>
@@ -178,19 +166,32 @@ button {
 				</a></li>
 				<li class="sidebar-list-item"><a href="/rental"> <span
 						class="material-icons-outlined">check</span> Rental Information
-				</a></li>
-
-						<li class="sidebar-list-item"><a href="/adminProfile"><span
-						class="material-icons-outlined">person</span> Profile
-
-				</a></li>
-				<li class="sidebar-list-item"><a href="/admin"> <span
+				</a>
+				
+<li class="sidebar-list-item"><a href="/logout" class="logout-link"
+					data-bs-toggle="modal" data-bs-target="#logoutModal"> <span
 						class="material-icons-outlined">logout</span> Logout
 				</a></li>
 			</ul>
 		</aside>
 		<!-- End Sidebar -->
-
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to logout?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="/logout" class="btn btn-primary">Logout</a> <!-- Adjust the href according to your logout endpoint -->
+      </div>
+    </div>
+  </div>
+</div>
 		<!-- Main -->
 		<main class="main-container">
 			<div class="main-title">

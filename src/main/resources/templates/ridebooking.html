@@ -5,6 +5,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ride Details</title>
+<!-- Bootstrap JS Bundle with Popper.js -->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <!-- Open Sans Font -->
 <link
@@ -32,10 +36,10 @@
 
 </head>
 <style>
-*{
+* {
 	font-family: Quicksand, sans-serif;
-
 }
+
 body {
 	font-family: Quicksand, sans-serif;
 }
@@ -45,6 +49,7 @@ button {
 	background-color: #de3450;
 	border: none;
 	border-radius: 0.5rem;
+	height: 35px;
 }
 
 .status {
@@ -59,38 +64,49 @@ button {
 }
 /*Table styles*/
 .styled-table {
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+	width: 100%;
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	background-color: white;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
+
 .styled-table thead tr {
-    background-color: black;
-    color: #ffffff;
-    text-align: left;
+	background-color: black;
+	color: #ffffff;
+	text-align: left;
 }
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
+
+.styled-table th, .styled-table td {
+	padding: 12px 15px;
 }
+
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+	background-color: #f3f3f3;
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid black;
+	border-bottom: 2px solid black;
 }
 
 .styled-table tbody tr.active-row {
-    font-weight: bold;
-    color: #009879;
+	font-weight: bold;
+	color: #009879;
+}
 
+.header {
+	background-color: white;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+	width: 100%;
+	border-radius: 0.5rem;
 }
 </style>
 
@@ -118,11 +134,16 @@ button {
 				</form>
 
 			</div>
-			<div class="header-right">
-				<span class="material-icons-outlined">notifications</span> <span
-					class="material-icons-outlined">email</span> <span
-					class="material-icons-outlined">account_circle</span>
-			</div>
+			<div class="header-right"></div>
+			<p style="color: black; margin-left: 65rem;; margin-top: 1rem">Add
+				Ride</p>
+
+			<a href="/add">
+
+				<button class="search-button" style="width: 50px">
+					<i class="fas fa-add"></i>
+				</button>
+			</a>
 		</header>
 		<!-- End Header -->
 
@@ -148,25 +169,42 @@ button {
 				</a></li>
 				<li class="sidebar-list-item"><a href="/rental"> <span
 						class="material-icons-outlined">check</span> Rental Information
-				</a></li>
-
-				<li class="sidebar-list-item"><a href="/adminProfile"><span
-						class="material-icons-outlined">person</span> Profile </a></li>
-				<li class="sidebar-list-item"><a href="/admin"> <span
+				</a>
+				<li class="sidebar-list-item"><a href="/logout"
+					class="logout-link" data-bs-toggle="modal"
+					data-bs-target="#logoutModal"> <span
 						class="material-icons-outlined">logout</span> Logout
 				</a></li>
 			</ul>
 		</aside>
 		<!-- End Sidebar -->
-
+		<div class="modal fade" id="logoutModal" tabindex="-1"
+			aria-labelledby="logoutModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">Are you sure you want to logout?</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">Cancel</button>
+						<a href="/logout" class="btn btn-primary">Logout</a>
+						<!-- Adjust the href according to your logout endpoint -->
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- Main -->
 		<main class="main-container">
 			<div class="main-title">
 				<h2>RIDE DETAILS</h2>
 			</div>
 			<!--Table-->
-			
-			
+
+
 			<table class="styled-table">
 				<thead>
 					<tr>
@@ -188,7 +226,7 @@ button {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="ride:${rideList}" style="color:black;">
+					<tr th:each="ride:${rideList}" style="color: black;">
 						<td th:text="${ride.rideId}"></td>
 						<td th:text="${ride.type}"></td>
 						<td th:text="${ride.plateNo}"></td>
@@ -201,14 +239,12 @@ button {
 						<td><a th:href="@{'/assets/' +${ride.rideImg}}"
 							target="_blank" style="text-decoration: none;">View Image</a></td>
 
-						<td> <a
-							th:href="@{'/editRide/'+${ride.rideId}}"> <input
+						<td><a th:href="@{'/editRide/'+${ride.rideId}}"> <input
 								type="submit" value="Edit"
 								style="background-color: #44916f; color: white; border-radius: 0.5rem; border-color: #44916f; width: 50px; height: 30px;">
 						</a></td>
 
-						<td><a
-							th:href="@{'/deleteRide/'+${ride.rideId}}"> <input
+						<td><a th:href="@{'/deleteRide/'+${ride.rideId}}"> <input
 								type="submit" value="Delete"
 								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
 

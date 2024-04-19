@@ -80,6 +80,7 @@ public class UserController {
 		return "indexTest";
 	}
 
+	
 //----------------------User Registration---------------------
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, @RequestParam MultipartFile licensePhoto, Model model)
@@ -565,4 +566,9 @@ public class UserController {
 //
 //	}
 
+	@GetMapping("/reviews")
+	public String reviewForm() {
+		
+		return "review";
+	}
 }

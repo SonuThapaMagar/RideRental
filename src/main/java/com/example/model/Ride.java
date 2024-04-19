@@ -2,6 +2,7 @@ package com.example.model;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,8 @@ public class Ride {
 	private int rideId;
 	private String type;
 	private String status;
+	
+	@Column(length = 1000)
 	private String about;
 	private int price;
 	private int plateNo;

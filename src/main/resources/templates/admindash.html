@@ -10,15 +10,23 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
 	rel="stylesheet">
-
 <!-- Material Icons -->
+<!-- Bootstrap JS Bundle with Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <link
 	href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
 	rel="stylesheet">
 <!--Bootstrap Table-->
+<!--Bootstrap Table-->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
   ">
+
+<!-- Search Bar -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+
 <!-- Bootstrap Icons -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -47,24 +55,9 @@ th {
 	align-items: center;
 	justify-content: space-between;
 	display: flex;
-	width: 1300px;
-	height: 200px;
+	width: 100%;
+	height: 100px;
 	border-radius: 0.5rem;
-}
-
-th, td {
-	border: 1px solid white;
-	padding: 8px;
-	text-align: left;
-	border-color: white;
-}
-
-th {
-	background-color: #de3450;
-}
-
-tr:nth-child(even) {
-	background-color: #f2f2f2;
 }
 
 button {
@@ -72,6 +65,7 @@ button {
 	background-color: #de3450;
 	border: none;
 	border-radius: 0.5rem;
+	height: 35px;
 }
 
 .status {
@@ -80,58 +74,57 @@ button {
 	display: inline-block;
 }
 
-.completed {
-	background-color: green;
-	color: white;
-}
-
-.cancel {
-	background-color: red;
-	color: white;
-}
-
-.booked {
-	background-color: blue;
-	color: white;
-}
-
-.pending {
-	background-color: yellow;
-	color: black;
-}
-
-@media only screen and (max-width: 600px) {
-	table {
-		border-collapse: collapse;
-		width: 100%;
-	}
-	th, td {
-		border: 1px solid #dddddd;
-		text-align: left;
-		padding: 8px;
-	}
-	th {
-		background-color: #de3450;
-	}
-	tr:nth-child(even) {
-		background-color: #f2f2f2;
-	}
-}
-
 .row {
 	margin-left: 1rem;
 	margin-top: 2rem;
 }
 
 .header {
-	width: 1350px;
+	width: 98%;
 }
 
 .main-title {
 	border-radius: 0.5rem;
-	width: 1300px;
+	width: 100%;
 	margin-right: 2rem;
 	margin-left: 0rem;
+}
+
+.styled-table {
+	border-collapse: collapse;
+	margin: 25px 0;
+	background-color: white;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+	background-color: black;
+	color: #ffffff;
+	text-align: left;
+}
+
+.styled-table th, .styled-table td {
+	padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+	border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+	background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+	border-bottom: 2px solid black;
+}
+
+.styled-table tbody tr.active-row {
+	font-weight: bold;
+	color: #009879;
 }
 </style>
 
@@ -145,17 +138,17 @@ button {
 				<span class="material-icons-outlined">menu</span>
 			</div>
 			<div class="header-left">
-<h2>Dashboard</h2>			</div>
-		
+				<h2>Dashboard</h2>
+			</div>
+
 		</header>
 		<!-- End Header -->
 
 		<!-- Sidebar -->
 		<aside id="sidebar">
 			<div class="sidebar-title">
-				<div class="sidebar-brand" >
-						<img src="./assets/edit (1).png" alt="Logo" />
-					Admin
+				<div class="sidebar-brand">
+					<img src="./assets/edit (1).png" alt="Logo" /> Admin
 				</div>
 				<span class="material-icons-outlined" onclick="closeSidebar()">close</span>
 			</div>
@@ -173,16 +166,33 @@ button {
 						class="material-icons-outlined">check</span> Rental Information
 				</a></li>
 
-						<li class="sidebar-list-item"><a href="/adminProfile"><span
-						class="material-icons-outlined">person</span> Profile
-
-				</a></li>
-				<li class="sidebar-list-item"><a href="/admin"> <span
+				<li class="sidebar-list-item"><a href="/logout" class="logout-link"
+					data-bs-toggle="modal" data-bs-target="#logoutModal"> <span
 						class="material-icons-outlined">logout</span> Logout
 				</a></li>
+
 			</ul>
 		</aside>
 		<!-- End Sidebar -->
+		<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to logout?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="/logout" class="btn btn-primary">Logout</a> <!-- Adjust the href according to your logout endpoint -->
+      </div>
+    </div>
+  </div>
+</div>
+		
 
 		<!-- Main -->
 		<main class="main-container">
@@ -192,33 +202,39 @@ button {
 				<div class="main-cards">
 
 					<a href="/ridebooking" style="text-decoration: none;">
-						<div class="card" style="border: none; margin-left: 2rem;">
+						<div class="card"
+							style="border: none; background-color: #7da0fa; margin-left: 2rem;">
 							<div class="card-inner">
-								<h2>Rides</h2>
+								<h2>Ride Details</h2>
 								<br> <span class="material-icons-outlined">visibility</span>
 							</div>
-							<p>View All</p>
-
-							<!--  h2>
-							Total Rides: <span th:text="${totalRides}"></span>
-						</h2-->
-
+							<h2>
+								Total Rides: <span th:text="${totalRides}"></span>
+							</h2>
 						</div>
 
 					</a> <a href="/manageUser" style="text-decoration: none;">
-						<div class="card" style="background-color: #4F79BD;">
+						<div class="card" style="background-color: #7978e9;">
 							<div class="card-inner">
 								<h2>View User Details</h2>
 								<span class="material-icons-outlined">info</span>
 							</div>
+							<h2>
+								Total Users: <span th:text="${totalUsers}"></span>
+							</h2>
+
 						</div>
-					</a> <a href="/add" style="text-decoration: none;">
-						<div class="card" style="background-color: #9363e0;">
+					</a> <a href="/rental" style="text-decoration: none;">
+						<div class="card" style="background-color: #f3797e;">
 							<div class="card-inner">
-								<h2>Add New Vehicles</h2>
+								<h2>View Rental Details</h2>
 								<span class="material-icons-outlined">add</span>
 							</div>
+							<h2>
+								Total Rental: <span th:text="${totalUsers}"></span>
+							</h2>
 						</div>
+
 					</a>
 				</div>
 			</div>
@@ -226,41 +242,72 @@ button {
 			<!--Table-->
 			<div class="history_lists">
 				<div class="row">
-					<h4>Ride Renting Details</h4>
-					<a href="/rental">View all</a>
+					<h4>Ride Details</h4>
 
-					<table>
-						<thead>
-							<tr>
-								<th>Rent ID</th>
-								<th>User</th>
-								<th>Booking Date</th>
-								<th>Booking End Date</th>
-								<th>Rent Package</th>
+					<div class="header-left">
+						<form action="/searchRent">
+							<input type="text" class="search-input" name="fullName"
+								id="search" placeholder="Search...">
+							<button class="search-button">
+								<i class="fas fa-search"></i>
+							</button>
+							<button type="button" class="clear-button"
+								style="width: 30px; height: 35px; color: white; background-color: black; border-radius: 0.3rem; cursor: pointer"
+								onclick="clearSearch()">
+								<i class="fas fa-times"></i>
+							</button>
+							<!-- Add Clear button -->
+						</form>
 
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="rent:${rentList}">
-								<td th:text="${rent.rentId}"></td>
-								<td th:text="${rent.fullName}"></td>
-								<td th:text="${rent.rentStartDate}"></td>
-								<td th:text="${rent.rentEndDate}"></td>
-								<td th:text="${rent.rentPackage}"></td>
+						<br>
+					</div>
 
 
-							</tr>
-					</table>
+
+					<th:block th:if="${#lists.isEmpty(rideList)}">
+						<p class="no-results">No rides found.</p>
+					</th:block>
+
 				</div>
 			</div>
+
+			<!--Table-->
+			<table class="styled-table">
+				<thead>
+					<tr>
+						<th>Ride ID</th>
+						<th>Ride Type</th>
+						<th>Ride Plate No</th>
+						<th>Status</th>
+						<th>Description</th>
+						<th>Image</th>
+
+
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ride:${rideList}" style="color: black;">
+						<td th:text="${ride.rideId}"></td>
+						<td th:text="${ride.type}"></td>
+						<td th:text="${ride.plateNo}"></td>
+						<td th:text="${ride.status}"></td>
+						<td th:text="${ride.about}"></td>
+						<td><a th:href="@{'/assets/' +${ride.rideImg}}"
+							target="_blank" style="text-decoration: none;">View Image</a></td>
+
+
+					</tr>
+				</tbody>
+			</table>
 		</main>
 		<!-- End Main -->
 
 	</div>
 
+
 	<!-- Scripts -->
 	<!-- Custom JS -->
-	<script src="dash.js"></script>
 	<script>
 	 const toggle = () => classList.toggle("active");
 

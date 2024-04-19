@@ -486,35 +486,30 @@ ul{
 
 					<div class="overlay"></div>
 					
-					<div class="profile-dropdown">
-						<div onclick="toggle()" class="profile-dropdown-btn">
-							<div class="profile-img">
-								<i class="fa-solid fa-circle"></i>
+					<div class="profile-dropdown" style="margin-left:40px">
+						<button class="profile-dropdown-btn" onclick="toggle()" style="width:165px">
+							<div class="profile-img"></div>
+							<span th:text="${loggedInUserEmail}"></span> <i
+								class="fas fa-caret-down"></i>
+						</button>
+
+						<div class="profile-dropdown-list">
+							<hr />
+							<div class="profile-dropdown-list-item">
+								<a th:href="@{'/editProfile/' + ${session.loggedInUserId}}">
+									<i class="fas fa-user"></i>Edit Profile
+								</a>
 							</div>
-
-							<span th:text="${loggedInUserEmail}"> <i
-								class="fa-solid fa-angle-down"></i></span>
-
-
+							<div class="profile-dropdown-list-item">
+								<a th:href="@{/loadChangePassword}"> <i class="fas fa-lock"></i>Change
+									Password
+								</a>
+							</div>
+							<div class="profile-dropdown-list-item">
+								<a href="/logoutUser"> <i class="fas fa-sign-out-alt"></i>Logout
+								</a>
+							</div>
 						</div>
-
-						<ul class="profile-dropdown-list">
-							<li class="profile-dropdown-list-item"><a
-								href="/editProfile"> <i class="fa-regular fa-user"></i>
-									Edit Profile
-							</a></li>
-
-
-							<li class="profile-dropdown-list-item"><a href=""> <i
-									class="fa-solid fa-sliders"></i> Settings
-							</a></li>
-
-
-
-							<li class="profile-dropdown-list-item"><a href="/logoutUser">
-									<i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
-							</a></li>
-						</ul>
 					</div>
 
 					<div class="hamburger-menu">
@@ -588,8 +583,9 @@ ul{
             crossorigin="anonymous"></script>
         </div>
       </div>
-    </div>
   </main>
+  
+  
   <!--footer-->
   <footer class="footer">
     <div class="container">
