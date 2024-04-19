@@ -40,75 +40,81 @@
 	font-family: Quicksand, sans-serif;
 }
 
-body {
-	font-family: Quicksand, sans-serif;
-}
+        /* Custom CSS */
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
 
-button {
-	color: white;
-	background-color: #de3450;
-	border: none;
-	border-radius: 0.5rem;
-	height: 35px;
-}
+        button {
+            color: white;
+            background-color: #de3450;
+            border: none;
+            border-radius: 0.5rem;
+            height: 35px;
+        }
 
-.status {
-	padding: 5px 10px;
-	border-radius: 5px;
-	display: inline-block;
-}
 
-.available {
-	background-color: green;
-	color: white;
-}
-/*Table styles*/
-.styled-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin: 25px 0;
-	font-size: 0.9em;
-	font-family: sans-serif;
-	background-color: white;
-	min-width: 400px;
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
 
-.styled-table thead tr {
-	background-color: black;
-	color: #ffffff;
-	text-align: left;
-}
+        /* Table styles */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            background-color: white;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
 
-.styled-table th, .styled-table td {
-	padding: 12px 15px;
-}
+        .styled-table thead tr {
+            background-color: black;
+            color: #ffffff;
+            text-align: left;
+        }
 
-.styled-table tbody tr {
-	border-bottom: 1px solid #dddddd;
-}
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
 
-.styled-table tbody tr:nth-of-type(even) {
-	background-color: #f3f3f3;
-}
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
 
-.styled-table tbody tr:last-of-type {
-	border-bottom: 2px solid black;
-}
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
 
-.styled-table tbody tr.active-row {
-	font-weight: bold;
-	color: #009879;
-}
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid black;
+        }
 
-.header {
-	background-color: white;
-	margin-bottom: 1rem;
-	margin-top: 1rem;
-	width: 100%;
-	border-radius: 0.5rem;
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
+
+        .header {
+            background-color: white;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+        @media (max-width: 768px) {
+  .styled-table {
+    font-size: 0.8em; /* Reduce font size for mobile */
+  }
+  .styled-table thead tr, .styled-table tbody tr {
+    display: block; /* Make table rows stack vertically */
+  }
+  .styled-table th, .styled-table td {
+    display: block; /* Make table cells stack vertically */
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
 }
-</style>
+    </style>
 
 <body>
 	<div class="grid-container">
@@ -135,7 +141,7 @@ button {
 
 			</div>
 			<div class="header-right"></div>
-			<p style="color: black; margin-left: 65rem;; margin-top: 1rem">Add
+			<p style="color: black; margin-left: 50rem;; margin-top: 1rem">Add
 				Ride</p>
 
 			<a href="/add">

@@ -54,7 +54,7 @@ body {
   
 .grid-container {
   display: grid;
-  grid-template-columns: 320px 1fr 1fr 1fr; /* Increase width of sidebar */
+  grid-template-columns: 300px 1fr 1fr 1fr; /* Increase width of sidebar */
   grid-template-rows: 0.2fr 3fr;
   grid-template-areas:
     'sidebar header header header'
