@@ -259,16 +259,16 @@ button {
 
 			<!-- Pagination -->
 			<nav aria-label="Page navigation example"
-				th:if="${totalPages != null && totalPages > 1}">
-				<ul class="pagination justify-content-center">
-					<li class="page-item"><a class="page-link" href="?page=1"
+				th:if="${totalPages != null && totalPages > 1}" >
+				<ul class="pagination justify-content-center" >
+					<li class="page-item"><a class="page-link" href="?page=1" style="color:black"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 					<li class="page-item"
-						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
-						class="page-link" th:href="@{'/ridebooking?page=' + ${pageNo}}"
+						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a 
+						class="page-link" th:href="@{'/ridebooking?page=' + ${pageNo}}" style="color:black"
 						th:text="${pageNo}"></a></li>
-					<li class="page-item"><a class="page-link"
+					<li class="page-item"><a class="page-link" style="color:black"
 						th:href="@{'/ridebooking?page=' + ${totalPages}}"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>

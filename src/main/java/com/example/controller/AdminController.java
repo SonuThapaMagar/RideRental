@@ -295,14 +295,22 @@ public class AdminController {
 	}
 
 	@GetMapping("/manageUser")
-	public String manageUser(Model model, HttpSession session) {
+	public String manageUser(Model model, @RequestParam(defaultValue = "0") int page,HttpSession session) {
 		String activeUser = (String) session.getAttribute("activeUser");
 		if (activeUser == null || !activeUser.equals(adminEmail)) {
 			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		List<User> uList = uRepo.findAll();
+		 // Pagination
+	    int pageSize = 5;
+	    page = Math.max(page, 1); // Ensure page is not less than 1
+	    Page<User> uPage = uRepo.findAll(PageRequest.of(page - 1, pageSize));
+	    int totalPages = uPage.getTotalPages();
+	    List<User> uList = uPage.getContent();
+	    
+	    
+	    model.addAttribute("totalPages", totalPages);
 		model.addAttribute("uList", uList);
 		return "manageUser";
 
