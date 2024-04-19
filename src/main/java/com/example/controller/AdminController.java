@@ -79,7 +79,6 @@ public class AdminController {
 			session.setAttribute("activeUser", a.getEmail());
 			session.setMaxInactiveInterval(30);
 
-
 			List<Ride> rideList = rideRepo.findAll();
 			model.addAttribute("rideList", rideList);
 			model.addAttribute("success", "Login successful!"); // Optional
@@ -99,8 +98,9 @@ public class AdminController {
 
 	@GetMapping("/adminDash")
 	public String adminDash(HttpSession session, Model model, Rent rent, User user, Ride ride) {
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
@@ -109,20 +109,25 @@ public class AdminController {
 
 		model.addAttribute("totalRides", totalRides);
 		model.addAttribute("totalUsers", totalUsers);
-		
-		
+
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
 
 		return "admindash";
 
 	}
-	
+
 	// -------------------Admin Search User--------------------
 
 	@GetMapping("/searchUser")
-	public String searchUser(@RequestParam(required = false) String fullName, Model model, User user) {
-
+	public String searchUser(@RequestParam(required = false) String fullName, Model model, User user,
+			HttpSession session) {
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		List<User> uList;
 		if (fullName != null && !fullName.isEmpty()) {
 			uList = uRepo.findByFullName(fullName); // Search by name and model
@@ -172,13 +177,13 @@ public class AdminController {
 	@GetMapping("/add")
 	public String add(HttpSession session, Model model) {
 
-		if (session.getAttribute("activeUser") == null) {
-			String errorMessage = "Please login first!";
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
-		} else {
-			return "add";
 		}
+		return "add";
 
 	}
 
@@ -204,7 +209,7 @@ public class AdminController {
 			newRide.setPricePerFullDay(ride.getPricePerFullDay());
 
 			newRide.setRideImg(rideImage.getOriginalFilename());
-			
+
 			Ride savedRide = rideRepo.save(newRide);
 
 			if (savedRide != null) {
@@ -221,8 +226,7 @@ public class AdminController {
 
 					}
 					System.out.println(imagePath);
-					
-					
+
 					List<Ride> rideList = rideRepo.findAll();
 					model.addAttribute("rideList", rideList);
 
@@ -248,13 +252,18 @@ public class AdminController {
 	@GetMapping("/admindash")
 	public String admindash(HttpSession session, Model model) {
 
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
 		long totalUsers = uRepo.count();
 
 		model.addAttribute("totalRides", totalRides);
 		model.addAttribute("totalUsers", totalUsers);
-		
-		
+
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
 		return "admindash";
@@ -263,7 +272,12 @@ public class AdminController {
 
 	@GetMapping("/ridebooking")
 	public String rideDetails(Model model, HttpSession session) {
-
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
 		return "ridebooking";
@@ -272,33 +286,41 @@ public class AdminController {
 
 	@GetMapping("/manageUser")
 	public String manageUser(Model model, HttpSession session) {
-
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		List<User> uList = uRepo.findAll();
 		model.addAttribute("uList", uList);
 		return "manageUser";
 
 	}
+
 	@GetMapping("/rental")
-	public String rental(Model model) {
-	    List<Rent> rentList = rentRepo.findAll();
+	public String rental(Model model, HttpSession session) {
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
+		List<Rent> rentList = rentRepo.findAll();
 
-	    
-	    model.addAttribute("rentList", rentList);
+		model.addAttribute("rentList", rentList);
 
-	    
-	    return "rental";
-	}
-
-
-	@GetMapping("/adminProfile")
-	public String adminProfile(Model model) {
-
-		return "adminProfile";
+		return "rental";
 	}
 
 	@GetMapping("/editRide/{rideId}")
 	public String editRide(@PathVariable int rideId, Model model, HttpSession session) {
-
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		Ride ride = rideRepo.findById(rideId).orElse(null);
 		if (ride == null) {
 			return "editRide"; // Redirect to an error page
@@ -350,21 +372,24 @@ public class AdminController {
 	// Edit User
 	@GetMapping("/editUser/{userId}")
 	public String editUser(@PathVariable int userId, Model model, HttpSession session) {
-	    if (session.getAttribute("activeUser") == null) {
-	        session.setAttribute("error", "Please login first!");
-	        return "adminlogin";
-	    }
-	    Optional<User> optionalUser = uRepo.findById(userId);
-	    if (optionalUser.isPresent()) {
-	        User user = optionalUser.get();
-	        model.addAttribute("userObject", user); // Add userObject to the model
-	        return "editUser";
-	    } else {
-	        // Handle case where user is not found
-	        return "manageUser"; // Redirect to an error page
-	    }
-	}
 
+		String activeUser = (String) session.getAttribute("activeUser");
+
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			// If the user is not logged in as admin, redirect to the admin login page
+			session.setAttribute("error", "Please login as admin to access this page!");
+			return "adminlogin";
+		}
+		Optional<User> optionalUser = uRepo.findById(userId);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			model.addAttribute("userObject", user); // Add userObject to the model
+			return "editUser";
+		} else {
+			// Handle case where user is not found
+			return "manageUser"; // Redirect to an error page
+		}
+	}
 
 	@PostMapping("/editUser")
 	public String editUser(@ModelAttribute User user, Model model) throws IOException {
@@ -408,7 +433,12 @@ public class AdminController {
 
 	@GetMapping("/deleteRide/{rideId}")
 	public String deleteRide(@PathVariable int rideId, Model model, HttpSession session) {
-
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		rideRepo.deleteById(rideId);
 		model.addAttribute("rideList", rideRepo.findAll());
 		return "ridebooking";
@@ -416,7 +446,12 @@ public class AdminController {
 
 	@GetMapping("/deleteUser/{userId}")
 	public String deleteUser(@PathVariable int userId, Model model, HttpSession session) {
-
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
 		uRepo.deleteById(userId);
 
 		model.addAttribute("uList", uRepo.findAll());
