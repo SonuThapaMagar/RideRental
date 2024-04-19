@@ -79,6 +79,9 @@ public class AdminController {
 			session.setAttribute("activeUser", a.getEmail());
 			session.setMaxInactiveInterval(30);
 
+
+			List<Ride> rideList = rideRepo.findAll();
+			model.addAttribute("rideList", rideList);
 			model.addAttribute("success", "Login successful!"); // Optional
 			return "admindash";
 		}
@@ -218,6 +221,8 @@ public class AdminController {
 
 					}
 					System.out.println(imagePath);
+					
+					
 					List<Ride> rideList = rideRepo.findAll();
 					model.addAttribute("rideList", rideList);
 
@@ -345,21 +350,21 @@ public class AdminController {
 	// Edit User
 	@GetMapping("/editUser/{userId}")
 	public String editUser(@PathVariable int userId, Model model, HttpSession session) {
-
-		if (session.getAttribute("activeUser") == null) {
-			session.setAttribute("error", "Please login first!");
-			return "adminlogin";
-		}
-		Optional<User> optionalUser = uRepo.findById(userId);
-		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			model.addAttribute("userObject", user);
-			return "editUser";
-		} else {
-			// Handle case where user is not found
-			return "manageUser"; // Redirect to an error page
-		}
+	    if (session.getAttribute("activeUser") == null) {
+	        session.setAttribute("error", "Please login first!");
+	        return "adminlogin";
+	    }
+	    Optional<User> optionalUser = uRepo.findById(userId);
+	    if (optionalUser.isPresent()) {
+	        User user = optionalUser.get();
+	        model.addAttribute("userObject", user); // Add userObject to the model
+	        return "editUser";
+	    } else {
+	        // Handle case where user is not found
+	        return "manageUser"; // Redirect to an error page
+	    }
 	}
+
 
 	@PostMapping("/editUser")
 	public String editUser(@ModelAttribute User user, Model model) throws IOException {
