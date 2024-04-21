@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.model.Review;
 import com.example.model.User;
@@ -34,7 +35,7 @@ public class ReviewController {
 	}
 
 	@PostMapping("/indexTest")
-	public String submitReview(@RequestBody String review, HttpSession session, Model model) {
+	public String submitReview(@RequestParam String review, HttpSession session, Model model) {
 
 		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
 		// Check if the user is logged in

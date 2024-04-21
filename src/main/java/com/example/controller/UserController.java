@@ -25,9 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.example.model.Rent;
+import com.example.model.Review;
 import com.example.model.Ride;
 import com.example.model.User;
 import com.example.repository.rentRepository;
+import com.example.repository.reviewRepository;
 import com.example.repository.rideRepository;
 import com.example.repository.userRepository;
 
@@ -54,12 +56,15 @@ public class UserController {
 
 	@Autowired
 	private rentRepository rentRepo;
+	
+	@Autowired
+	private reviewRepository reviewRepo;
 
 	// ------------------Landing Page ----------------------
 	@GetMapping("/")
 	public String landingPage() {
 
-		return "index.html";
+		return "index";
 	}
 	// ------------------Service Page ----------------------
 
@@ -76,7 +81,10 @@ public class UserController {
 	// ------------------Testimonials Page----------------------
 
 	@GetMapping("/indexTest")
-	public String testimonial() {
+	public String testimonial(Model model) {
+		
+		List<Review> reviewList = reviewRepo.findAll();
+		model.addAttribute("reviewList", reviewList);
 		return "test";
 	}
 
@@ -425,150 +433,13 @@ public class UserController {
 		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
 		return "Services";
 	}
-	// -------------------Testimonials---------------------
 
-	@GetMapping("/test")
-	public String test() {
-		return "test";
-	}
 	// -------------------Bikes & Price---------------------
 
 	@GetMapping("/view")
 	public String view() {
 		return "view";
 	}
-	// -------------------Rent Ride---------------------
+	
 
-//	@GetMapping("/rentRide/{rideId}")
-//	public String rentRide(@PathVariable int rideId, Model model, HttpSession session) {
-//
-//		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
-//
-//		if (session.getAttribute("activeUser") == null) {
-//			String errorMessage = "Please login first!";
-//			model.addAttribute("errorMessage", errorMessage);
-//			return "login";
-//		}
-//
-//		Optional<User> optionalUser = uRepo.findById(loggedInUserId);
-//		if (!optionalUser.isPresent()) {
-//			return "login";
-//
-//		}
-//		User loggedInUser = optionalUser.get();
-//
-//		Optional<Ride> optionalRide = rideRepo.findById(rideId);
-//		Ride ride = optionalRide.orElse(null);
-//
-//		if (ride == null) {
-//
-//			return "dashboard";
-//		}
-//
-//		model.addAttribute("rideObject", ride);
-//		model.addAttribute("user", loggedInUser);
-//
-//		return "rent";
-//	}
-//
-//	@PostMapping("/rentRide/{rideId}")
-//	public String rentRideDetails(@PathVariable int rideId, @ModelAttribute Rent rent, HttpSession session,
-//			Model model) {
-//
-//		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
-//
-//		Optional<User> optionalUser = uRepo.findById(loggedInUserId);
-//		if (!optionalUser.isPresent()) {
-//			return "login";
-//		}
-//		User loggedInUser = optionalUser.get();
-//
-//		// Retrieve the ride details
-//		Optional<Ride> optionalRide = rideRepo.findById(rideId);
-//		Ride ride = optionalRide.orElse(null);
-//
-//		if (ride == null) {
-//			return "dashboard"; // Handle case where ride is not found
-//		}
-//
-//		// Check if the selected ride is available for rent
-//		if (!ride.getStatus().equals("Available")) {
-//			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
-//			return "dashboard"; // Redirect to dashboard with error message
-//		}
-//
-//		// Update the status of the ride to "On Rent"
-//		ride.setStatus("On Rent");
-//		rideRepo.save(ride);
-//
-//		// Set the user details in the rent object
-//		rent.setUser(loggedInUser);
-//		rent.setRide(ride);
-//
-//		// Save the rent details
-//		Rent savedRent = rentRepo.save(rent);
-//
-//		return "orderDetails";
-//	}
-
-	// -------------------Rent Ride Details---------------------
-
-//	@GetMapping("/orderDetails")
-//	public String order(Model model, HttpSession session) {
-//
-//		List<Rent> rentList = rentRepo.findAll();
-//		model.addAttribute("rentList", rentList);
-//
-//		List<Ride> rideList = rideRepo.findAll();
-//		model.addAttribute("rideList", rideList);
-//		return "orderDetails";
-//	}
-//
-//	@PostMapping("/orderDetails")
-//	public String orderDetails(@ModelAttribute Rent rent, HttpSession session, Model model, Ride ride) {
-//
-////		String userEmail = (String) session.getAttribute("activeUser");
-//
-//		Ride rentedRide = rideRepo.findById(rent.getRentId()).orElse(null);
-//
-//		if (rentedRide != null && rentedRide.getStatus().equals("Available")) {
-//			// Update the status of the ride to "on rent"
-//			rentedRide.setStatus("On Rent");
-//			rideRepo.save(rentedRide);
-//
-//			// Save the rent details
-//			Rent savedRent = rentRepo.save(rent);
-//
-//			// Retrieve the updated list of rents and rides
-//			List<Rent> rentList = rentRepo.findAll();
-//			List<Ride> rideList = rideRepo.findAll();
-//
-//			// Update the model with the updated lists and redirect to the order details
-//			model.addAttribute("rentList", rentList);
-//			model.addAttribute("rideList", rideList);
-//			return "orderDetails";
-//		} else {
-//			model.addAttribute("errorMessage", "Selected ride is not available for rent.");
-//			return "orderDetails";
-//		}
-//	}
-	// -------------------Cancel Booking---------------------
-
-//	@GetMapping("/cancelBooking/{rentId}")
-//	public String cancel(@PathVariable int rentId, Model model, User user, HttpSession session) {
-//
-//		session.setAttribute("activeUser", user.getEmail());
-//		model.addAttribute("loggedInUserEmail", user.getEmail());
-//
-//		rentRepo.deleteById(rentId);
-//		model.addAttribute("rentList", rentRepo.findAll());
-//		return "orderDetails";
-//
-//	}
-
-	@GetMapping("/reviews")
-	public String reviewForm() {
-		
-		return "review";
-	}
 }
