@@ -149,6 +149,9 @@ public class RentController {
 			model.addAttribute("errorMessage", errorMessage);
 			return "login";
 		}
+		String loggedInUserEmail  = (String) session.getAttribute("activeUser");
+		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
+
 		List<User> uList = uRepo.findAll();
 		model.addAttribute("uList", uList);
 

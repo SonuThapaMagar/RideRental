@@ -45,6 +45,13 @@ public class ReviewController {
 			return "login"; // Redirect to the login page
 		}
 
+		  // Check if the review text exceeds the character limit
+	    if (review.length() > 1000) {
+	        String errorMessage = "Review text should not exceed 1000 characters.";
+	        model.addAttribute("errorMessage", errorMessage);
+	        return "dashboard"; 
+	        }
+
 		Review newReview = new Review();
 		newReview.setReviews(review);
 		

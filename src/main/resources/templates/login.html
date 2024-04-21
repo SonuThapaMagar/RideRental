@@ -101,15 +101,15 @@
 					</div>
 
 
-					<input type="submit" class="btn" value="Sign up" />
-					<p
-						style="width: 29.375rem; color: black; height: 3.4375rem; margin-left: 80px; flex-shrink: 0;">
-						By clicking Sign up, you agree our <span><strong
-							style="text-decoration: underline;">Terms and Condition</strong></span>
-						and <span><strong style="text-decoration: underline;">Privacy
-								Statement</strong></span>
-					</p>
-
+					<input type="submit" class="btn" value="Sign up" /> <a
+						href="/terms" style="text-decoration:none;color:black">
+						<p style="width: 29.375rem; color: black; height: 3.4375rem; margin-left: 80px; flex-shrink: 0;">
+							By clicking Sign up, you agree our <span><strong
+								style="text-decoration: underline;">Terms and Condition</strong></span>
+							and <span><strong style="text-decoration: underline;">Privacy
+									Statement</strong></span>
+						</p>
+					</a>
 				</form>
 			</div>
 		</div>
@@ -144,15 +144,15 @@
 
 <script src="./js/login.js"></script>
 <script th:if="${successMessage}">
-    setTimeout(function() {
-        document.querySelector('.success-message').style.display = 'none';
-    }, 5000); // 2000 milliseconds = 2 seconds
+	setTimeout(function() {
+		document.querySelector('.success-message').style.display = 'none';
+	}, 5000); // 2000 milliseconds = 2 seconds
 </script>
 
 <script th:if="${errorMessage}">
-    setTimeout(function() {
-        document.querySelector('.error-message').style.display = 'none';
-    }, 2000); // 2000 milliseconds = 2 seconds
+	setTimeout(function() {
+		document.querySelector('.error-message').style.display = 'none';
+	}, 2000); // 2000 milliseconds = 2 seconds
 </script>
 
 </html>

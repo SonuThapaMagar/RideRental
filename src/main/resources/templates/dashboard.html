@@ -303,11 +303,11 @@ body {
 
 
 					</div>
-						<!-- Button to open review form -->
-						<button type="button" style="width: 181px;" class="btn btn-primary"
-							data-bs-toggle="modal" data-bs-target="#reviewModal">
-							Write a Review</button>
-					</div>
+					<!-- Button to open review form -->
+					<button type="button" style="width: 181px;" class="btn btn-primary"
+						data-bs-toggle="modal" data-bs-target="#reviewModal">
+						Write a Review</button>
+				</div>
 			</section>
 		</div>
 	</main>
@@ -323,8 +323,14 @@ body {
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				
+
 				<div class="modal-body">
+
+					<div th:if="${errorMessage}" class="error-message"
+						style="text-align: center; color: red;">
+						<p th:text="${errorMessage}"></p>
+					</div>
+
 					<form action="/indexTest" method="post">
 						<div class="mb-3">
 							<label for="review" class="form-label">Your Review:</label>
@@ -346,7 +352,7 @@ body {
 							</div>
 						</div>
 					</form>
-					
+
 				</div>
 
 			</div>

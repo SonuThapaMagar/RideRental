@@ -56,7 +56,7 @@ public class UserController {
 
 	@Autowired
 	private rentRepository rentRepo;
-	
+
 	@Autowired
 	private reviewRepository reviewRepo;
 
@@ -82,13 +82,12 @@ public class UserController {
 
 	@GetMapping("/indexTest")
 	public String testimonial(Model model) {
-		
+
 		List<Review> reviewList = reviewRepo.findAll();
 		model.addAttribute("reviewList", reviewList);
 		return "test";
 	}
 
-	
 //----------------------User Registration---------------------
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute User user, @RequestParam MultipartFile licensePhoto, Model model)
@@ -154,10 +153,12 @@ public class UserController {
 			model.addAttribute("errorMessage", errorMessage);
 			return "login";
 		}
+		String loggedInUserEmail = (String) session.getAttribute("activeUser");
+		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
 
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
-		model.addAttribute("loggedInUserEmail", user.getEmail());
+//		model.addAttribute("loggedInUserEmail", user.getEmail());
 
 		return "dashboard";
 	}
@@ -170,8 +171,10 @@ public class UserController {
 
 		if (users.size() == 1) {
 			User loggedInUser = users.get(0);
-//			Integer loggedInUserId = user.getUserId();
-			
+			Integer loggedInUserId = user.getUserId();
+			String loggedInUserEmail = (String) session.getAttribute("activeUser");
+			model.addAttribute("loggedInUserEmail", loggedInUserEmail);
+
 			session.setAttribute("loggedInUserId", loggedInUser.getUserId());
 			session.setAttribute("activeUser", user.getEmail());
 
@@ -429,17 +432,26 @@ public class UserController {
 
 	@GetMapping("/Services")
 	public String Services(Model model, User user, HttpSession session) {
+
 		String loggedInUserEmail = (String) session.getAttribute("activeUser");
 		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
+
 		return "Services";
 	}
 
 	// -------------------Bikes & Price---------------------
 
 	@GetMapping("/view")
-	public String view() {
+	public String view(HttpSession session, Model model) {
+		String loggedInUserEmail = (String) session.getAttribute("activeUser");
+		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
 		return "view";
 	}
-	
+
+	// ----------------------Terms and Conditions--------------------
+	@GetMapping("/terms")
+	public String terms() {
+		return "terms";
+	}
 
 }
