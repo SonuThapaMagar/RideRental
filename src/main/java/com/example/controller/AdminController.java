@@ -34,6 +34,8 @@ import com.example.repository.rentRepository;
 import com.example.repository.rideRepository;
 import com.example.repository.userRepository;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -80,8 +82,12 @@ public class AdminController {
 		// Checking the credential
 		if (a.getEmail().equals(adminEmail) && a.getPassword().equals(adminPassword)) {
 			session.setAttribute("activeUser", a.getEmail());
-			session.setMaxInactiveInterval(30);
 
+			long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
+			long totalUsers = uRepo.count();
+
+			model.addAttribute("totalRides", totalRides);
+			model.addAttribute("totalUsers", totalUsers);
 			List<Ride> rideList = rideRepo.findAll();
 			model.addAttribute("rideList", rideList);
 			model.addAttribute("success", "Login successful!"); // Optional
@@ -93,17 +99,30 @@ public class AdminController {
 	// -------------------Admin Logout--------------------
 
 	@GetMapping("/logout")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, HttpServletResponse response) {
+
 		session.invalidate();
+		if (session == null) {
+			return "adminlogin";
+
+		}
+		// Set cache control headers to prevent caching of pages
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+		response.setHeader("Expires", "0"); // Proxies
 		return "adminlogin";
 	}
 	// -------------------Admin Dashboard--------------------
 
 	@GetMapping("/adminDash")
 	public String adminDash(HttpSession session, Model model, Rent rent, User user, Ride ride) {
+
 		String activeUser = (String) session.getAttribute("activeUser");
+
 		if (activeUser == null || !activeUser.equals(adminEmail)) {
+
 			String errorMessage = "Please login as admin to access this page!";
+
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
@@ -274,58 +293,63 @@ public class AdminController {
 	}
 
 	@GetMapping("/ridebooking")
-	public String rideDetails(Model model,@RequestParam(defaultValue = "0") int page, HttpSession session) {
+	public String rideDetails(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
 		String activeUser = (String) session.getAttribute("activeUser");
 		if (activeUser == null || !activeUser.equals(adminEmail)) {
 			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		 // Pagination
-	    int pageSize = 5;
-	    page = Math.max(page, 1); // Ensure page is not less than 1
-	    Page<Ride> ridePage = rideRepo.findAll(PageRequest.of(page - 1, pageSize));
-	    int totalPages = ridePage.getTotalPages();
-	    List<Ride> rideList = ridePage.getContent();
-	    
-	    model.addAttribute("totalPages", totalPages);
+		// Pagination
+		int pageSize = 5;
+		page = Math.max(page, 1); // Ensure page is not less than 1
+		Page<Ride> ridePage = rideRepo.findAll(PageRequest.of(page - 1, pageSize));
+		int totalPages = ridePage.getTotalPages();
+		List<Ride> rideList = ridePage.getContent();
+
+		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("rideList", rideList);
 		return "ridebooking";
 
 	}
 
 	@GetMapping("/manageUser")
-	public String manageUser(Model model, @RequestParam(defaultValue = "0") int page,HttpSession session) {
+	public String manageUser(Model model, @RequestParam(defaultValue = "0") int page, HttpSession session) {
 		String activeUser = (String) session.getAttribute("activeUser");
 		if (activeUser == null || !activeUser.equals(adminEmail)) {
 			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		 // Pagination
-	    int pageSize = 5;
-	    page = Math.max(page, 1); // Ensure page is not less than 1
-	    Page<User> uPage = uRepo.findAll(PageRequest.of(page - 1, pageSize));
-	    int totalPages = uPage.getTotalPages();
-	    List<User> uList = uPage.getContent();
-	    
-	    
-	    model.addAttribute("totalPages", totalPages);
+		// Pagination
+		int pageSize = 5;
+		page = Math.max(page, 1); // Ensure page is not less than 1
+		Page<User> uPage = uRepo.findAll(PageRequest.of(page - 1, pageSize));
+		int totalPages = uPage.getTotalPages();
+		List<User> uList = uPage.getContent();
+
+		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("uList", uList);
 		return "manageUser";
 
 	}
 
 	@GetMapping("/rental")
-	public String rental(Model model, HttpSession session) {
+	public String rental(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
 		String activeUser = (String) session.getAttribute("activeUser");
 		if (activeUser == null || !activeUser.equals(adminEmail)) {
 			String errorMessage = "Please login as admin to access this page!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "adminlogin";
 		}
-		List<Rent> rentList = rentRepo.findAll();
+		// Pagination
+		int pageSize = 5;
+		page = Math.max(page, 1); // Ensure page is not less than 1
+		Page<Rent> rentPage = rentRepo.findAll(PageRequest.of(page - 1, pageSize));
+		int totalPages = rentPage.getTotalPages();
+		List<Rent> rentList = rentPage.getContent();
 
+		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("rentList", rentList);
 
 		return "rental";

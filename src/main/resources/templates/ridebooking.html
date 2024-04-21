@@ -123,7 +123,7 @@ button {
 				<span class="material-icons-outlined">menu</span>
 			</div>
 			<div class="search-bar">
-				<form action="/searchRide">
+				<form th:action="@{/searchRide(page=${currentPage})}" method="GET">
 					<input type="text" class="search-input" name="keyword" id="search"
 						placeholder="Search...">
 					<button class="search-button">
@@ -134,8 +134,8 @@ button {
 						onclick="clearSearch()">
 						<i class="fas fa-times"></i>
 					</button>
-					<!-- Add Clear button -->
 				</form>
+
 
 			</div>
 			<div class="header-right"></div>
@@ -259,16 +259,21 @@ button {
 
 			<!-- Pagination -->
 			<nav aria-label="Page navigation example"
-				th:if="${totalPages != null && totalPages > 1}" >
-				<ul class="pagination justify-content-center" >
-					<li class="page-item"><a class="page-link" href="?page=1" style="color:black"
-						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				th:if="${totalPages != null && totalPages > 1}">
+				
+				<ul class="pagination justify-content-center">
+					
+					<li class="page-item"><a class="page-link" href="?page=1"
+						style="color: black" aria-label="Previous"> <span
+							aria-hidden="true">&laquo;</span>
 					</a></li>
-					<li class="page-item"
-						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a 
-						class="page-link" th:href="@{'/ridebooking?page=' + ${pageNo}}" style="color:black"
-						th:text="${pageNo}"></a></li>
-					<li class="page-item"><a class="page-link" style="color:black"
+					
+					<li class="page-item" th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
+						class="page-link" th:href="@{'/ridebooking?page=' + ${pageNo}}"
+						style="color: black" th:text="${pageNo}"></a></li>
+					
+					<li class="page-item"><a class="page-link"
+						style="color: black"
 						th:href="@{'/ridebooking?page=' + ${totalPages}}"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>

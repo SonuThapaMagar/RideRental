@@ -318,7 +318,17 @@ button {
 		function clearSearch() {
 			document.getElementById('search').value = ''; // Clear search input
 			document.querySelector('form').submit();
-		}</script>
+		}
+		
+		// Clear local storage
+		localStorage.clear();
+		// Clear cookies
+		document.cookie.split(";").forEach(function(c) {
+		  document.cookie = c
+		    .replace(/^ +/, "")
+		    .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+		});
+		</script>
 </body>
 
 </html>

@@ -287,12 +287,139 @@ header .container {
 	animation: appear 1s 1 both;
 }
 
-@keyframes appear { 0% {
+@
+keyframes appear { 0% {
 	clip-path: circle(30% at -25% -25%);
 }
 
-100%{
-clip-path:circle(150% at 0 0);
+100
+
+
+
+
+
+
+
+
+
+
+
+
+%
+{
+clip-path
+
+
+
+
+
+
+
+
+
+
+
+
+:
+
+
+
+
+
+
+
+
+
+
+
+
+circle
+
+
+
+
+
+
+
+
+
+
+(
+
+
+
+
+
+
+
+
+
+
+
+
+150
+
+
+
+
+
+
+
+
+
+
+%
+at
+
+
+
+
+
+
+
+
+
+
+
+
+0
+
+
+
+
+
+
+
+
+
+
+
+
+0
+
+
+
+
+
+
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+;
 }
 }
 .row {
@@ -531,7 +658,7 @@ ul {
 
 					<div class="links">
 						<ul>
-							<li><a href="userLogin">Home</a></li>
+							<li><a href="/dashboard">Home</a></li>
 							<li><a href="Services">Services</a></li>
 							<li><a href="view">Bikes & Pricing</a></li>
 							<li><a href="/orderDetails">Your Bookings</a></li>
@@ -584,64 +711,24 @@ ul {
 					<h1>What our clients say about us.</h1>
 				</div>
 				<div class="testimonials__grid">
-					<!-- Iterate over the reviews and display them -->
-					<th:block th:each="review : ${reviews}">
+					<th:block th:each="review : ${reviewList}">
+
 						<div class="card">
-							<!-- Add appropriate HTML structure for displaying each review -->
-							<span><i class="ri-double-quotes-l"></i></span>
-							<!-- Add user image if needed -->
-							<p class="name">User</p>
+							<span><i class="ri-double-quotes-l"></i></span> <img
+								src="assets/mark.jpg" alt="user" />
+							<p class="name">
+								<span th:if="${review.user != null}"
+									th:text="${review.user.fullName}"></span>
+							</p>
+
 							<hr>
-							<p th:text="${review}"></p>
+							<p th:text="${review.reviews}"></p>
 						</div>
 					</th:block>
+
+
 				</div>
 
-				<div class="testimonials__grid">
-					<div class="card">
-						<span><i class="ri-double-quotes-l"></i></span> <img
-							src="assets/elon.jpg" alt="user" />
-						<p class="name">Elon Musk</p>
-						<hr>
-						<p>Five Stars! This ride rental service was amazing! The app
-							was super easy to use and the bike I rented was clean and
-							well-maintained. I loved the flexibility of being able to pick up
-							and drop off the bike at different locations.</p>
-					</div>
-
-					<div class="card">
-						<span><i class="ri-double-quotes-l"></i></span> <img
-							src="assets/mark.jpg" alt="user" />
-						<p class="name">Mark Zuckerberg</p>
-						<hr>
-						<p>The ride rental service was decent overall. The process of
-							renting and returning the bike was straightforward, and the price
-							was reasonable.</p>
-					</div>
-
-					<div class="card">
-						<span><i class="ri-double-quotes-l"></i></span> <img
-							src="assets/jackson.jpg" alt="user" />
-						<p class="name">Jackson Wang</p>
-						<hr />
-						<p>The customer service was fantastic - they were friendly,
-							helpful, and quick to respond to my questions. I would definitely
-							recommend this service to anyone looking for a convenient and
-							affordable way to get around town.</p>
-
-					</div>
-				</div>
-
-				<!-- <div class="review">
-                    <h4>No two homes are alike!</h4>
-                    <p>
-                        Our Elite network, combined with your personal needs, allows us to
-                        create a home plan specifically tailored to you.
-                    </p>
-                    <a href="">
-                        <button>GET A QUOTE</button>
-                    </a>
-                </div> -->
 			</div>
 
 		</div>

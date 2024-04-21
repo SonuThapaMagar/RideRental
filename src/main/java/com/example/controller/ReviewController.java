@@ -1,45 +1,74 @@
-//package com.example.controller;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//
-//import jakarta.servlet.http.HttpSession;
-//
-//
-//@Controller
-//public class ReviewController {
-//
-//	
-//	@GetMapping("/review")
-//	public String reviewForm() {
-//		
-//		return "dashboard";
-//	}
-//	
-//	@PostMapping("/submitReview")
-//	public String submitReview(@RequestBody String review,HttpSession session,Model model) {
-//
-//		// Retrieve the logged-in user's ID from the session
-//		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
-//		// Check if the user is logged in
-//		if (session.getAttribute("activeUser") == null) {
-//			String errorMessage = "Please login first!";
-//			model.addAttribute("errorMessage", errorMessage);
-//			return "login"; // Redirect to the login page
-//		}
-//		
-//		return "dashboard";
-//	}
-//	 @GetMapping("/testimonials")
-//	    public String testimonials(Model model) {
-//	        model.addAttribute("reviews", reviews); // Pass the list of reviews to the Thymeleaf model
-//	        return "testimonials"; // Return the testimonials HTML template
-//	    }
-//	
-//}
+package com.example.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.example.model.Review;
+import com.example.model.User;
+import com.example.repository.reviewRepository;
+import com.example.repository.userRepository;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class ReviewController {
+
+	@Autowired
+	private reviewRepository reviewRepo;
+	
+	@Autowired
+	private userRepository uRepo;
+
+	// -----------------------------Review------------------------------
+	@GetMapping("/review")
+	public String reviewForm() {
+
+		return "dashboard";
+	}
+
+	@PostMapping("/indexTest")
+	public String submitReview(@RequestBody String review, HttpSession session, Model model) {
+
+		Integer loggedInUserId = (Integer) session.getAttribute("loggedInUserId");
+		// Check if the user is logged in
+		if (session.getAttribute("activeUser") == null) {
+			String errorMessage = "Please login first!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "login"; // Redirect to the login page
+		}
+
+		Review newReview = new Review();
+		newReview.setReviews(review);
+		
+		User loggedInUser = uRepo.findById(loggedInUserId).get();
+	    newReview.setUser(loggedInUser); 
+
+		reviewRepo.save(newReview);
+//		session.removeAttribute("review");
+
+		session.setAttribute("review", review);
+		
+		List<Review> reviewList = reviewRepo.findAll();
+		model.addAttribute("reviewList", reviewList);
+		return "test";
+	}
+
+	@GetMapping("/testimonials")
+	public String testimonials(Model model, HttpSession session) {
+
+		String review = (String) session.getAttribute("review");
+
+		List<Review> reviewList = reviewRepo.findAll();
+		model.addAttribute("reviewList", reviewList);
+
+		return "test"; // Return the testimonials HTML template
+	}
+
+}

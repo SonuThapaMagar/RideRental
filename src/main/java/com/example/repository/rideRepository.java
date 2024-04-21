@@ -1,5 +1,7 @@
 package com.example.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,6 @@ public interface rideRepository extends JpaRepository<Ride, Integer> {
 
 	List<Ride> findByAboutContainingIgnoreCase(String about);
 
-//    int findPriceByTypeAndPackage(String type, String rentPackage);
+    Page<Ride> findByAboutContainingIgnoreCase(String keyword, Pageable pageable);
 
 }

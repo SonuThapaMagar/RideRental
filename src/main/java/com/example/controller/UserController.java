@@ -77,7 +77,7 @@ public class UserController {
 
 	@GetMapping("/indexTest")
 	public String testimonial() {
-		return "indexTest";
+		return "test";
 	}
 
 	
