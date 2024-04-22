@@ -112,6 +112,9 @@ public class RentController {
 
 			selectedRide.setStatus("On Rent");
 			rideRepo.save(selectedRide);
+			
+			List<Rent> rentList = rentRepo.findAll();
+			model.addAttribute("rentList", rentList);
 			// Set payment status from the form data
 			String paymentStatus1 = rent.getPaymentStatus();
 			if ("paid".equals(paymentStatus)) {
@@ -131,6 +134,7 @@ public class RentController {
 				return "orderDetails";
 			}
 
+			
 		} else {
 			String errorMessage = "Selected ride not found!";
 			model.addAttribute("errorMessage", errorMessage);
@@ -178,6 +182,8 @@ public class RentController {
 
 			// Save the rent details
 			Rent savedRent = rentRepo.save(rent);
+			
+			
 
 			// Retrieve the updated list of rents and rides
 			List<Rent> rentList = rentRepo.findAll();

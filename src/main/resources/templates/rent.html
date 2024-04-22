@@ -206,7 +206,7 @@ form .fields .input-field {
 		<header>Ride Rental Form</header>
 
 
-		<form action="/rentRide" method="POST" th:object="${rent}">
+<form action="/rentRide" method="POST" th:object="${rent}" onsubmit="return validateForm()">
 			<div class="form first">
 
 				<div th:if="${errorMessage}" class="error-message"
@@ -315,6 +315,35 @@ form .fields .input-field {
 		</form>
 	</div>
 </body>
+<script>
+    function validateForm() {
+        // Retrieve the values of the rental start date and end date fields
+        var rentStartDate = document.getElementById('rentStartDate').value;
+        var rentEndDate = document.getElementById('rentEndDate').value;
+
+        // Convert the values to Date objects
+        var startDate = new Date(rentStartDate);
+        var endDate = new Date(rentEndDate);
+        var currentDate = new Date();
+
+        // Compare the dates
+        if (startDate < currentDate || endDate < currentDate) {
+            // Display an error message
+            alert("Rental start date and end date cannot be in the past.");
+            return false; // Prevent the form from being submitted
+        }
+
+        // Check if end date is before start date
+        if (endDate < startDate) {
+            // Display an error message
+            alert("Rental end date cannot be before the rental start date.");
+            return false; // Prevent the form from being submitted
+        }
+
+        // Form is valid, allow submission
+        return true;
+    }
+</script>
 <script>
     function setPaymentStatus(status) {
         document.getElementById('paymentStatus').value = status;

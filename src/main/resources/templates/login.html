@@ -66,6 +66,12 @@
 
 				<form action="/register" method="POST" class="sign-up-form"
 					enctype="multipart/form-data">
+
+					<!-- Placeholder for displaying error messages -->
+					<div th:if="${error}" class="error-message"
+						style="text-align: center; color: red;">
+						<p th:text="${error}"></p>
+					</div>
 					<img src="./assets/edit (1).png" alt="logo"
 						style="margin-top: 20px;">
 					<p>Rentide</p>
@@ -102,8 +108,9 @@
 
 
 					<input type="submit" class="btn" value="Sign up" /> <a
-						href="/terms" style="text-decoration:none;color:black">
-						<p style="width: 29.375rem; color: black; height: 3.4375rem; margin-left: 80px; flex-shrink: 0;">
+						href="/terms" style="text-decoration: none; color: black">
+						<p
+							style="width: 29.375rem; color: black; height: 3.4375rem; margin-left: 80px; flex-shrink: 0;">
 							By clicking Sign up, you agree our <span><strong
 								style="text-decoration: underline;">Terms and Condition</strong></span>
 							and <span><strong style="text-decoration: underline;">Privacy
