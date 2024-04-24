@@ -62,6 +62,9 @@ public class User {
 	@JoinColumn(name = "rideId")
 	private Ride ride;
 	
+	@OneToOne
+	@JoinColumn(name = "reviewId")
+	private Review review;
 	
 	@OneToMany
 	(mappedBy = "user")
@@ -145,6 +148,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Review getReview() {
+		return review;
+	}
+
+	public void setReview(Review review) {
+		this.review = review;
 	}
 
 }

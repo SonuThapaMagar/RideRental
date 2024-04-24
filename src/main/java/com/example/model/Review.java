@@ -23,6 +23,8 @@ public class Review {
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+	
+	
 
 	public int getReviewId() {
 		return reviewId;

@@ -28,9 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.model.Admin;
 import com.example.model.Rent;
+import com.example.model.Review;
 import com.example.model.Ride;
 import com.example.model.User;
 import com.example.repository.rentRepository;
+import com.example.repository.reviewRepository;
 import com.example.repository.rideRepository;
 import com.example.repository.userRepository;
 
@@ -51,6 +53,9 @@ public class AdminController {
 
 	@Autowired
 	private rentRepository rentRepo;
+
+	@Autowired
+	private reviewRepository reviewRepo;
 
 	// -------------------Admin Login--------------------
 
@@ -193,6 +198,20 @@ public class AdminController {
 
 		return "ridebooking";
 	}
+	
+	@GetMapping("searchReview")
+	public String searchReview(@RequestParam(required = false) String keyword, Model model) {
+		
+		List<Review>reviewList;
+		if (keyword != null && !keyword.isEmpty()) {
+			reviewList = reviewRepo.findByUserFullNameContainingIgnoreCase(keyword); // Search by name and model
+																			// (case-insensitively)
+		} else {
+			reviewList = reviewRepo.findAll(); // Retrieve all rides if no keyword provided
+		}
+		model.addAttribute("reviewList",reviewList);
+		return "adminReview";
+	}
 
 	// -------------------Admin Add Ride--------------------
 
@@ -334,6 +353,38 @@ public class AdminController {
 
 	}
 
+	@GetMapping("/adminReview")
+	public String adminReview(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
+
+		String activeUser = (String) session.getAttribute("activeUser");
+		if (activeUser == null || !activeUser.equals(adminEmail)) {
+			String errorMessage = "Please login as admin to access this page!";
+			model.addAttribute("errorMessage", errorMessage);
+			return "adminlogin";
+		}
+		// Pagination
+		int pageSize = 5;
+		page = Math.max(page, 1); // Ensure page is not less than 1
+		Page<Review> reviewPage = reviewRepo.findAll(PageRequest.of(page - 1, pageSize));
+		int totalPages = reviewPage.getTotalPages();
+		List<Review> reviewList = reviewPage.getContent();
+
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("reviewList", reviewList);
+
+		return "adminReview";
+	}
+
+	@GetMapping("/deleteReview/{reviewId}")
+	public String deleteReview(@PathVariable int reviewId,Model model,HttpSession session) {
+		
+		reviewRepo.deleteById(reviewId);
+		model.addAttribute("reviewList",reviewRepo.findAll());
+		
+		return "adminReview";
+	}
+	
+	
 	@GetMapping("/rental")
 	public String rental(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
 		String activeUser = (String) session.getAttribute("activeUser");

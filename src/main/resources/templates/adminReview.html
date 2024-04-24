@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http:www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Ride Bookings</title>
-
+<title>Admin Review</title>
 <!-- Bootstrap JS Bundle with Popper.js -->
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+
+<!-- DataTables JavaScript -->
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
 
 
 <!-- Open Sans Font -->
@@ -35,48 +41,39 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
-
-
-<style>
-.expanded-image {
-	width: 300px; /* Adjust as needed */
-	height: auto; /* Maintain aspect ratio */
-	transition: width 0.3s ease; /* Add smooth transition */
-}
-</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-	$(document).ready(function() {
-		$('.image-container').click(function() {
-			$(this).find('img').toggleClass('expanded-image');
-		});
-	});
-</script>
 </head>
+<script>
+    $(document).ready(function() {
+        $('#rideTable').DataTable();
+    });
+</script>
+
 <style>
 * {
 	font-family: Quicksand, sans-serif;
 }
 
+/* Custom CSS */
 body {
-	font-family: Quicksand, sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }
 
-.header {
-	background-color: white;
-	margin-bottom: 1rem;
-	margin-top: 1rem;
-	width: 100%;
+button {
+	color: white;
+	background-color: #de3450;
+	border: none;
 	border-radius: 0.5rem;
+	height: 35px;
 }
-/*Table styles*/
+
+/* Table styles */
 .styled-table {
 	width: 100%;
-	background-color: white;
 	border-collapse: collapse;
 	margin: 25px 0;
 	font-size: 0.9em;
 	font-family: sans-serif;
+	background-color: white;
 	min-width: 400px;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
@@ -108,12 +105,25 @@ body {
 	color: #009879;
 }
 
-button {
-	color: white;
-	background-color: #de3450;
-	border: none;
+.header {
+	background-color: white;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+	width: 100%;
 	border-radius: 0.5rem;
-	height: 35px;
+}
+
+@media ( max-width : 768px) {
+	.styled-table {
+		font-size: 0.8em; /* Reduce font size for mobile */
+	}
+	.styled-table thead tr, .styled-table tbody tr {
+		display: block; /* Make table rows stack vertically */
+	}
+	.styled-table th, .styled-table td {
+		display: block; /* Make table cells stack vertically */
+		padding: 10px; /* Adjust padding for smaller screens */
+	}
 }
 </style>
 
@@ -126,8 +136,9 @@ button {
 				<span class="material-icons-outlined">menu</span>
 			</div>
 			<div class="search-bar">
-				<form action="/searchUser">
-					<input type="text" class="search-input" name="fullName" id="search"
+				<form th:action="@{/searchReview}" method="GET">
+					<input type="hidden" name="page" th:value="${currentPage}" /> <input
+						type="text" class="search-input" name="keyword" id="search"
 						placeholder="Search...">
 					<button class="search-button">
 						<i class="fas fa-search"></i>
@@ -137,10 +148,13 @@ button {
 						onclick="clearSearch()">
 						<i class="fas fa-times"></i>
 					</button>
-					<!-- Add Clear button -->
 				</form>
 
+
 			</div>
+			<div class="header-right"></div>
+			
+			
 
 		</header>
 		<!-- End Header -->
@@ -171,6 +185,7 @@ button {
 				<li class="sidebar-list-item"><a href="/adminReview"> <span
 						class="material-icons-outlined">reviews</span> Review Details
 				</a></li>
+
 				<li class="sidebar-list-item"><a href="/logout"
 					class="logout-link" data-bs-toggle="modal"
 					data-bs-target="#logoutModal"> <span
@@ -201,73 +216,71 @@ button {
 		<!-- Main -->
 		<main class="main-container">
 			<div class="main-title">
-				<h2>Users Details</h2>
+				<h2>Review DETAILS</h2>
 			</div>
 			<!--Table-->
-			<table class="styled-table">
+
+
+			<table class="styled-table" id="rideTable">
 				<thead>
 					<tr>
-						<th>User ID</th>
-						<th>Name</th>
+						<th>User</th>
 						<th>Email</th>
-						<th>Phone Number</th>
-						<th>License</th>
-						<th>Date of Birth</th>
-						<th></th>
-						<th></th>
+						<th>Phone</th>
+						<th>Review</th>
+						<th>Action</th>
+
+
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user:${uList}" style="color: black;">
-						<td th:text="${user.userId}"></td>
-						<td th:text="${user.fullName}"></td>
-						<td th:text="${user.email}"></td>
-						<td th:text="${user.phone}"></td>
-						<td><a th:href="@{'/assets/' + ${user.license}}"
-							target="_blank" style="text-decoration: none;">View License</a></td>
+					<tr th:each="review:${reviewList}" style="color: black;">
 
-						<td th:text="${user.dob}"></td>
-
-						<td><span class="material-icons-outlined">edit</span> <a
-							th:href="@{ '/editUser/' + ${user.userId}}"> <input
-								type="submit" value="Edit"
-								style="background-color: #44916f; color: white; border-radius: 0.5rem; border-color: #44916f; width: 50px; height: 30px;">
-
-						</a></td>
-
-						<td><span class="material-icons-outlined"> delete</span> <a
-							th:href="@{ '/deleteUser/' + ${user.userId}}"> <input
-								type="submit" value="Delete"
+						<td th:if="${review.user != null}"
+							th:text="${review.user.fullName}"></td>
+						<td th:if="${review.user != null}" th:text="${review.user.email}"></td>
+						<td th:if="${review.user != null}" th:text="${review.user.phone}"></td>
+						<td th:text="${review.reviews}"></td>
+						<td><a th:href="@{'/deleteReview/'+${review.reviewId}}">
+								<input type="submit" value="Delete"
 								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
 
 						</a>
 					</tr>
+				</tbody>
 			</table>
+
 			<!-- Pagination -->
 			<nav aria-label="Page navigation example"
 				th:if="${totalPages != null && totalPages > 1}">
+
 				<ul class="pagination justify-content-center">
+
 					<li class="page-item"><a class="page-link" href="?page=1"
 						style="color: black" aria-label="Previous"> <span
 							aria-hidden="true">&laquo;</span>
 					</a></li>
+
 					<li class="page-item"
 						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
-						class="page-link" th:href="@{'/manageUser?page=' + ${pageNo}}"
+						class="page-link" th:href="@{'/adminReview?page=' + ${pageNo}}"
 						style="color: black" th:text="${pageNo}"></a></li>
+
 					<li class="page-item"><a class="page-link"
 						style="color: black"
-						th:href="@{'/manageUser?page=' + ${totalPages}}" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
+						th:href="@{'/adminReview?page=' + ${totalPages}}"
+						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 
 				</ul>
 			</nav>
-			<th:block th:if="${#lists.isEmpty(uList)}">
-				<p class="no-results">No user found matching your search
-					criteria.</p>
-			</th:block>
+
+
+
+
 		</main>
+
+
 		<!-- End Main -->
 
 	</div>

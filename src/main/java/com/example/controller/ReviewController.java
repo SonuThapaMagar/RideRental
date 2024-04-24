@@ -23,7 +23,7 @@ public class ReviewController {
 
 	@Autowired
 	private reviewRepository reviewRepo;
-	
+
 	@Autowired
 	private userRepository uRepo;
 
@@ -45,24 +45,24 @@ public class ReviewController {
 			return "login"; // Redirect to the login page
 		}
 
-		  // Check if the review text exceeds the character limit
-	    if (review.length() > 1000) {
-	        String errorMessage = "Review text should not exceed 1000 characters.";
-	        model.addAttribute("errorMessage", errorMessage);
-	        return "dashboard"; 
-	        }
+		// Check if the review text exceeds the character limit
+		if (review.length() > 1000) {
+			String errorMessage = "Review text should not exceed 1000 characters.";
+			model.addAttribute("errorMessage", errorMessage);
+			return "dashboard";
+		}
 
 		Review newReview = new Review();
 		newReview.setReviews(review);
-		
+
 		User loggedInUser = uRepo.findById(loggedInUserId).get();
-	    newReview.setUser(loggedInUser); 
+		newReview.setUser(loggedInUser);
 
 		reviewRepo.save(newReview);
 //		session.removeAttribute("review");
 
 		session.setAttribute("review", review);
-		
+
 		List<Review> reviewList = reviewRepo.findAll();
 		model.addAttribute("reviewList", reviewList);
 		return "test";
@@ -78,5 +78,7 @@ public class ReviewController {
 
 		return "test"; // Return the testimonials HTML template
 	}
+
+	
 
 }
