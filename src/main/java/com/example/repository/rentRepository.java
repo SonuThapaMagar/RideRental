@@ -19,5 +19,7 @@ public interface rentRepository extends JpaRepository<Rent, Integer> {
 	List<Rent> findDistinctByUser(User user);
 
 	List<Rent> findByUser(User loggedInUser);
+	
+	
 
 }

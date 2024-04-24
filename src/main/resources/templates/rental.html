@@ -142,6 +142,9 @@ button {
 				<li class="sidebar-list-item"><a href="/rental"> <span
 						class="material-icons-outlined">check</span> Rental Information
 				</a>
+				<li class="sidebar-list-item"><a href="/adminReview"> <span
+						class="material-icons-outlined">reviews</span> Review Details
+				</a></li>
 				<li class="sidebar-list-item"><a href="/logout"
 					class="logout-link" data-bs-toggle="modal"
 					data-bs-target="#logoutModal"> <span
@@ -182,12 +185,11 @@ button {
 						<th>User</th>
 						<th>Email</th>
 						<th>Phone</th>
-
 						<th>Booking Date</th>
 						<th>Booking End Date</th>
 						<th>Package</th>
 						<th>Location</th>
-						<th>Payment</th>
+						<th>Rent Status</th>
 
 						<th></th>
 						<th></th>
@@ -198,17 +200,16 @@ button {
 
 
 						<td th:text="${rent.rentId}"></td>
-  <td th:if="${rent.user != null}" th:text="${rent.user.fullName}"></td>
-    <td th:if="${rent.user != null}" th:text="${rent.user.email}"></td>
-    <td th:if="${rent.user != null}" th:text="${rent.user.phone}"></td>
-    <td th:if="${rent.ride != null}" th:text="${rent.ride.about}"></td>
+						<td th:if="${rent.user != null}" th:text="${rent.user.fullName}"></td>
+						<td th:if="${rent.user != null}" th:text="${rent.user.email}"></td>
+						<td th:if="${rent.user != null}" th:text="${rent.user.phone}"></td>
 						<td th:text="${rent.rentStartDate}"></td>
 						<td th:text="${rent.rentEndDate}"></td>
 						<td th:text="${rent.rentPackage}"></td>
 
 						<td th:text="${rent.pickUpLocation}"></td>
 
-						<td th:text="${rent.paymentStatus}"></td>
+						<td th:text="${rent.rentStatus}"></td>
 
 
 						<td><a th:href="@{'/deleteRent/'+${rent.rentId}}"> <input
@@ -235,8 +236,7 @@ button {
 						style="color: black" th:text="${pageNo}"></a></li>
 
 					<li class="page-item"><a class="page-link"
-						style="color: black"
-						th:href="@{'/rental?page=' + ${totalPages}}"
+						style="color: black" th:href="@{'/rental?page=' + ${totalPages}}"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 

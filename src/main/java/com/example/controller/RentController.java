@@ -120,13 +120,14 @@ public class RentController {
 			rent.setUser(loggedInUser); // Set the logged-in user
 			rent.setRide(selectedRide); // Set the selected ride
 			rent.setPaymentStatus(paymentStatus);
-			
+
 			rentRepo.save(rent);
 
 			selectedRide.setStatus("On Rent");
 			rideRepo.save(selectedRide);
 
 			rent.setPaymentStatus(paymentStatus);
+			rent.setRentStatus("Rented");
 
 			List<Rent> rentList = rentRepo.findAll();
 			model.addAttribute("rentList", rentList);
@@ -134,8 +135,6 @@ public class RentController {
 			String paymentStatus1 = rent.getPaymentStatus();
 			if ("paid".equals(paymentStatus)) {
 
-			
-	
 				return "orderDetails";
 			} else {
 
@@ -157,17 +156,17 @@ public class RentController {
 
 	@GetMapping("/orderDetails")
 	public String rideBookingDetails(Model model, HttpSession session) {
-		
+
 		if (session.getAttribute("activeUser") == null) {
 			String errorMessage = "Please login first!";
 			model.addAttribute("errorMessage", errorMessage);
 			return "login";
 		}
-		
+
 		String loggedInUserEmail = (String) session.getAttribute("activeUser");
 		model.addAttribute("loggedInUserEmail", loggedInUserEmail);
 		// Retrieve the user from the database using the email
-		
+
 		User loggedInUser = uRepo.findByEmail(loggedInUserEmail);
 		if (loggedInUser == null) {
 			String errorMessage = "User not found!";
@@ -226,31 +225,48 @@ public class RentController {
 //	}
 //
 //	// -------------------Cancel Booking---------------------
-//
-//	@GetMapping("/cancelBooking/{rentId}")
-//	public String cancel(@PathVariable int rentId, Model model, HttpSession session) {
-//
-//		Rent rent = rentRepo.findById(rentId).orElse(null);
-//		if (rent != null) {
-//			model.addAttribute("rent", rent);
-//			return "orderDetails";
-//		} else {
-//			return "orderdtails";
-//		}
-//	}
-//
-//	@PostMapping("cancelBooking/{rentId}")
-//	public String cancelBooking(@PathVariable int rentId, @RequestParam("rentStatus") String rentStatus, Model model) {
-//
-//		Optional<Rent> optionalRent = rentRepo.findById(rentId);
-//		if (optionalRent.isPresent()) {
-//			Rent rent = optionalRent.get();
-//			rent.setRentStatus("Cancelled");
-//			rentRepo.save(rent);
-//			return "orderDetails";
-//		}
-//		return "orderDetails";
-//	}
+
+	@GetMapping("/cancelBooking/{rentId}")
+	public String cancel(@PathVariable int rentId, Model model, HttpSession session) {
+
+		Rent rent = rentRepo.findById(rentId).orElse(null);
+		if (rent != null) {
+			model.addAttribute("rent", rent);
+			return "orderDetails";
+		} else {
+			return "orderDetails";
+		}
+	}
+
+	@PostMapping("cancelBooking/{rentId}")
+	public String cancelBooking(@PathVariable int rentId, @RequestParam("rentStatus") String rentStatus, Model model,
+			HttpSession session) {
+
+		Optional<Rent> optionalRent = rentRepo.findById(rentId);
+		if (optionalRent.isPresent()) {
+			Rent rent = optionalRent.get();
+			rent.setRentStatus("Cancelled");
+			rentRepo.save(rent);
+
+			String loggedInUserEmail = (String) session.getAttribute("activeUser");
+			model.addAttribute("loggedInUserEmail", loggedInUserEmail);
+			// Retrieve the user from the database using the email
+
+			User loggedInUser = uRepo.findByEmail(loggedInUserEmail);
+			if (loggedInUser == null) {
+				String errorMessage = "User not found!";
+				model.addAttribute("errorMessage", errorMessage);
+				return "dashboard"; // Display error page
+			}
+			List<Rent> rentList = rentRepo.findByUser(loggedInUser);
+			model.addAttribute("rentList", rentList);
+			return "orderDetails";
+
+		}
+
+		return "orderDetails";
+	}
+
 	@GetMapping("deleteRent/{rentId}")
 	public String deleteRent(@PathVariable int rentId, Model model) {
 

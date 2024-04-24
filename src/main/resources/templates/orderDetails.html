@@ -416,10 +416,16 @@ ul {
 										<form
 											th:action="@{/cancelBooking/{rentId}(rentId=${rent.rentId})}"
 											method="post">
-											<button type="submit" class="btn btn-danger"
+											<input type="hidden" name="rentStatus" value="cancelled">
+											<button th:if="${rent.rentStatus != 'Cancelled'}"
+												type="submit" class="btn btn-danger"
 												style="width: 131px; height: 50px;">Cancel Rent</button>
+											<button th:unless="${rent.rentStatus != 'Cancelled'}"
+												class="btn btn-danger disabled"
+												style="width: 131px; height: 50px;" disabled>Cancelled</button>
 										</form>
 									</td>
+
 
 									<td th:text="${rent.rentStatus}"></td>
 

@@ -90,7 +90,8 @@ public class AdminController {
 
 			long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
 			long totalUsers = uRepo.count();
-
+			long totalRents = rentRepo.count();
+			model.addAttribute("totalRents", totalRents);
 			model.addAttribute("totalRides", totalRides);
 			model.addAttribute("totalUsers", totalUsers);
 			List<Ride> rideList = rideRepo.findAll();
@@ -107,7 +108,7 @@ public class AdminController {
 	public String logout(HttpSession session, HttpServletResponse response) {
 
 		session.invalidate();
-		if (session == null) {
+		if (session == null){
 			return "adminlogin";
 
 		}
@@ -133,9 +134,13 @@ public class AdminController {
 		}
 		long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
 		long totalUsers = uRepo.count();
+		long totalRents = rentRepo.count();
+		model.addAttribute("totalRents", totalRents);
+
 
 		model.addAttribute("totalRides", totalRides);
 		model.addAttribute("totalUsers", totalUsers);
+
 
 		List<Ride> rideList = rideRepo.findAll();
 		model.addAttribute("rideList", rideList);
@@ -301,6 +306,8 @@ public class AdminController {
 		}
 		long totalRides = rideRepo.count(); // Assuming you have a method in your repository to count rides
 		long totalUsers = uRepo.count();
+		long totalRents = rentRepo.count();
+		model.addAttribute("totalRents", totalRents);
 
 		model.addAttribute("totalRides", totalRides);
 		model.addAttribute("totalUsers", totalUsers);
