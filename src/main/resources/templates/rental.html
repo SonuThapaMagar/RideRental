@@ -179,10 +179,15 @@ button {
 				<thead>
 					<tr>
 						<th>Rent ID</th>
+						<th>User</th>
+						<th>Email</th>
+						<th>Phone</th>
 
 						<th>Booking Date</th>
 						<th>Booking End Date</th>
-						<th>Rent Package</th>
+						<th>Package</th>
+						<th>Location</th>
+						<th>Payment</th>
 
 						<th></th>
 						<th></th>
@@ -193,40 +198,52 @@ button {
 
 
 						<td th:text="${rent.rentId}"></td>
-
+  <td th:if="${rent.user != null}" th:text="${rent.user.fullName}"></td>
+    <td th:if="${rent.user != null}" th:text="${rent.user.email}"></td>
+    <td th:if="${rent.user != null}" th:text="${rent.user.phone}"></td>
+    <td th:if="${rent.ride != null}" th:text="${rent.ride.about}"></td>
 						<td th:text="${rent.rentStartDate}"></td>
 						<td th:text="${rent.rentEndDate}"></td>
-
 						<td th:text="${rent.rentPackage}"></td>
 
+						<td th:text="${rent.pickUpLocation}"></td>
 
+						<td th:text="${rent.paymentStatus}"></td>
+
+
+						<td><a th:href="@{'/deleteRent/'+${rent.rentId}}"> <input
+								type="submit" value="Delete"
+								style="background-color: orangered; color: white; border-radius: 0.5rem; border-color: orangered">
+
+						</a>
 					</tr>
 			</table>
 			<!-- Pagination -->
-						<nav aria-label="Page navigation example"
+			<nav aria-label="Page navigation example"
 				th:if="${totalPages != null && totalPages > 1}">
-				
+
 				<ul class="pagination justify-content-center">
-					
+
 					<li class="page-item"><a class="page-link" href="?page=1"
 						style="color: black" aria-label="Previous"> <span
 							aria-hidden="true">&laquo;</span>
 					</a></li>
-					
-					<li class="page-item" th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
-						class="page-link" th:href="@{'/ridebooking?page=' + ${pageNo}}"
+
+					<li class="page-item"
+						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
+						class="page-link" th:href="@{'/rental?page=' + ${pageNo}}"
 						style="color: black" th:text="${pageNo}"></a></li>
-					
+
 					<li class="page-item"><a class="page-link"
 						style="color: black"
-						th:href="@{'/ridebooking?page=' + ${totalPages}}"
+						th:href="@{'/rental?page=' + ${totalPages}}"
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 
 				</ul>
 			</nav>
 			<th:block th:if="${#lists.isEmpty(rentList)}">
-				<p class="no-results">No rides found matching your search
+				<p class="no-results">No rent found matching your search
 					criteria.</p>
 			</th:block>
 		</main>

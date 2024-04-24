@@ -301,9 +301,9 @@ form .fields .input-field {
 						</a>
 
 
-						<button type="submit" class="btn" id="pay-now-btn"
-							style="background-color: green;"
-							onclick="setPaymentStatus('Paid')">Pay Now via eSewa</button>
+						<button type="submit" class="btn" id="pay-now-btn" style="background-color: green;"
+        onclick="setPaymentStatus('Paid')">Pay Now via eSewa</button>
+
 					
 					</div>
 <input type="hidden" id="paymentStatus" name="paymentStatus" th:field="${rent.paymentStatus}" value="">
@@ -347,6 +347,12 @@ form .fields .input-field {
 <script>
     function setPaymentStatus(status) {
         document.getElementById('paymentStatus').value = status;
+    }
+    function setPaymentStatus(status) {
+        // Set the payment status to "Paid" if the user clicks on "Pay Now via eSewa"
+        if (status === 'Paid') {
+            document.getElementById('paymentStatus').value = 'Paid';
+        }
     }
 </script>
 

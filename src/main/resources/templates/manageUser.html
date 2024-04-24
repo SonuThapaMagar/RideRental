@@ -7,7 +7,8 @@
 <title>Ride Bookings</title>
 
 <!-- Bootstrap JS Bundle with Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
 <!-- Open Sans Font -->
@@ -53,57 +54,58 @@
 </script>
 </head>
 <style>
-*{
+* {
 	font-family: Quicksand, sans-serif;
-
 }
+
 body {
 	font-family: Quicksand, sans-serif;
 }
 
-.header{
-background-color:white;
-margin-bottom:1rem;
-margin-top:1rem;
-width:100%;
-border-radius:0.5rem;
+.header {
+	background-color: white;
+	margin-bottom: 1rem;
+	margin-top: 1rem;
+	width: 100%;
+	border-radius: 0.5rem;
 }
 /*Table styles*/
 .styled-table {
-width:100%;
-background-color:white;
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+	width: 100%;
+	background-color: white;
+	border-collapse: collapse;
+	margin: 25px 0;
+	font-size: 0.9em;
+	font-family: sans-serif;
+	min-width: 400px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
+
 .styled-table thead tr {
-    background-color: black;
-    color: #ffffff;
-    text-align: left;
+	background-color: black;
+	color: #ffffff;
+	text-align: left;
 }
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
+
+.styled-table th, .styled-table td {
+	padding: 12px 15px;
 }
+
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+	background-color: #f3f3f3;
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid black;
+	border-bottom: 2px solid black;
 }
 
 .styled-table tbody tr.active-row {
-    font-weight: bold;
-    color: #009879;
-
+	font-weight: bold;
+	color: #009879;
 }
 
 button {
@@ -111,9 +113,8 @@ button {
 	background-color: #de3450;
 	border: none;
 	border-radius: 0.5rem;
-	height:35px;
+	height: 35px;
 }
-
 </style>
 
 <body>
@@ -140,7 +141,7 @@ button {
 				</form>
 
 			</div>
-			
+
 		</header>
 		<!-- End Header -->
 
@@ -167,31 +168,33 @@ button {
 				<li class="sidebar-list-item"><a href="/rental"> <span
 						class="material-icons-outlined">check</span> Rental Information
 				</a>
-				
-<li class="sidebar-list-item"><a href="/logout" class="logout-link"
-					data-bs-toggle="modal" data-bs-target="#logoutModal"> <span
+				<li class="sidebar-list-item"><a href="/logout"
+					class="logout-link" data-bs-toggle="modal"
+					data-bs-target="#logoutModal"> <span
 						class="material-icons-outlined">logout</span> Logout
 				</a></li>
 			</ul>
 		</aside>
 		<!-- End Sidebar -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to logout?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <a href="/logout" class="btn btn-primary">Logout</a> <!-- Adjust the href according to your logout endpoint -->
-      </div>
-    </div>
-  </div>
-</div>
+		<div class="modal fade" id="logoutModal" tabindex="-1"
+			aria-labelledby="logoutModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">Are you sure you want to logout?</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">Cancel</button>
+						<a href="/logout" class="btn btn-primary">Logout</a>
+						<!-- Adjust the href according to your logout endpoint -->
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- Main -->
 		<main class="main-container">
 			<div class="main-title">
@@ -212,15 +215,14 @@ button {
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user:${uList}"style="color:black;">
+					<tr th:each="user:${uList}" style="color: black;">
 						<td th:text="${user.userId}"></td>
 						<td th:text="${user.fullName}"></td>
 						<td th:text="${user.email}"></td>
 						<td th:text="${user.phone}"></td>
-						<td><a
-							th:href="@{'/assets/' + ${user.license}}"
-							target="_blank" style="text-decoration:none;">View License</a></td>
-						
+						<td><a th:href="@{'/assets/' + ${user.license}}"
+							target="_blank" style="text-decoration: none;">View License</a></td>
+
 						<td th:text="${user.dob}"></td>
 
 						<td><span class="material-icons-outlined">edit</span> <a
@@ -238,28 +240,30 @@ button {
 						</a>
 					</tr>
 			</table>
-				<!-- Pagination -->
+			<!-- Pagination -->
 			<nav aria-label="Page navigation example"
-				th:if="${totalPages != null && totalPages > 1}" >
-				<ul class="pagination justify-content-center" >
-					<li class="page-item"><a class="page-link" href="?page=1" style="color:black"
-						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				th:if="${totalPages != null && totalPages > 1}">
+				<ul class="pagination justify-content-center">
+					<li class="page-item"><a class="page-link" href="?page=1"
+						style="color: black" aria-label="Previous"> <span
+							aria-hidden="true">&laquo;</span>
 					</a></li>
 					<li class="page-item"
-						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a 
-						class="page-link" th:href="@{'/manageUser?page=' + ${pageNo}}" style="color:black"
-						th:text="${pageNo}"></a></li>
-					<li class="page-item"><a class="page-link" style="color:black"
-						th:href="@{'/manageUser?page=' + ${totalPages}}"
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						th:each="pageNo : ${#numbers.sequence(1, totalPages)}"><a
+						class="page-link" th:href="@{'/manageUser?page=' + ${pageNo}}"
+						style="color: black" th:text="${pageNo}"></a></li>
+					<li class="page-item"><a class="page-link"
+						style="color: black"
+						th:href="@{'/manageUser?page=' + ${totalPages}}" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
 					</a></li>
 
 				</ul>
 			</nav>
 			<th:block th:if="${#lists.isEmpty(uList)}">
-							<p class="no-results">No rides found matching your search
-								criteria.</p>
-						</th:block>
+				<p class="no-results">No user found matching your search
+					criteria.</p>
+			</th:block>
 		</main>
 		<!-- End Main -->
 

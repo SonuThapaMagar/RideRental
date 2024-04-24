@@ -385,12 +385,13 @@ ul {
 
 							<thead class="table-dark">
 								<tr>
-									<th scope="col">Ride</th>
-
+									<th scope="col">Name</th>
+									<th scope="col">Email</th>
+									<th scope="col">Phone</th>
 									<th scope="col">Pick-up Location</th>
-									<th scope="col">Rent Start Date and Time</th>
+									<th scope="col">Rent Start Date</th>
 									<th scope="col">Rent End Date</th>
-									<th scope="col">Total Price & Package</th>
+									<th scope="col">Price & Package</th>
 									<th scope="col">Payment Status</th>
 									<th scope="col">Action</th>
 									<th scope="col">Rent Status</th>
@@ -402,22 +403,24 @@ ul {
 								<tr th:each="rent :${rentList}">
 
 
-									<td th:if="${rent.ride != null}" th:text="${rent.ride.about}"></td>
-
+									<td th:if="${rent.user != null}"
+										th:text="${rent.user.fullName}"></td>
+									<td th:if="${rent.user != null}" th:text="${rent.user.email}"></td>
+									<td th:if="${rent.user != null}" th:text="${rent.user.phone}"></td>
 									<td th:text="${rent.pickUpLocation}"></td>
 									<td th:text="${rent.rentStartDate}"></td>
 									<td th:text="${rent.rentEndDate}"></td>
 									<td th:text="${rent.rentPackage}"></td>
 									<td th:text="${rent.paymentStatus}"></td>
 									<td>
-
-										<button type="button" class="btn btn-danger"
-											data-bs-toggle="modal" data-bs-target="#cancelBookingModal"
-											style="width: 131px; height: 45px;">Cancel Rent</button> <!-- a th:href="@{'/cancelBooking/' + ${rent.rentId}}">
-											<input type="submit" value="Cancel Rent"
-											style="background-color: orangered; color: white; height: 30px; border-radius: 0.5rem; border-color: orangered">
-									</a-->
+										<form
+											th:action="@{/cancelBooking/{rentId}(rentId=${rent.rentId})}"
+											method="post">
+											<button type="submit" class="btn btn-danger"
+												style="width: 131px; height: 50px;">Cancel Rent</button>
+										</form>
 									</td>
+
 									<td th:text="${rent.rentStatus}"></td>
 
 								</tr>
@@ -432,33 +435,6 @@ ul {
 		</div>
 
 	</main>
-
-	<!-- Bootstrap Modal -->
-	<div class="modal fade" id="cancelBookingModal" tabindex="-1"
-		aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="cancelBookingModalLabel">Confirm
-						Cancellation</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">Are you sure you want to cancel this
-					booking?</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal" style="background-color: black;">Close</button>
-
-					<form action="/cancelBooking/${rent.rentId}" method="POST">
-						<button type="button" class="btn btn-danger" id="confirmCancel">Cancel
-							Anyway</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 	<!-- JavaScript Files -->
 

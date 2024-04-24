@@ -64,8 +64,8 @@
 
 				</form>
 
-				<form action="/register" method="POST" class="sign-up-form"
-					enctype="multipart/form-data">
+				<form action="/register" method="POST" class="sign-up-form" enctype="multipart/form-data" name="signupForm" onsubmit="return validateForm()">
+
 
 					<!-- Placeholder for displaying error messages -->
 					<div th:if="${error}" class="error-message"
@@ -148,6 +148,40 @@
 		</div>
 	</div>
 </body>
+<script>
+  function validateForm() {
+    var fullName = document.forms["signupForm"]["fullName"].value;
+    var email = document.forms["signupForm"]["email"].value;
+    var phone = document.forms["signupForm"]["phone"].value;
+    var password = document.forms["signupForm"]["password"].value;
+
+    // Check if fullName is empty
+    if (fullName == "") {
+      alert("Please enter your full name");
+      return false;
+    }
+    
+    // Check if email is empty or in valid format
+    if (email == "") {
+      alert("Please enter a valid email address");
+      return false;
+    }
+    
+    // Check if phone number is empty or not a number
+    if (phone == "" || isNaN(phone)) {
+      alert("Please enter a valid phone number");
+      return false;
+    }
+    
+    // Check if password is empty or less than 6 characters
+    if (password == "" || password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return false;
+    }
+
+    return true;
+  }
+</script>
 
 <script src="./js/login.js"></script>
 <script th:if="${successMessage}">

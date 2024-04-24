@@ -210,7 +210,7 @@ public class AdminController {
 	}
 
 	@PostMapping("/added")
-	public String addRide(@ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,
+	public String addRide(@Valid @ModelAttribute Ride ride, @RequestParam MultipartFile rideImage, Model model,
 			HttpSession session) throws IOException {
 
 		try {

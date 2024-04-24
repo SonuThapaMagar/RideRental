@@ -24,7 +24,7 @@ public class Ride {
 	@Column(length = 1000)
 	private String about;
 	private int price;
-	private int plateNo;
+	private String plateNo;
 	private String rideImg;
 
 	// Price for different rental packages
@@ -124,12 +124,14 @@ public class Ride {
 		this.price = price;
 	}
 
-	public int getPlateNo() {
+	public String getPlateNo() {
 		return plateNo;
 	}
 
-	public void setPlateNo(int plateNo) {
+	public void setPlateNo(String plateNo) {
 		this.plateNo = plateNo;
 	}
+
+	
 
 }

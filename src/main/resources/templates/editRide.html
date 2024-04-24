@@ -153,10 +153,6 @@ button {
 						class="material-icons-outlined">check</span> Rental Information
 				</a></li>
 
-
-				<li class="sidebar-list-item"><a href="#"> <span
-						class="material-icons-outlined">poll</span> Reports
-				</a></li>
 				<!--li class="sidebar-list-item">
           <a href="#">
             <span class="material-icons-outlined">settings</span> Settings
@@ -184,18 +180,13 @@ button {
 					</div>
 
 					<div class="form-group">
-						<label for="rideType">Ride Type:</label> <select id="rideType"
-							th:field="*{type}">
-							<option value="bike" th:selected="${rideObject.type == 'bike'}">Bike</option>
-							<option value="scooter"
-								th:selected="${rideObject.type == 'scooter'}">Scooter</option>
-
-						</select>
+						<label for="rideType">Ride Type:</label> <input type="text"
+							id="rideType" name="type" required>
 					</div>
 
 					<div class="form-group">
 						<label for="licensePlate">License Plate Number:</label> <input
-							type="number" th:field="*{plateNo}" required>
+							type="text" th:field="*{plateNo}" required>
 					</div>
 
 					<div class="form-group">
